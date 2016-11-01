@@ -21,6 +21,7 @@ public class BikeDimensions {
     protected Point mPaddles; /* Pedale */
 
     // really necessary?
+    // ck no idea ;-)
     // Point  steering_head_length; /* Lenkkopflänge / - höhe */
     // Point bicycleTrail; /* Nachlauf */
     // Point bendingRecess; /* Gabelbiegung Rücksprung */
@@ -33,7 +34,7 @@ public class BikeDimensions {
         this.mPaddles = mPaddles;
     }
 
-    public double getWheelbase() {
+    public double getWheelbase() throws NumberFormatException {
         return Math.hypot(mFrontWheel.x, mBackWheel.x) + Math.hypot(mBackWheel.x, mBackWheel.y);
     }
 
