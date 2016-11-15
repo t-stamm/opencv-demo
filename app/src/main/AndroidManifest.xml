@@ -32,28 +32,36 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.MainActivity">
 
+
         </activity>
         <activity
             android:name=".activities.LoadingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_loading"
-            android:theme="@style/FullscreenTheme" />
-        <activity
-            android:name=".activities.CameraActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_camera"
-            android:theme="@style/FullscreenTheme" />
-        <activity android:name=".activities.PersonDimensionsActivity"
-            android:label="PersonDimensionsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme"
-            >
+            android:theme="@style/FullscreenTheme" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.CameraActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_camera"
+            android:theme="@style/FullscreenTheme" />
+
+        <activity android:name=".activities.PersonDimensionsActivity"
+            android:label="PersonDimensionsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme"
+            /><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
     </application>
 
 </manifest>

@@ -1,7 +1,17 @@
 package com.catira.opencvdemo.activities;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceView;
@@ -22,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     // Used for logging success or failure messages
     private static final String TAG = "OpenCVDemo::Activity";
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
 
     // Loads camera view of OpenCV for us to use. This lets us see using OpenCV
     private CameraBridgeViewBase mOpenCvCameraView;
@@ -57,12 +68,16 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         setContentView(R.layout.activity_main);
 
+
         mOpenCvCameraView = (JavaCameraView) findViewById(R.id.show_camera_activity_java_surface_view);
 
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
 
         mOpenCvCameraView.setCvCameraViewListener(this);
+
+
     }
+
 
     @Override
     public void onPause() {
@@ -101,4 +116,5 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mRgba = inputFrame.rgba();
         return mRgba;
     }
+
 }

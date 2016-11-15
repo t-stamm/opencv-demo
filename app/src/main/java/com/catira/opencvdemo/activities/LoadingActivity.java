@@ -1,14 +1,32 @@
 package com.catira.opencvdemo.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.SurfaceView;
 import android.view.View;
 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+
 import com.catira.opencvdemo.R;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.opencv.android.JavaCameraView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -31,6 +49,7 @@ public class LoadingActivity extends AppCompatActivity {
      * Some older devices needs a small delay between UI widget updates
      * and a change of the status and navigation bar.
      */
+    private static final String TAG = "LoadingActivity";
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
@@ -84,6 +103,11 @@ public class LoadingActivity extends AppCompatActivity {
             return false;
         }
     };
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +132,45 @@ public class LoadingActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    /**
+     * Called when the user clicks the Send button
+     */
+    public void getPermission(View view) {
+        // Do something in response to button
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            // Berechtigung gewährt
+            Log.v(TAG, "Berichtigung gewährt");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else {
+            // Berechtigung NICHT gewährt
+            // Nach Berechtigung fragen
+            Log.v(TAG, "Berichtigung nachfragen");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] ergebnis) {
+        if (requestCode == 1) {
+            if (ergebnis.length > 0
+                    && ergebnis[0] == PackageManager.PERMISSION_GRANTED) {
+                // Berechtigung wurde erteilt.
+                // Bitte starte hier den oben angesprochenen Befehl 3 (das Beispiel).
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+            } else {
+                // Berechtigung wurde nicht erteilt.
+            }
+            return;
+        } else {
+            // Weitere Abfragen nach Bestätigung (mit Index) folgen hier.
+        }
     }
 
     @Override
@@ -161,5 +224,41 @@ public class LoadingActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Loading Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
