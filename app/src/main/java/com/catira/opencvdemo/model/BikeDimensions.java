@@ -20,6 +20,8 @@ public class BikeDimensions {
     protected Point mSaddle; /* Sattel */
     protected Point mPaddles; /* Pedale */
 
+
+
     // really necessary?
     // ck no idea ;-)
     // Point  steering_head_length; /* Lenkkopflänge / - höhe */
@@ -58,3 +60,4 @@ public class BikeDimensions {
         return mPaddles;
     }
 }
+

@@ -1,32 +1,22 @@
 package com.catira.opencvdemo.activities;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 
-import org.opencv.android.JavaCameraView;
+import com.catira.opencvdemo.R;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
+import org.opencv.android.JavaCameraView;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-
-import com.catira.opencvdemo.R;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -37,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     // Loads camera view of OpenCV for us to use. This lets us see using OpenCV
     private CameraBridgeViewBase mOpenCvCameraView;
 
-    // Used in Camera selection from menu (when implemented)
+    // Used in Camera selection from menu_main (when implemented)
     private boolean mIsJavaCamera = true;
     private MenuItem mItemSwitchCamera = null;
 

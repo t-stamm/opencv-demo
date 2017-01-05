@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="seatPosIndex_names">
+        <item>Touren-Position</item>
+        <item>sportliche Halterung</item>
+        <item>Race-Halterung</item>
+    </string-array>
+
+    <string-array name="seatPosIndex_values">
+        <item>0,52</item>
+        <item>0,53</item>
+        <item>0,54</item>
+    </string-array>
+
+    <!--
+     <string-array name="listValues">
+         <item name="TourenPosition" format="float" type="dimen">1.1</item>
+         <item name="sportlicheHaltung" format="float" type="dimen">2</item>
+         <item name="RaceHaltung" format="float" type="dimen">5</item>
+     </string-array>
+     -->
+</resources>

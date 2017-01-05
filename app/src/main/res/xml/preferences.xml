@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Beispielvorlage
+    <EditTextPreference
+        android:title="@string/preference_aktienliste_title"
+        android:key="@string/preference_aktienliste_key"
+        android:defaultValue="@string/preference_aktienliste_default"
+        android:inputType="textMultiLine" />
+    -->
+    <!-- Beispielvorlage
+    <EditTextPreference
+        android:title="@string/preferenceSitzpositionIndexName"
+        android:key="@string/preferenceSitzpositionKey"
+        android:defaultValue="@string/preferenceSitzpositionTourenDefault"
+        android:inputType="textMultiLine" />
+    -->
+    <EditTextPreference
+        android:title="@string/preferenceInsideLegIndexName"
+        android:key="@string/preferenceInsideLegKey"
+        android:defaultValue="@string/preferenceInsideLegDefault"
+        android:inputType="time" />
+
+    <EditTextPreference
+        android:title="@string/preferenceTrunkLengthIndexName"
+        android:key="@string/preferenceTrunkLengthKey"
+        android:defaultValue="@string/preferenceTrunkLengthDefault"
+        android:inputType="time" />
+
+    <EditTextPreference
+        android:title="@string/preferenceBodyLengthIndexName"
+        android:key="@string/preferenceBodyLengthKey"
+        android:defaultValue="@string/preferenceTrunkLengthDefault"
+        android:inputType="time" />
+
+    <EditTextPreference
+        android:title="@string/preferenceArmLengthIndexName"
+        android:key="@string/preferenceArmLengthKey"
+        android:defaultValue="@string/preferenceArmLengthDefault"
+        android:inputType="time" />
+
+    <PreferenceCategory
+        android:title="Sitzpositions-Index H">
+        <ListPreference
+            android:title="Wähle deine Haltung aus."
+            android:key="@string/listSeatPosIndex"
+            android:defaultValue="@string/listSeatPosIndexDefaultValue"
+            android:entries="@array/seatPosIndex_names"
+            android:entryValues="@array/seatPosIndex_values" />
+    </PreferenceCategory>
+</PreferenceScreen>
