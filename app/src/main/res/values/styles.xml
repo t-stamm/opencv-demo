@@ -8,6 +8,39 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Überschrift der Activity -->
+    <style name="Text_Activity_Ueberschrift">
+        <item name="android:textColor">#004d40</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--     -->
+
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
         <item name="android:windowActionBarOverlay">true</item>
