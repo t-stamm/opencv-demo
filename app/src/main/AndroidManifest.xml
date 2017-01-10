@@ -75,6 +75,12 @@
             android:label="@string/title_activity_result"
             android:theme="@style/FullscreenTheme">
         </activity>
+        <activity
+            android:name=".activities.ZeichnenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="ZeichnenActivity"
+            android:theme="@style/FullscreenTheme">
+        </activity>
     </application>
 
 </manifest>
