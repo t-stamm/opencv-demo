@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.KickoffActivity"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/ab_info_id"
+        android:title="@string/title_ab_info"
+        android:icon="@drawable/ab_info_icon"
+        android:orderInCategory="100"
+        android:onClick="doInfo"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/ab_help_id"
+        android:title="@string/title_ab_help"
+        android:icon="@drawable/ab_help_icon"
+        android:orderInCategory="100"
+        android:onClick="doHelp"
+        app:showAsAction="always"
+        />
+
+</menu>
