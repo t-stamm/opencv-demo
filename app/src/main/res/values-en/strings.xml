@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FahrradApp</string>
+    <string name="title_activity_loading">Welcome</string>
+    <string name="title_activity_kickoff">New Optimizing</string>
+    <string name="title_activity_dimension">Body dimensions</string>
+    <string name="title_activity_camera">Picture</string>
+    <string name="title_activity_result">Result</string>
+
+
+    <string name="toast_backpress_dimension_activity">Press back again to close the app</string>
+
+    <string name="title_ab_info">About us</string>
+    <string name="text_ab_info">Hier muss das Impressum auf Englisch geschrieben werden</string>
+
+    <string name="title_ab_help">Brief instruction</string>
+    <string name="text_ab_help">\n1.\n\n2.</string>
+
+    <string name="title_ab_human">Body dimension</string>
+
+</resources>
