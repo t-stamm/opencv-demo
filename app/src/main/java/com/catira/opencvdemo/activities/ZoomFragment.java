@@ -1,109 +1,103 @@
 package com.catira.opencvdemo.activities;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import catira.com.fahrradapp.R;
+import com.catira.opencvdemo.R;
+
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ZoomFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ZoomFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Listens on a touch event on the parent of this Fragment
+ * and displays a part of the parent with a zoomfactor
  */
-public class ZoomFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class ZoomFragment extends Fragment implements View.OnDragListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    private float mZoomFactor = 2.0f;
+    private Canvas mDrawableCanvas = null;
+    private static int mSIZE = 100;
 
     public ZoomFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ZoomFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ZoomFragment newInstance(String param1, String param2) {
-        ZoomFragment fragment = new ZoomFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private View getParentView() {
+        return (View)getView().getParent();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        Bitmap b = Bitmap.createBitmap(mSIZE, mSIZE, Bitmap.Config.ARGB_8888);
+        mDrawableCanvas = new Canvas(b);
+        getView().draw(mDrawableCanvas);
+        hide();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_zoom, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        getParentView().setOnDragListener(this);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Click hander that reacts on clicks of the fragment parent
+     * @param v
+     * @param event
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+        switch (event.getAction()) {
+            case DragEvent.ACTION_DRAG_EXITED:
+            case DragEvent.ACTION_DRAG_ENDED:
+                hide();
+            case DragEvent.ACTION_DRAG_ENTERED:
+            case DragEvent.ACTION_DRAG_STARTED:
+                show();
+                break;
+            case DragEvent.ACTION_DRAG_LOCATION:
+                updateImage(v, event);
+            default:
+                break;
+        }
+        // always return false since the event should
+        // propagate further
+        return false;
+    }
+
+    private void show() {
+        getView().setVisibility(View.VISIBLE);
+    }
+
+    private void hide() {
+        getView().setVisibility(View.INVISIBLE);
+    }
+
+    private void updateImage(View v, DragEvent e) {
+        int helper = mSIZE/2;
+        v.layout((int)e.getX()-helper, (int)e.getY()-helper, (int)e.getX()+helper, (int)e.getY()+helper);
+        v.draw(mDrawableCanvas);
     }
 }
