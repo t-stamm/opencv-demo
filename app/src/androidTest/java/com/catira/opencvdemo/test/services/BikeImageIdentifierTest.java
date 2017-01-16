@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Timo on 01.11.2016.
  */
-
+/*
 @RunWith(AndroidJUnit4.class)
 public class BikeImageIdentifierTest {
 
@@ -77,3 +77,4 @@ public class BikeImageIdentifierTest {
         Assert.assertTrue(bii.getLastMatchedDimensions().size() == 1);
     }
 }
+*/

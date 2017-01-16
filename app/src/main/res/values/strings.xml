@@ -1,19 +1,28 @@
 <resources>
     <string name="app_name">FahrradApp</string>
-    <string name="hello_world">Hallo ProgrammierenLernenHQ World!</string>
 
-    <string name="title_activity_loading">LoadingActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 
-    <string name="title_activity_camera">CameraActivity</string>
-    <string name="title_activity_person_dimensions">PersonDimensionsActivity</string>
+    <string name="title_activity_loading">Willkommen</string>
+    <string name="title_activity_kickoff">Neue Optimierung</string>
+    <string name="title_activity_dimension">Körpermaße</string>
+    <string name="title_activity_camera">Foto</string>
+    <string name="title_activity_result">Ergebnis</string>
 
-    <string name="title_activity_aktiendetail">Aktiendetail</string>
 
-    <string name="title_activity_einstellungen">Einstellungen</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_daten_aktualisieren">Daten aktualisieren</string>
+    <string name="toast_backpress_dimension_activity">Drücken Sie erneut Zurück um die App zu beenden</string>
+
+    <string name="title_ab_info">Impressum</string>
+    <string name="text_ab_info">Das ist unser kleines aber feines Impressum.\n\nIhr erreicht uns unter info@roadbike.com</string>
+
+    <string name="title_ab_help">Kurzanleitung</string>
+    <string name="text_ab_help">\n1.\n\n2.</string>
+
+    <string name="title_ab_human">Körpermaße</string>
+
+
+
+
+
 
     <string name="preference_aktienliste_title">Setting String in XML</string>
     <string name="preference_aktienliste_key">aktienliste</string>
@@ -42,7 +51,19 @@
     <string name="listSeatPosIndex">ListPref</string>
     <string name="listSeatPosIndexDefaultValue">0,52</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+
+    <string name="title_activity_person_dimensions">PersonDimensionsActivity</string>
+
+    <string name="title_activity_aktiendetail">Aktiendetail</string>
+
+    <string name="title_activity_einstellungen">Einstellungen</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_daten_aktualisieren">Daten aktualisieren</string>
+
+
 
 </resources>
