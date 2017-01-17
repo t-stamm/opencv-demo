@@ -56,6 +56,12 @@
             android:theme="@style/FullscreenTheme">
         </activity>
 
+        <activity
+            android:name=".activities.SettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_setting"
+            android:theme="@style/FullscreenTheme">
+        </activity>
 
         <activity
             android:name=".activities.CameraActivity"

@@ -14,8 +14,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.services.Fragment_Help;
-import com.catira.opencvdemo.services.Fragment_Impressum;
 
 public class KickoffActivity extends AppCompatActivity {
     private Toast toast;

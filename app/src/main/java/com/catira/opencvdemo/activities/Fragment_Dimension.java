@@ -1,22 +1,23 @@
-package com.catira.opencvdemo.services;
+package com.catira.opencvdemo.activities;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.text.Html;
 
 import com.catira.opencvdemo.R;
 
 //vordefinierte AlertDialog Klasse angelegt mit max. drei Schaltflächen
-public class Fragment_Help extends AppCompatDialogFragment {
+public class Fragment_Dimension extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle b) {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.title_ab_help));
-        builder.setMessage(getString(R.string.text_ab_help));
+        builder.setTitle (getString(R.string.title_ab_human));
+        builder.setMessage (Html.fromHtml(getResources().getString(R.string.text_ab_human)));
 
         builder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener(){
