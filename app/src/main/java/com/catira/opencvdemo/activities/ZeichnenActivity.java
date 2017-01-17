@@ -1,5 +1,7 @@
 package com.catira.opencvdemo.activities;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
     private ZeichnenView zview;
     private FrameLayout frameLayout;
     private ZeichnenView highest_point_saddle_view;
+    private ZoomFragment mZoomFragment;
 
     public static final String EXTRA_IMAGE = "extra_image";
 
@@ -41,6 +44,11 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
         //int point = 1;
         zview = new ZeichnenView(this);
         frameLayout.addView(zview);
+
+        mZoomFragment = ZoomFragment.newInstance(R.id.bikecycleImageView);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.framelayout1, mZoomFragment).commit();
+
         /*
         FrameLayout.LayoutParams zviewLayoutParams =
                 new FrameLayout.LayoutParams();
@@ -111,20 +119,9 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-
-        /*
-        if(v == frameLayout && event.getAction() == MotionEvent.ACTION_DOWN) {
-            zview.updateMouse((int) event.getX(), (int) event.getY());
-            return true;
-        }
-
-        if(v == frameLayout && event.getAction() == MotionEvent.ACTION_MOVE) {
-            zview.updateMouse((int) event.getX(), (int) event.getY());
-            return true;
-        }
-        */
-
-        return false;
+        zview.onTouch(event);
+        mZoomFragment.onTouch(v, event);
+        return true;
     }
 
 }

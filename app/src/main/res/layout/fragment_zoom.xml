@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context="com.catira.opencvdemo.activities.ZoomFragment">
+    tools:context="com.catira.opencvdemo.activities.ZoomFragment"
+    android:background="@drawable/background_rectangle"
+    android:padding="1dp">
 
     <!-- image that will display the zoomed view of the touched part of the parent of this fragment -->
 
@@ -11,12 +13,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/zoomImage"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+        android:layout_gravity="center_vertical|center_horizontal" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="3dp"
+        android:layout_height="15dp"
         app:srcCompat="@android:color/holo_red_dark"
-        android:id="@+id/imageView3"
-        android:clickable="false" />
+        android:id="@+id/lineVertical"
+        android:clickable="false"
+        android:layout_gravity="center_vertical|center_horizontal" />
+
+    <ImageView
+        android:layout_width="15dp"
+        android:layout_height="3dp"
+        app:srcCompat="@android:color/holo_red_dark"
+        android:id="@+id/lineHorizontal"
+        android:clickable="false"
+        android:layout_gravity="center_vertical|center_horizontal" />
+
 </FrameLayout>
