@@ -45,7 +45,7 @@ public class LoadingActivity extends AppCompatActivity {
     public int doWork(int mProzessStatus) {
         try {
             mProzessStatus = mProzessStatus + 1;
-            Thread.sleep(50);
+            Thread.sleep(10);
         } catch (Exception e) {
         //Fehlercode ausgeben
         }

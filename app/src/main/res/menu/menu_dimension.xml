@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".activities.DimensionActivity"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    tools:context=".activities.DimensionActivity">
 
     <item
         android:id="@+id/ab_human_id"
-        android:title="@string/title_ab_human"
         android:icon="@drawable/ab_human_icon"
         android:orderInCategory="100"
-        app:showAsAction="always"
-        />
-
+        android:title="@string/title_ab_human"
+        android:onClick="doHuman"
+        app:showAsAction="always" />
 
 
 </menu>

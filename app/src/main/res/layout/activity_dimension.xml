@@ -1,33 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-
-    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.catira.opencvdemo.activities.DimensionActivity">
 
+    <FrameLayout
+        android:layout_width="200sp"
+        android:layout_height="380sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp">
+
+        <ImageView
+            android:id="@+id/dim_graphic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dim_graphic_background"
+            android:padding="3dp"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/dimension_graphic" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/arm_length"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:hint="in cm"
+                android:inputType="number"
+                android:maxLength="3" />
+
+            <EditText
+                android:id="@+id/inside_leg_length"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="260dp"
+                android:ems="10"
+                android:hint="in cm"
+                android:inputType="number"
+                android:maxLength="3" />
+
+            <EditText
+                android:id="@+id/body_length"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:layout_marginTop="130dp"
+                android:ems="10"
+                android:hint="in cm"
+                android:inputType="number"
+                android:maxLength="3" />
+        </RelativeLayout>
+    </FrameLayout>
+
     <ImageButton
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:id="@+id/background"
-        android:background="@drawable/background_rectangle"
-        android:elevation="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/background_rectangle"
+        android:elevation="10dp" />
+
     <ImageButton
+        android:id="@+id/fa_button_dim"
         android:layout_width="65dp"
         android:layout_height="65dp"
-        android:id="@+id/fa_button_dim"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
         android:background="@drawable/fab_oval"
         android:elevation="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="35dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/fab_check_icon"
-        />
+        android:src="@drawable/fab_check_icon" />
 
 </RelativeLayout>
+
+
