@@ -24,6 +24,11 @@ public class BikeCalculationHistoryStorage {
 
     public BikeCalculationHistoryStorage(Context context) {
         this.mSharedPref = context.getSharedPreferences(BIKE_HISTORY_SETTINGS, Context.MODE_PRIVATE);
+        load();
+    }
+
+    private void load() {
+        // TODO implement
     }
 
     public void addEntry(BikeCalculationHistoryEntry entry) {
