@@ -117,7 +117,7 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
     }
 
     private void updateImage(View v, MotionEvent e) {
-        System.out.println(v.getX()+" / "+v.getY()+" : "+e.getX()+" / "+e.getY());
+        // Move image to the right of the window if the cursor would collide with it
         double size = mSIZE * 1.1;
         if(e.getX() < size && e.getY() < (size * 1.1)) {
             getView().setX(v.getWidth() - mSIZE);
