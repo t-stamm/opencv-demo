@@ -5,13 +5,17 @@ package com.catira.opencvdemo.model;
  * Created by Timo on 26.10.2016.
  */
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.opencv.core.Point;
 
 /**
  * Saves the bike key points for the wheels, saddle and steering.
  * Other values are calculated
  */
-public class BikeDimensions {
+public class BikeDimensions implements JSONable {
 
 
     protected Point mFrontWheel; /* Vorderrad Mittelpunkt */
@@ -58,6 +62,23 @@ public class BikeDimensions {
 
     public Point getPaddles() {
         return mPaddles;
+    }
+
+    @Override
+    public JSONObject getJson() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("frontWheel", "{x: "+mFrontWheel.x+", y: "+mFrontWheel.y+"}");
+            json.put("backWheel", "{x: "+mBackWheel.x+", y: "+mBackWheel.y+"}");
+            json.put("forkHead", "{x: "+mForkHead.x+", y: "+mForkHead.y+"}");
+            json.put("saddle", "{x: "+mSaddle.x+", y: "+mSaddle.y+"}");
+            json.put("paddles", "{x: "+mPaddles.x+", y: "+mPaddles.y+"}");
+
+            return json;
+        } catch(JSONException e) {
+            Log.e(this.getClass().getName(), "Could not convert BikeDimensions to Json: "+e.getMessage());
+        }
+        return null;
     }
 }
 
