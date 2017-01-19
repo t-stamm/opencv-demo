@@ -1,32 +1,50 @@
 package com.catira.opencvdemo.model;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Timo on 26.10.2016.
  */
 
-public class PersonDimensions {
+public class PersonDimensions implements JSONable {
 
-    protected double arm_length;
-    protected double leg_length; //Schrittlänge
-    protected double snout_vent_length; //Rumpflänge
-    protected double body_height;
+    protected double mArmLength;
+    protected double mLegLength; //Schrittlänge
+    protected double mBodyHeight;
 
-    public PersonDimensions(double arm_length, double leg_length, double body_height, double snout_vent_length) {
-        this.arm_length = arm_length;
-        this.leg_length = leg_length;
-        this.body_height = body_height;
-        this.snout_vent_length = snout_vent_length;
+    public PersonDimensions(double arm_length, double leg_length, double body_height) {
+        this.mArmLength = arm_length;
+        this.mLegLength = leg_length;
+        this.mBodyHeight = body_height;
     }
 
-    public double getArm_length() {
-        return arm_length;
+    public double getArmLength() {
+        return mArmLength;
     }
 
-    public double getLeg_length() {
-        return leg_length;
+    public double getLegLength() {
+        return mLegLength;
     }
 
-    public double getBody_height() {
-        return body_height;
+    public double getBodyHeight() {
+        return mBodyHeight;
+    }
+
+    @Override
+    public JSONObject getJson() {
+        try {
+            JSONObject json = new JSONObject();
+            json.put("armLength", mArmLength);
+            json.put("legLength", mLegLength);
+            json.put("bodyHeight", mBodyHeight);
+
+            return json;
+        } catch (JSONException e) {
+            Log.e(this.getClass().getName(), "Error converting "+this.getClass().getName()+" to json: "+e.getMessage());
+        }
+        return null;
     }
 }
