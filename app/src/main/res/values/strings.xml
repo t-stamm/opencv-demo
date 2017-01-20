@@ -13,7 +13,7 @@
     <string name="toast_backpress_dimension_activity">Drücken Sie erneut Zurück um die App zu beenden</string>
 
     <string name="title_ab_info">Impressum</string>
-    <string name="text_ab_info">Das ist unser kleines aber feines Impressum.\n\nIhr erreicht uns unter info@roadbike.com</string>
+    <string name="text_ab_info">Das ist unser kleines aber feines Impressum.\n\nIhr erreicht uns unter info@xy.com</string>
 
     <string name="title_ab_help">Kurzanleitung</string>
     <string name="text_ab_help">\n1.\n\n2.</string>
@@ -24,7 +24,8 @@
                                             <b>Schrittlänge</b><br/>Hierfür kannst du am besten ein Buch zwischen die Beine klemmen und bis zur Oberkannte des Buches messen.]]></string>
 
 
-
+    <string name="toast_dimension">Es wurden noch nicht alle Längen ausgefüllt</string>
+    <string name="toast_setting">Es wurden noch nicht alle Einstellungen getroffen</string>
 
 
 

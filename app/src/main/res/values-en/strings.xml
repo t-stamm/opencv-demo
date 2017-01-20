@@ -22,4 +22,10 @@
                                             <b>Körperlänge</b><br/>Nimm das Maß bis zu der kleinen v-förmigen Einbuchtung am Brustbein.<br/><br/>
                                             <b>Schrittlänge</b><br/>Hierfür kannst du am besten ein Buch zwischen die Beine klemmen und bis zur Oberkannte des Buches messen.]]></string>
 
+    <string name="toast_dimension">Please set your body dimensions first</string>
+    <string name="toast_setting">Please chose your settings first</string>
+
+
+
+
 </resources>
