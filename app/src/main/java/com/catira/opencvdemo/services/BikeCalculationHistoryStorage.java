@@ -27,15 +27,28 @@ public class BikeCalculationHistoryStorage {
 
     private static String BIKE_HISTORY_SETTINGS = "bike_calculation_history";
     private final SharedPreferences mSharedPref;
+    private Runnable mCallback;
 
     private List<BikeCalculationHistoryEntry> entries;
 
-    public BikeCalculationHistoryStorage(Context context) {
+    public BikeCalculationHistoryStorage(Context context, Runnable callback) {
         this.mSharedPref = context.getSharedPreferences(BIKE_HISTORY_SETTINGS, Context.MODE_PRIVATE);
+        this.mCallback = callback;
         load();
     }
-
     private void load() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadData();
+                if(mCallback != null) {
+                    mCallback.run();
+                }
+            }
+        }).run();
+    }
+
+    private void loadData() {
         String jsonString = this.mSharedPref.getString(BIKE_HISTORY_SETTINGS, null);
         if(jsonString != null) {
             entries = new ArrayList<>();
