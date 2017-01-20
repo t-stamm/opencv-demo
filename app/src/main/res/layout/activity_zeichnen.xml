@@ -19,26 +19,57 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Höchster Sattelpunkt"
+        android:text="Switch Points and bicycle tyre"
         android:id="@+id/buttonReset" />
 
     <FrameLayout
         android:id="@+id/framelayout1"
         android:background="#000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="240dp"
         android:layout_below="@id/buttonReset"
         >
-            <ImageView
-                android:id="@+id/bikecycleImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:layout_margin="0dp"
-                android:src="@drawable/default_fahrrad">
-        </ImageView>
+
+        <ImageView
+            android:id="@+id/bikecycleImageView"
+            android:scaleType="fitXY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_margin="0dp"
+            android:src="@drawable/default_fahrrad">
+    </ImageView>
 
     </FrameLayout>
+
+    <TextView
+        android:text="BackTyre: "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/framelayout1"
+        android:textColor="#ffffff"
+        android:id="@+id/textView4" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView4"
+
+        android:id="@+id/seekBarBackTypre" />
+
+    <TextView
+        android:text="FrontTyre: "
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBarBackTypre"
+        android:textColor="#ffffff"
+        android:id="@+id/textView5" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView5"
+        android:id="@+id/seekBarFrontTypre" />
 
 </RelativeLayout>
 

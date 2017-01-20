@@ -264,7 +264,7 @@ public class MoveViewComponent extends View {
 
             String nearestTyre = null;
             nearestTyre = whichCircleTyre(event);
-            
+
             if(nearestTyre == "green") {
                 float dx = event.getX() - xBackTyre;
                 float dy = event.getY() - yBackTyre;
