@@ -232,8 +232,7 @@ public class ZeichnenView extends View{
         return faktor;
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public void onTouch(MotionEvent event) {
         int action = event.getAction();
 
         float dx = event.getX() - xpos;
@@ -263,6 +262,5 @@ public class ZeichnenView extends View{
         }
 
         invalidate();
-        return true;
     }
 }
