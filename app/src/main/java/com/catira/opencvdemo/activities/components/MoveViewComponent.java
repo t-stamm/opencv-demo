@@ -21,6 +21,14 @@ public class MoveViewComponent extends View {
     private float yRed = -1;
     private float xGreen = -1;
     private float yGreen = -1;
+    private float xCyan = -1;
+    private float yCyan = -1;
+    private float xBlack = -1;
+    private float yBlack = -1;
+    private float xGray = -1;
+    private float yGray = -1;
+    private float xMagenta = -1;
+    private float yMagenta = -1;
     private float xBackTyre = -1;
     private float yBackTyre= -1;
     private float xFrontTyre = -1;
@@ -37,13 +45,16 @@ public class MoveViewComponent extends View {
 
     private String farbe;
 
-    private Canvas canvasRed, canvasBlue, canvasGreen;
-    private Bitmap pointBlueBitmap, pointRedBitmap, pointGreenBitmap;
-    private Paint paint, paintRed, paintBlue, paintGreen;
+    private Canvas canvasRed, canvasBlue, canvasGreen, canvasCyan, canvasBlack, canvasGray, canvasMagenta;
+    private Bitmap pointBlueBitmap, pointRedBitmap, pointGreenBitmap, pointCyanBitmap,
+            pointBlackBitmap, pointGrayBitmap, pointMagentaBitmap;
+    private Paint paint, paintRed, paintBlue, paintGreen, paintCyan, paintBlack, paintGray, paintMagenta;
     private boolean init = true;
 
-    Paint red_paintbrush_fill, blue_paintbrush_fill, green_paintbrush_fill;
-    Paint red_paintbrush_stroke, blue_paintbrush_stroke, green_paintbrush_stroke, yellow_paintbrush_stroke;
+    Paint red_paintbrush_fill, blue_paintbrush_fill, green_paintbrush_fill, cyan_paintbrush_fill,
+            black_paintbrush_fill;
+    Paint red_paintbrush_stroke, blue_paintbrush_stroke, green_paintbrush_stroke, yellow_paintbrush_stroke,
+            cyan_paintbrush_stroke, black_paintbrush_stroke;
 
     private int touch = 0;
 
@@ -90,15 +101,25 @@ public class MoveViewComponent extends View {
             ypos = (getHeight() / 2) - (getHeight() / 12);
             xRed = (getWidth() / 2) - (getWidth() / 5);
             yRed = (getHeight() / 2) - (getHeight() / (float)2.4);
+            xBlack = (getWidth() / 2) - (getWidth() / 5);
+            yBlack = (getHeight() / 2) - (getHeight() / (float)2);
             xGreen = (getWidth() / 2) + (getWidth() / 6);
             yGreen = (getHeight() / 2) - (getHeight() / 3);
+            xCyan = (getWidth() / 2) + (getWidth() / 14);
+            yCyan = (getHeight() / 2) - (getHeight() / 14);
+            xGray = (getWidth() / 2) + (getWidth() / 6);
+            yGray = (getHeight() / 2) - (getHeight() / (float)2.4);
+            xMagenta = (getWidth() / 2) + (getWidth() / 4);
+            yMagenta = (getHeight() / 2) - (getHeight() / (float)2.2);
             xBackTyre = (getWidth() / 2) - (getWidth() / 4);
             yBackTyre = (getHeight() / 2);
             xFrontTyre = (getWidth() / 2) + (getWidth() / 4);
             yFrontTyre = (getHeight() / 2);
-            CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen);
+            CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
+                    xBlack, yBlack, xGray, yGray, xMagenta, yMagenta);
             //Drawing line from point to  point
-            linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen);
+            linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
+                    xBlack, yBlack,xGray, yGray, xMagenta, yMagenta);
             //Drawing bicycle circle
             bicycle_tyre_circle(canvas, xBackTyre, yBackTyre,
                                         xFrontTyre, yFrontTyre,
@@ -129,9 +150,11 @@ public class MoveViewComponent extends View {
         //update
         if (canvasBlue != null  && canvasRed != null && init != true) {
             //Drawing Points
-            CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen);
+            CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan, xBlack, yBlack,
+                    xGray, yGray, xMagenta, yMagenta);
             //Drawing line from point to  point
-            linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen);
+            linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
+                    xBlack, yBlack, xGray, yGray, xMagenta, yMagenta);
             //Drawing bicycle circle
             bicycle_tyre_circle(canvas, xBackTyre, yBackTyre,
                                         xFrontTyre, yFrontTyre,
@@ -143,7 +166,10 @@ public class MoveViewComponent extends View {
         init=false;
     }
 
-    private void CreatePoints(Canvas canvas, float xpos, float ypos, float xRed, float yRed, float xGreen, float yGreen) {
+    private void CreatePoints(Canvas canvas, float xpos, float ypos, float xRed, float yRed,
+                              float xGreen, float yGreen, float xCyan, float yCyan,
+                              float xBlack, float yBlack, float xGray, float yGray,
+                              float xMagenta, float yMagenta) {
 
 
         paintRed = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -174,16 +200,65 @@ public class MoveViewComponent extends View {
         //canvas.drawCircle(xpos, ypos, 17, paintBlue);
         canvas.drawBitmap(pointGreenBitmap, 0, 0, paintGreen);
 
+        paintCyan = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pointCyanBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        canvasCyan = new Canvas(pointCyanBitmap);
+        paintCyan.setColor(Color.CYAN);
+        paintCyan.setStrokeWidth(20);
+        canvasCyan.drawCircle(xCyan, yCyan, 17, paintCyan);
+        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        //canvas.drawCircle(xpos, ypos, 17, paintBlue);
+        canvas.drawBitmap(pointCyanBitmap, 0, 0, paintCyan);
+
+        paintBlack = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pointBlackBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        canvasBlack = new Canvas(pointBlackBitmap);
+        paintBlack.setColor(Color.BLACK);
+        paintBlack.setStrokeWidth(20);
+        canvasBlack.drawCircle(xBlack, yBlack, 17, paintBlack);
+        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        //canvas.drawCircle(xpos, ypos, 17, paintBlue);
+        canvas.drawBitmap(pointBlackBitmap, 0, 0, paintBlack);
+
+        paintGray = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pointGrayBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        canvasGray = new Canvas(pointGrayBitmap);
+        paintGray.setColor(Color.GRAY);
+        paintGray.setStrokeWidth(20);
+        canvasGray.drawCircle(xGray, yGray, 17, paintGray);
+        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        //canvas.drawCircle(xpos, ypos, 17, paintBlue);
+        canvas.drawBitmap(pointGrayBitmap, 0, 0, paintGray);
+
+        paintMagenta = new Paint(Paint.ANTI_ALIAS_FLAG);
+        pointMagentaBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
+        canvasMagenta = new Canvas(pointBlackBitmap);
+        paintMagenta.setColor(Color.MAGENTA);
+        paintMagenta.setStrokeWidth(20);
+        canvasMagenta.drawCircle(xMagenta, yMagenta, 17, paintMagenta);
+        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        //canvas.drawCircle(xpos, ypos, 17, paintBlue);
+        canvas.drawBitmap(pointMagentaBitmap, 0, 0, paintMagenta);
     }
 
-    private void linefromPointToPoint (Canvas canvas, float xpos, float ypos, float xRed, float yRed, float xGreen, float yGreen) {
+    private void linefromPointToPoint (Canvas canvas, float xpos, float ypos, float xRed, float yRed,
+                                       float xGreen, float yGreen, float xCyan, float yCyan,
+                                       float xBlack, float yBlack, float xGray, float yGray,
+                                       float xMagenta, float yMagenta) {
         triangle = new Path();
         triangle.moveTo(xRed, yRed);
         triangle.lineTo(xGreen, yGreen);
         triangle.moveTo(xGreen, yGreen);
+        triangle.lineTo(xGray, yGray);
+        triangle.moveTo(xGray, yGray);
+        triangle.lineTo(xMagenta, yMagenta);
+        triangle.moveTo(xGreen, yGreen);
         triangle.lineTo(xpos, ypos);
+        triangle.lineTo(xCyan, yCyan);
         triangle.moveTo(xpos, ypos);
         triangle.lineTo(xRed, yRed);
+        triangle.lineTo(xBlack, yBlack);
+
 
         canvas.drawPath(triangle, red_paintbrush_stroke);
     }
@@ -210,20 +285,56 @@ public class MoveViewComponent extends View {
         double aGreen = touchX - xGreen;
         double bGreen = touchY - yGreen;
 
+        double aCyan = touchX - xCyan;
+        double bCyan = touchY - yCyan;
+
+        double aBlack = touchX - xBlack;
+        double bBlack = touchY - yBlack;
+
+        double aGray= touchX - xGray;
+        double bGray = touchY - yGray;
+
+        double aMagenta = touchX - xMagenta;
+        double bMagenta = touchY - yMagenta;
+
         double cRed = Math.sqrt(Math.pow(aRed,2)+ Math.pow(bRed,2));
         double cBlue = Math.sqrt(Math.pow(aBlue,2)+ Math.pow(bBlue,2));
         double cGreen = Math.sqrt(Math.pow(aGreen,2)+ Math.pow(bGreen,2));
+        double cCyan = Math.sqrt(Math.pow(aCyan,2)+ Math.pow(bCyan,2));
+        double cBlack = Math.sqrt(Math.pow(aBlack,2)+ Math.pow(bBlack,2));
+        double cGray = Math.sqrt(Math.pow(aGray,2)+ Math.pow(bGray,2));
+        double cMagenta = Math.sqrt(Math.pow(aMagenta,2)+ Math.pow(bMagenta,2));
 
         //for (int i=0;i<countPoint;i++)
-        if (cRed < cBlue && cRed < cGreen) {
+        if (cRed < cBlue && cRed < cGreen && cRed < cCyan && cRed < cBlack
+                && cRed < cGray && cRed < cMagenta) {
             circle = "red";
         }
-        if (cBlue < cRed && cBlue < cGreen){
+        if (cBlue < cRed && cBlue < cGreen && cBlue < cCyan && cRed < cBlack
+                && cBlue < cGray && cBlue < cMagenta) {
             circle = "blue";
         }
 
-        if(cGreen < cRed && cGreen < cBlue) {
+        if(cGreen < cRed && cGreen < cBlue && cGreen < cCyan && cRed < cBlack
+                && cGreen < cGray && cGreen < cMagenta)  {
             circle = "green";
+        }
+
+        if(cCyan < cRed && cCyan < cBlue && cCyan < cGreen && cRed < cBlack
+                && cCyan < cGray && cCyan < cMagenta)  {
+            circle = "cyan";
+        }
+        if(cBlack < cRed && cBlack < cBlue && cBlack < cGreen && cBlack < cCyan
+                && cBlack < cGray && cBlack < cMagenta)  {
+            circle = "black";
+        }
+        if(cGray < cRed && cGray < cBlue && cGray < cBlack && cGray < cCyan
+                && cGray < cGreen && cGray < cMagenta)  {
+            circle = "gray";
+        }
+        if(cMagenta < cRed && cMagenta < cBlue && cMagenta < cGreen && cMagenta < cCyan
+                && cMagenta < cGray && cMagenta < cBlack)  {
+            circle = "magenta";
         }
 
         return circle;
@@ -421,6 +532,118 @@ public class MoveViewComponent extends View {
                     yGreen = getHeight();
                 }
             }
+            if (nearestPoint == "cyan") {
+
+                float dx = event.getX() - xCyan;
+                float dy = event.getY() - yCyan;
+
+
+                if(action == MotionEvent.ACTION_MOVE) {
+                    xCyan += dx;
+                    yCyan += dy;
+                }
+                else  if(action == MotionEvent.ACTION_DOWN ) {
+                    xCyan += Math.signum(dx) * 25;
+                    yCyan += Math.signum(dy) * 25;
+                }
+
+                if(xCyan < 0) {
+                    xCyan = 0;
+                }
+                if(xCyan > getWidth()) {
+                    xCyan = getWidth();
+                }
+                if(yCyan < 0) {
+                    yCyan = 0;
+                }
+                if(yCyan > getHeight()) {
+                    yCyan = getHeight();
+                }
+            }
+            if (nearestPoint == "black") {
+
+                float dx = event.getX() - xBlack;
+                float dy = event.getY() - yBlack;
+
+
+                if(action == MotionEvent.ACTION_MOVE) {
+                    xBlack += dx;
+                    yBlack += dy;
+                }
+                else  if(action == MotionEvent.ACTION_DOWN ) {
+                    xBlack += Math.signum(dx) * 25;
+                    yBlack += Math.signum(dy) * 25;
+                }
+
+                if(xBlack < 0) {
+                    xBlack = 0;
+                }
+                if(xBlack > getWidth()) {
+                    xBlack = getWidth();
+                }
+                if(yBlack < 0) {
+                    yBlack = 0;
+                }
+                if(yBlack > getHeight()) {
+                    yBlack = getHeight();
+                }
+            }
+            if (nearestPoint == "gray") {
+
+                float dx = event.getX() - xGray;
+                float dy = event.getY() - yGray;
+
+
+                if(action == MotionEvent.ACTION_MOVE) {
+                    xGray += dx;
+                    yGray += dy;
+                }
+                else  if(action == MotionEvent.ACTION_DOWN ) {
+                    xGray += Math.signum(dx) * 25;
+                    yGray += Math.signum(dy) * 25;
+                }
+
+                if(xGray < 0) {
+                    xGray = 0;
+                }
+                if(xGray > getWidth()) {
+                    xGray = getWidth();
+                }
+                if(yGray < 0) {
+                    yGray = 0;
+                }
+                if(yGray > getHeight()) {
+                    yGray = getHeight();
+                }
+            }
+            if (nearestPoint == "magenta") {
+
+                float dx = event.getX() - xMagenta;
+                float dy = event.getY() - yMagenta;
+
+
+                if(action == MotionEvent.ACTION_MOVE) {
+                    xMagenta += dx;
+                    yMagenta += dy;
+                }
+                else  if(action == MotionEvent.ACTION_DOWN ) {
+                    xMagenta += Math.signum(dx) * 25;
+                    yMagenta += Math.signum(dy) * 25;
+                }
+
+                if(xMagenta < 0) {
+                    xMagenta = 0;
+                }
+                if(xMagenta > getWidth()) {
+                    xMagenta = getWidth();
+                }
+                if(yMagenta < 0) {
+                    yMagenta = 0;
+                }
+                if(yMagenta > getHeight()) {
+                    yMagenta = getHeight();
+                }
+            }
         }
         invalidate();
         return true;
@@ -438,6 +661,10 @@ public class MoveViewComponent extends View {
         green_paintbrush_fill = new Paint();
         green_paintbrush_fill.setColor(Color.RED);
         green_paintbrush_fill.setStyle(Paint.Style.FILL);
+
+        cyan_paintbrush_fill = new Paint();
+        cyan_paintbrush_fill.setColor(Color.CYAN);
+        cyan_paintbrush_fill.setStyle(Paint.Style.FILL);
 
         red_paintbrush_stroke = new Paint();
         red_paintbrush_stroke.setColor(Color.RED);
@@ -458,6 +685,16 @@ public class MoveViewComponent extends View {
         yellow_paintbrush_stroke.setColor(Color.YELLOW);
         yellow_paintbrush_stroke.setStyle(Paint.Style.STROKE);
         yellow_paintbrush_stroke.setStrokeWidth(10);
+
+        cyan_paintbrush_stroke = new Paint();
+        cyan_paintbrush_stroke.setColor(Color.CYAN);
+        cyan_paintbrush_stroke.setStyle(Paint.Style.STROKE);
+        cyan_paintbrush_stroke.setStrokeWidth(10);
+
+        black_paintbrush_stroke = new Paint();
+        black_paintbrush_stroke.setColor(Color.BLACK);
+        black_paintbrush_stroke.setStyle(Paint.Style.STROKE);
+        black_paintbrush_stroke.setStrokeWidth(10);
     }
 
     private class touchZoomListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
