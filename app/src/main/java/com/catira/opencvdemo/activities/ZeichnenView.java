@@ -136,17 +136,6 @@ public class ZeichnenView extends View{
             ypos = 300;
             createLayerTopLink(canvas, xpos, ypos);
 
-
-            backingBitmap = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-            canvas2 = new Canvas(backingBitmap);
-
-            Paint paint = new Paint();
-            paint.setColor(Color.RED);
-            paint.setStrokeWidth(20);
-            //canvas.drawCircle(100, 100, 50, paint);
-            canvas2.drawCircle(25, 25, 25, paint);
-            canvas.drawBitmap(backingBitmap, 200, 90, paint);
-
             // Set Initialisation to false
             init = false;
         }
