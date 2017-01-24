@@ -224,7 +224,7 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Blueview.onTouchEvent(event);
+        Blueview.onTouch(event);
         //zview.onTouch(event);
         mZoomFragment.onTouch(v, event);
         return true;

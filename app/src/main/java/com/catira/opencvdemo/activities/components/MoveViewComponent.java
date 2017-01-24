@@ -256,8 +256,9 @@ public class MoveViewComponent extends View {
 
         return circleTyre;
     }
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+
+
+    public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
         //bicycle circle
         if(circleBackTyre == true){
