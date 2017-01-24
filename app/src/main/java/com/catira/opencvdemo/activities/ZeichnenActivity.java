@@ -1,5 +1,6 @@
 package com.catira.opencvdemo.activities;
 
+import android.app.FragmentTransaction;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
     private MoveViewComponent testview, Blueview, Redview;
     private static SeekBar seekbar_BackTypre;
     private static SeekBar seekbar_FrontTypre;
+    private ZoomFragment mZoomFragment;
 
     public static final String EXTRA_IMAGE = "extra_image";
 
@@ -51,7 +53,9 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
                 new FrameLayout.LayoutParams();
         zview.setLayoutParams(zviewLayoutParams);
         */
-
+        mZoomFragment = ZoomFragment.newInstance(R.id.bikecycleImageView);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.framelayout1, mZoomFragment).commit();
 
 
 
@@ -220,6 +224,11 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        Blueview.onTouchEvent(event);
+        //zview.onTouch(event);
+        mZoomFragment.onTouch(v, event);
+        return true;
+        
         //!!!Erkennung eines Punktes geht nicht, wenn die View nicht so groß ist wie ein Punkt
         /*
         if (Blueview.getX() > event.getX()) {
@@ -248,7 +257,7 @@ public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchL
         }
         */
 
-        return false;
+        //return false;
     }
 
 }
