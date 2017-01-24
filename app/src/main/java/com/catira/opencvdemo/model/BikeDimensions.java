@@ -65,20 +65,28 @@ public class BikeDimensions implements JSONable {
     }
 
     @Override
-    public JSONObject getJson() {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("frontWheel", "{x: "+mFrontWheel.x+", y: "+mFrontWheel.y+"}");
-            json.put("backWheel", "{x: "+mBackWheel.x+", y: "+mBackWheel.y+"}");
-            json.put("forkHead", "{x: "+mForkHead.x+", y: "+mForkHead.y+"}");
-            json.put("saddle", "{x: "+mSaddle.x+", y: "+mSaddle.y+"}");
-            json.put("paddles", "{x: "+mPaddles.x+", y: "+mPaddles.y+"}");
+    public JSONObject getJson() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("frontWheel", "{x: " + mFrontWheel.x + ", y: " + mFrontWheel.y + "}");
+        json.put("backWheel", "{x: " + mBackWheel.x + ", y: " + mBackWheel.y + "}");
+        json.put("forkHead", "{x: " + mForkHead.x + ", y: " + mForkHead.y + "}");
+        json.put("saddle", "{x: " + mSaddle.x + ", y: " + mSaddle.y + "}");
+        json.put("paddles", "{x: " + mPaddles.x + ", y: " + mPaddles.y + "}");
 
-            return json;
-        } catch(JSONException e) {
-            Log.e(this.getClass().getName(), "Could not convert BikeDimensions to Json: "+e.getMessage());
-        }
-        return null;
+        return json;
+    }
+
+    public static BikeDimensions fromJson(JSONObject json) throws JSONException {
+        return new BikeDimensions(getPointFromJson("frontWheel", json),
+                getPointFromJson("backWheel", json),
+                getPointFromJson("forkHead", json),
+                getPointFromJson("saddle", json),
+                getPointFromJson("paddles", json));
+    }
+
+    private static Point getPointFromJson(String name, JSONObject json) throws JSONException {
+        JSONObject pointObject = json.getJSONObject(name);
+        return new Point(pointObject.getDouble("x"), pointObject.getDouble("y"));
     }
 }
 

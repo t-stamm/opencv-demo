@@ -10,7 +10,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:layout_marginTop="100dp">
 
         <RelativeLayout
@@ -19,10 +19,14 @@
 
             <TextView
                 android:id="@+id/set_pos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
-                android:hint="noch keine Auswahl getroffen"
+                android:hint="keine Auswahl"
+                android:textSize="18sp"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:background="@drawable/editview_set"
                 android:text="" />
 
             <Button
@@ -38,12 +42,16 @@
 
             <TextView
                 android:id="@+id/set_zoll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="40dp"
                 android:layout_below="@+id/choice_pos"
                 android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
-                android:hint="noch keine Auswahl getroffen"
+                android:hint="keine Auswahl"
+                android:textSize="18sp"
+                android:textColor="@color/colorAccent"
+                android:gravity="center"
+                android:background="@drawable/editview_set"
                 android:text="" />
 
             <Button

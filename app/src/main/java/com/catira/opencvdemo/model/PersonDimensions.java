@@ -34,17 +34,16 @@ public class PersonDimensions implements JSONable {
     }
 
     @Override
-    public JSONObject getJson() {
-        try {
-            JSONObject json = new JSONObject();
-            json.put("armLength", mArmLength);
-            json.put("legLength", mLegLength);
-            json.put("bodyHeight", mBodyHeight);
+    public JSONObject getJson() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("armLength", mArmLength);
+        json.put("legLength", mLegLength);
+        json.put("bodyHeight", mBodyHeight);
 
-            return json;
-        } catch (JSONException e) {
-            Log.e(this.getClass().getName(), "Error converting "+this.getClass().getName()+" to json: "+e.getMessage());
-        }
-        return null;
+        return json;
+    }
+
+    public static PersonDimensions fromJson(JSONObject json) throws JSONException {
+        return new PersonDimensions(json.getDouble("armLength"), json.getDouble("legLength"), json.getDouble("bodyHeight"));
     }
 }
