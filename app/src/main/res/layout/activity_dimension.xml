@@ -35,6 +35,8 @@
                 android:layout_marginTop="8dp"
                 android:ems="10"
                 android:hint="in cm"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
                 android:inputType="number"
                 android:maxLength="3" />
 
@@ -46,6 +48,8 @@
                 android:layout_marginTop="260dp"
                 android:ems="10"
                 android:hint="in cm"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
                 android:inputType="number"
                 android:maxLength="3" />
 
@@ -54,9 +58,11 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="120dp"
-                android:layout_marginTop="130dp"
+                android:layout_marginTop="160dp"
                 android:ems="10"
                 android:hint="in cm"
+                android:gravity="center"
+                android:textColor="@color/colorAccent"
                 android:inputType="number"
                 android:maxLength="3" />
         </RelativeLayout>
