@@ -42,7 +42,6 @@ public class MoveViewComponent extends View {
     private float xDir = -1;
     private float yDir = -1;
 
-
     private String farbe;
 
     private Canvas canvasRed, canvasBlue, canvasGreen, canvasCyan, canvasBlack, canvasGray, canvasMagenta;
@@ -57,6 +56,8 @@ public class MoveViewComponent extends View {
             cyan_paintbrush_stroke, black_paintbrush_stroke;
 
     private int touch = 0;
+
+    private boolean drawingPoints = false;
 
     /*
     Initialisierung mit allen Elementen die in der View verschoben werden können.
@@ -75,9 +76,6 @@ public class MoveViewComponent extends View {
             //set multitouch
             SGD = new ScaleGestureDetector(c, new touchZoomListener());
 
-
-
-
             setFocusable(true);
         }
 
@@ -86,10 +84,12 @@ public class MoveViewComponent extends View {
     public void updateMouse() {
         if(circleBackTyre == false) {
             circleBackTyre = true;
+            drawingPoints = false;
         } else {
             circleBackTyre = false;
+            drawingPoints = true;
         }
-
+        invalidate();
     }
     @Override
     protected void onDraw(Canvas canvas) {
@@ -102,7 +102,7 @@ public class MoveViewComponent extends View {
             xRed = (getWidth() / 2) - (getWidth() / 5);
             yRed = (getHeight() / 2) - (getHeight() / (float)2.4);
             xBlack = (getWidth() / 2) - (getWidth() / 5);
-            yBlack = (getHeight() / 2) - (getHeight() / (float)2);
+            yBlack = (getHeight() / 2) - (getHeight() / (float)2.2);
             xGreen = (getWidth() / 2) + (getWidth() / 6);
             yGreen = (getHeight() / 2) - (getHeight() / 3);
             xCyan = (getWidth() / 2) + (getWidth() / 14);
@@ -115,50 +115,39 @@ public class MoveViewComponent extends View {
             yBackTyre = (getHeight() / 2);
             xFrontTyre = (getWidth() / 2) + (getWidth() / 4);
             yFrontTyre = (getHeight() / 2);
-            CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
-                    xBlack, yBlack, xGray, yGray, xMagenta, yMagenta);
-            //Drawing line from point to  point
-            linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
-                    xBlack, yBlack,xGray, yGray, xMagenta, yMagenta);
+            if(drawingPoints == true) {
+                CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
+                        xBlack, yBlack, xGray, yGray, xMagenta, yMagenta);
+                //Drawing line from point to  point
+                linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
+                        xBlack, yBlack,xGray, yGray, xMagenta, yMagenta);
+            }
+
+            // Change allow circleBackTyre
+            circleBackTyre = true;
             //Drawing bicycle circle
             bicycle_tyre_circle(canvas, xBackTyre, yBackTyre,
                                         xFrontTyre, yFrontTyre,
                                         circleBackTyreSize, circleFrontTyreSize);
-
-
         }
 
-        if(farbe == "blue" && init == false && touch == 0) {
-            //CreatePoint(canvas, xpos, ypos);
-            //canvas.drawCircle(xpos, ypos, 17, paintBlue);
-        }
 
-        if(touch == 1) {
-            //canvas.restore();
-            //canvasRed.restore();
-            //CreatePoint(canvas, xpos, ypos);
-
-        }
-
-        if(farbe == "red" && init == false && touch == 0) {
-            //CreatePoint(canvas, xpos, ypos);
-            //Wie speichert man x und y für ein Punkt
-            //xRed = xpos;
-            //yRed = ypos;
-            //canvas.drawCircle(xpos, ypos, 17, paintRed);
-        }
         //update
-        if (canvasBlue != null  && canvasRed != null && init != true) {
+        if ( init != true ) {
             //Drawing Points
-            CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan, xBlack, yBlack,
-                    xGray, yGray, xMagenta, yMagenta);
-            //Drawing line from point to  point
-            linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
-                    xBlack, yBlack, xGray, yGray, xMagenta, yMagenta);
-            //Drawing bicycle circle
-            bicycle_tyre_circle(canvas, xBackTyre, yBackTyre,
-                                        xFrontTyre, yFrontTyre,
-                                        circleBackTyreSize, circleFrontTyreSize);
+            if(drawingPoints == true) {
+                CreatePoints(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan, xBlack, yBlack,
+                        xGray, yGray, xMagenta, yMagenta);
+                //Drawing line from point to  point
+                linefromPointToPoint(canvas, xpos, ypos, xRed, yRed, xGreen, yGreen, xCyan, yCyan,
+                        xBlack, yBlack, xGray, yGray, xMagenta, yMagenta);
+            }
+            else {
+                //Drawing bicycle circle
+                bicycle_tyre_circle(canvas, xBackTyre, yBackTyre,
+                        xFrontTyre, yFrontTyre,
+                        circleBackTyreSize, circleFrontTyreSize);
+            }
         }
 
 

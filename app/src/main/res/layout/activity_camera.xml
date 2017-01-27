@@ -20,13 +20,66 @@
         android:layout_centerHorizontal="true"
         />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@color/common_google_signin_btn_text_dark_default"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/iv" />
+    <FrameLayout
+        android:id="@+id/framelayout1"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@color/common_google_signin_btn_text_dark_default"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/bikecycleImageView"
+            android:src="@drawable/default_fahrrad" />
+
+    </FrameLayout>
+    <RelativeLayout
+        android:id="@+id/seekBarWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/framelayout1"
+        >
+            <TextView
+                android:text="BackTyre: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#009587"
+                android:id="@+id/textView4" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView4"
+                android:id="@+id/seekBarBackTypre" />
+
+            <TextView
+                android:text="FrontTyre: "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/seekBarBackTypre"
+                android:textColor="#009587"
+                android:id="@+id/textView5" />
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView5"
+                android:id="@+id/seekBarFrontTypre" />
+
+            <Button
+                android:text="Next Step: Set Points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/seekBarFrontTypre"
+                android:onClick="thirdStep()"
+                android:id="@+id/buttonNextStep"
+                android:textAlignment="center"
+                android:layout_marginTop="20px" />
+    </RelativeLayout>
+
 
     <ImageButton
     android:layout_width="65dp"
