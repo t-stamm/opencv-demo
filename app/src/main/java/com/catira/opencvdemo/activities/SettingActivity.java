@@ -43,9 +43,9 @@ public class SettingActivity extends AppCompatActivity {
                     return;
                 } else {
                     Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
+                    intent.putExtra("wheelSize", wheelsizeEditText.getText());
                     startActivity(intent);
-                }
-            }
+                }}
         });
 
         setPos = (Button) findViewById(R.id.choice_pos);

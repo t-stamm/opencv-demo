@@ -152,6 +152,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                 });
 
+        //Zweites Rad berechnen
+        Log.d("FahrradApp", "Zoll: " + getIntent().getStringExtra("wheelSize") );
+        double mmPixelFaktor = 2.5;
+        int wheelDistance = 1000; // mm
+        double resultFakWhDis;
+        // Mit der WheelSize in mm wird der Faktor zwischen Bildpixel und realem Millimeter dargestellt
+        resultFakWhDis = mmPixelFaktor * wheelDistance;
+        // das resultFakWhDis plus oder minus in der x-Achse zum Mittelpunkt eines Rades
+
+
     }
     public void thirdStep(){
         seekBarWrapper.setVisibility(View.GONE);
