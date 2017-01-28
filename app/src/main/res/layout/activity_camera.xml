@@ -74,11 +74,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/seekBarFrontTypre"
-                android:onClick="thirdStep()"
-                android:id="@+id/buttonNextStep"
+                android:id="@+id/buttonNextStepSetPoints"
                 android:textAlignment="center"
                 android:layout_marginTop="20px" />
+
+
     </RelativeLayout>
+
+    <Button
+        android:text="Back: Set Typres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBarWrapper"
+        android:id="@+id/buttonBacktoCycle"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:layout_marginTop="20px" />
 
 
     <ImageButton
