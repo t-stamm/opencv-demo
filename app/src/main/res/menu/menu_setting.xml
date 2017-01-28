@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.DimensionActivity">
+
+    <item
+        android:id="@+id/ab_set_id"
+        android:icon="@drawable/ab_help_icon"
+        android:orderInCategory="100"
+        android:title="@string/title_ab_set"
+        android:onClick="doSet"
+        app:showAsAction="always" />
+
+
+</menu>

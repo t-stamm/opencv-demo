@@ -46,3 +46,8 @@ dependencies {
     compile 'com.makeramen:roundedimageview:2.2.1'
 
 }
+
+//Um Percent-Layout zu verwenden
+dependencies {
+    compile 'com.android.support:percent:24.0.0'//23.1.1
+}
