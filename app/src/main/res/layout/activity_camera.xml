@@ -71,10 +71,11 @@
 
             <Button
                 android:text="Next Step: Set Points"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/seekBarFrontTypre"
                 android:id="@+id/buttonNextStepSetPoints"
+                android:layout_centerInParent="true"
                 android:textAlignment="center"
                 android:layout_marginTop="20px" />
 
@@ -83,12 +84,13 @@
 
     <Button
         android:text="Back: Set Typres"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/seekBarWrapper"
         android:id="@+id/buttonBacktoCycle"
         android:visibility="gone"
         android:textAlignment="center"
+        android:layout_centerInParent="true"
         android:layout_marginTop="20px" />
 
 
