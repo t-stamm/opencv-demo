@@ -1,6 +1,7 @@
 package com.catira.opencvdemo.activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,8 +24,25 @@ public class DimensionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dimension);
+
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRunDim", true);
+        if (isFirstRun) {
+            // Place your dialog code here to display the dialog
+            Fragment_Dimension fragment = new Fragment_Dimension();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            transaction.add(fragment, "Dimension");
+            transaction.commit();
+
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRunDim", false)
+                    .apply();
+        }
 
         weiter = (ImageButton) findViewById(R.id.fa_button_dim);
         weiter.setOnClickListener(new View.OnClickListener() {

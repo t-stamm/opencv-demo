@@ -1,6 +1,7 @@
 package com.catira.opencvdemo.activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -15,8 +16,10 @@ public class LoadingActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
 
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+        setTitle(R.string.title_activity_loading);
 
         mProgress = (ProgressBar) findViewById(R.id.progressbar);
 
@@ -45,7 +48,7 @@ public class LoadingActivity extends AppCompatActivity {
     public int doWork(int mProzessStatus) {
         try {
             mProzessStatus = mProzessStatus + 1;
-            Thread.sleep(10);
+            Thread.sleep(50);
         } catch (Exception e) {
         //Fehlercode ausgeben
         }

@@ -1,11 +1,15 @@
 package com.catira.opencvdemo.activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,8 +27,25 @@ public class SettingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
+
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRunSet", true);
+        if (isFirstRun) {
+            // Place your dialog code here to display the dialog
+            Fragment_Setting_Help fragment = new Fragment_Setting_Help();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            transaction.add(fragment, "Hilfe Reifengröße");
+            transaction.commit();
+
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRunSet", false)
+                    .apply();
+        }
 
 
         weiter = (ImageButton) findViewById(R.id.fa_button_set);
@@ -71,8 +92,22 @@ public class SettingActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+    }
 
+    //Mit Help Menü Button Dialog starten über Fragment Manager
+    public void doSet(MenuItem menuItem) {
+        Fragment_Setting_Help fragment = new Fragment_Setting_Help();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.add(fragment, "Hilfe Reifengröße");
+        transaction.commit();
+    }
 
+    // Laden der Menuressource
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_setting, menu);
+        return true;
     }
 }
 

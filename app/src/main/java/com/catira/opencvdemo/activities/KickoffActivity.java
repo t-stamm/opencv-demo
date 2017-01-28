@@ -1,6 +1,7 @@
 package com.catira.opencvdemo.activities;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.catira.opencvdemo.R;
 
 public class KickoffActivity extends AppCompatActivity {
@@ -23,6 +25,7 @@ public class KickoffActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kickoff);
         android.support.v7.app.ActionBar ab = getSupportActionBar();
@@ -30,11 +33,26 @@ public class KickoffActivity extends AppCompatActivity {
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
 
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRunKick", true);
+        if (isFirstRun) {
+            // Place your dialog code here to display the dialog
+            Fragment_Help fragment = new Fragment_Help();
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction transaction = fm.beginTransaction();
+            transaction.add(fragment, "Hilfe");
+            transaction.commit();
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRunKick", false)
+                    .apply();
+        }
+
         floatButton = (ImageButton) findViewById(R.id.fa_button);
         floatButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick (View v) {
-            Intent intent = new Intent(getApplicationContext(), DimensionActivity.class);
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), DimensionActivity.class);
                 startActivity(intent);
             }
         });
@@ -69,9 +87,9 @@ public class KickoffActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (this.lastBackPressTime < System.currentTimeMillis() - 4000) {
-            toast = Toast.makeText(this, getString(R.string.toast_backpress_dimension_activity ), Toast.LENGTH_LONG);
+            toast = Toast.makeText(this, getString(R.string.toast_backpress_dimension_activity), Toast.LENGTH_LONG);
             TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
-            if(v != null) v.setGravity(Gravity.CENTER); //Text zentriert im Toast anzeigen
+            if (v != null) v.setGravity(Gravity.CENTER); //Text zentriert im Toast anzeigen
             toast.show();
             this.lastBackPressTime = System.currentTimeMillis();
         } else {
