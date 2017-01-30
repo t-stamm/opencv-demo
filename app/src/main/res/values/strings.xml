@@ -15,27 +15,30 @@
     <string name="title_ab_info">Impressum</string>
     <string name="text_ab_info">Das ist unser kleines aber feines Impressum.\n\nIhr erreicht uns unter info@xy.com</string>
 
-    <string name="title_ab_help">Kurzanleitung</string>
-    <string name="text_ab_help">\n1.\n\n2.</string>
+    <string name="title_ab_help">So wirds gemacht...</string>
+        <string name="text_ab_help"><![CDATA[<b>1.Neue Vermessung</b><br/>Lege eine neue Vermessung an oder öffne ein abgeschlossene Optimierung<br/><br/>
+                                            <b>2.Körpermaße</b><br/>Erfasse deine Körpermaße<br/><br/>
+                                            <b>3.Randbedingungen</b><br/>Bevorzugte Sitzhaltung und Reifengröße sind erforderlich<br/><br/>
+                                            <b>4.Foto</b><br/>Erstelle ein Foto von deinem Rennrad<br/><br/>
+                                            <b>5.Optimierung</b><br/>Deine persönliche optimierte Sitzposition wird ausgegeben]]></string>
 
-    <string name="title_ab_human">So wird´s gemacht...</string>
+    <string name="title_ab_human">Deine Körpermaße</string>
     <string name="text_ab_human"><![CDATA[<b>Armlänge</b><br/>Nimm ein Stift in die Faust und messe den Abstand von dem Stift bis zu der kleinen Aushöhlung auf der Schulter.<br/><br/>
                                             <b>Körperlänge</b><br/>Nimm das Maß bis zu der kleinen v-förmigen Einbuchtung am Brustbein.<br/><br/>
                                             <b>Schrittlänge</b><br/>Hierfür kannst du am besten ein Buch zwischen die Beine klemmen und bis zur Oberkannte des Buches messen.]]></string>
 
-    <string name="title_ab_set">Info zur Reifengröße</string>
-    <string name="text_ab_set">\n1.\n\n2.</string>
+    <string name="title_ab_set">Randbedingungen</string>
+    <string name="text_ab_set"><![CDATA[<b>1.Sitzhaltung</b><br/>Wähle eine bevorzugte Sitzhaltung aus<br/><br/>
+                                            <b>2.Reifengröße</b><br/>Wähle deine Reifengröße aus]]></string>
 
 
     <string name="toast_dimension">Es wurden noch nicht alle Längen ausgefüllt</string>
-    <string name="toast_setting">Es wurden noch nicht alle Einstellungen getroffen</string>
+    <string name="toast_setting">Es wurden noch nicht alle Randbedingungen getroffen</string>
 
 
 
 
-    <string name="preference_aktienliste_title">Setting String in XML</string>
-    <string name="preference_aktienliste_key">aktienliste</string>
-    <string name="preference_aktienliste_default">BMW.DE,DAI.DE,VOW3.DE,SAP.DE,^GDAXI</string>
+
 
     <string name="preferenceSitzpositionIndexName">Sitzpositions-Index H</string>
     <string name="preferenceSitzpositionKey">Sitzpositions-Index</string>
@@ -67,12 +70,10 @@
 
     <string name="title_activity_person_dimensions">PersonDimensionsActivity</string>
 
-    <string name="title_activity_aktiendetail">Aktiendetail</string>
 
     <string name="title_activity_einstellungen">Einstellungen</string>
     <string name="action_settings">Settings</string>
     <string name="action_daten_aktualisieren">Daten aktualisieren</string>
-
 
 
 </resources>
