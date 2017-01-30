@@ -189,7 +189,14 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             return;
-    }
+        }
+        int check2 = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA);
+        if(check2 != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, 1);
+            return;
+        }
 
         cameraIntentSenden();
 
