@@ -429,8 +429,6 @@ public class MoveViewComponent extends View {
             touch = 1;
             //Canvas Position ermitteln!?
 
-
-
             //neareset Circle
             nearestPoint = whichCircle(event, countPoint);
             //Test blau/red erkannt
