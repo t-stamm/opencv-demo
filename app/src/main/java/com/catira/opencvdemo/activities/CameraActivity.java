@@ -93,6 +93,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
         frameLayout.setVisibility(View.VISIBLE);
         seekBarWrapper.setVisibility(View.VISIBLE);
+        fa_button_check.setVisibility(View.GONE);
 
         fa_button_camera = (ImageView) findViewById(R.id.fa_button_camera);
         fa_button_camera.setVisibility(View.GONE);
@@ -157,10 +158,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         double mmPixelFaktor = 2.5;
         int wheelDistance = 1000; // mm
         double resultFakWhDis;
+        int firstBicycleCenterY;
+        int firstBicycleCenterX;
         // Mit der WheelSize in mm wird der Faktor zwischen Bildpixel und realem Millimeter dargestellt
         resultFakWhDis = mmPixelFaktor * wheelDistance;
+        Log.d("FahrradApp", "Punkt: " + resultFakWhDis);
         // das resultFakWhDis plus oder minus in der x-Achse zum Mittelpunkt eines Rades
-
 
     }
     public void thirdStep(){
