@@ -14,21 +14,24 @@
     <string name="title_ab_info">About us</string>
     <string name="text_ab_info">Hier muss das Impressum auf Englisch geschrieben werden</string>
 
-    <string name="title_ab_help">Brief instruction</string>
-    <string name="text_ab_help">\n1.\n\n2.</string>
+    <string name="title_ab_help">Let´s go...</string>
+    <string name="text_ab_help"><![CDATA[<b>1.New measurement</b><br/>Lege eine neue Vermessung an oder öffne ein altes Ergebnis<br/><br/>
+                                            <b>2.Body dimension</b><br/>Erfasse deine Körpermaße<br/><br/>
+                                            <b>3.Boundary conditions</b><br/>Randbedingungen, unter denen die Optimierung gestartet<br/><br/>
+                                            <b>4.Picture</b><br/>Erstelle ein Foto von deinem Rennrad<br/><br/>
+                                            <b>5.Optimization</b><br/>Deine persönlöiche optimierte Sitzposition wird ausgegeben]]></string>
 
-    <string name="title_ab_human">Let´s go...</string>
-    <string name="text_ab_human"><![CDATA[<b>Armlänge</b><br/>Nimm ein Stift in die Faust und messe den Abstand von dem Stift bis zu der kleinen Aushöhlung auf der Schulter.<br/><br/>
-                                            <b>Körperlänge</b><br/>Nimm das Maß bis zu der kleinen v-förmigen Einbuchtung am Brustbein.<br/><br/>
-                                            <b>Schrittlänge</b><br/>Hierfür kannst du am besten ein Buch zwischen die Beine klemmen und bis zur Oberkannte des Buches messen.]]></string>
+    <string name="title_ab_human">Your bodydimension</string>
+    <string name="text_ab_human"><![CDATA[<b>Arm length</b><br/>Nimm ein Stift in die Faust und messe den Abstand von dem Stift bis zu der kleinen Aushöhlung auf der Schulter.<br/><br/>
+                                            <b>Body length</b><br/>Nimm das Maß bis zu der kleinen v-förmigen Einbuchtung am Brustbein.<br/><br/>
+                                            <b>Inside leg</b><br/>Hierfür kannst du am besten ein Buch zwischen die Beine klemmen und bis zur Oberkannte des Buches messen.]]></string>
 
-    <string name="title_ab_set">Info wheelsize</string>
-    <string name="text_ab_set">\n1.\n\n2.</string>
+    <string name="title_ab_set">Boundary conditions</string>
+    <string name="text_ab_set"><![CDATA[<b>1.Ride set-up</b><br/>Choose your set-up<br/><br/>
+                                            <b>2.Wheel size</b><br/>Choose your wheel size]]></string>
 
     <string name="toast_dimension">Please set your body dimensions first</string>
-    <string name="toast_setting">Please chose your settings first</string>
-
-
+    <string name="toast_setting">Please chose your boundary conditions first</string>
 
 
 </resources>

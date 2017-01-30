@@ -8,44 +8,29 @@
     android:background="@color/background"
     tools:context="com.catira.opencvdemo.activities.DimensionActivity">
 
-    <FrameLayout
+    <android.support.percent.PercentFrameLayout
 
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:layout_marginTop="15dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/dim_graphic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
+            app:layout_widthPercent="60%"
+            app:layout_marginTopPercent="10%"
+            app:layout_marginLeftPercent="20%"
+            app:layout_heightPercent="65%"
             app:srcCompat="@drawable/dimension_graphic" />
 
-        <RelativeLayout
+
+        <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <EditText
                 android:id="@+id/arm_length"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="100dp"
-                android:layout_marginTop="15dp"
-                android:ems="10"
-                android:gravity="center"
-                android:hint="in cm"
-                android:inputType="number"
-                android:maxLength="3"
-                android:textColor="@color/colorAccent" />
-
-            <EditText
-                android:id="@+id/inside_leg_length"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="115dp"
-                android:layout_marginTop="230dp"
+                app:layout_marginLeftPercent="50%"
+                app:layout_marginTopPercent="5%"
                 android:ems="10"
                 android:gravity="center"
                 android:hint="in cm"
@@ -57,16 +42,31 @@
                 android:id="@+id/body_length"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="115dp"
-                android:layout_marginTop="115dp"
+                app:layout_marginLeftPercent="60%"
+                app:layout_marginTopPercent="27%"
                 android:ems="10"
                 android:gravity="center"
                 android:hint="in cm"
                 android:inputType="number"
                 android:maxLength="3"
                 android:textColor="@color/colorAccent" />
-        </RelativeLayout>
-    </FrameLayout>
+
+            <EditText
+                android:id="@+id/inside_leg_length"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            app:layout_marginLeftPercent="60%"
+            app:layout_marginTopPercent="50%"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="in cm"
+            android:inputType="number"
+            android:maxLength="3"
+            android:textColor="@color/colorAccent" />
+
+
+        </android.support.percent.PercentRelativeLayout>
+    </android.support.percent.PercentFrameLayout>
 
     <ImageButton
         android:id="@+id/background"

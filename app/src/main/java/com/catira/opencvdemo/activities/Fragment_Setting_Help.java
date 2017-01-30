@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.text.Html;
 
 import com.catira.opencvdemo.R;
 
@@ -16,7 +17,7 @@ public class Fragment_Setting_Help extends AppCompatDialogFragment {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.title_ab_set));
-        builder.setMessage(getString(R.string.text_ab_set));
+        builder.setMessage (Html.fromHtml(getResources().getString(R.string.text_ab_set)));
 
         builder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
