@@ -37,6 +37,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     ImageView bikecycleImageView, fa_button_camera, fa_button_check;
     Intent i;
     final static int cameraData = 0;
+    final static int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1, PERMISSIONS_REQUEST_CAMERA = 2;
+    private int permissionFirst = 0, permissionSecond = 0;
+
     Bitmap bmp;
     private File bildDatei;
 
@@ -185,16 +188,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
         int check = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if(check != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            return;
-        }
+
         int check2 = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA);
-        if(check2 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA}, 1);
+
+        if(check != PackageManager.PERMISSION_GRANTED ) {
+            setPermissionsRequestWriteExternalStorage();
+            return;
+        }
+        if(check == 0 && check2 != PackageManager.PERMISSION_GRANTED) {
+            setPermissionsRequestCamera();
             return;
         }
 
@@ -209,6 +212,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         */
     }
+
+    private void setPermissionsRequestWriteExternalStorage() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+    }
+    private void setPermissionsRequestCamera() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.CAMERA}, 2);
+    }
     private void cameraIntentSenden()  {
         try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -222,9 +234,53 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) throws SecurityException{
-        if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                                           String permissions[], int[] grantResults) throws SecurityException {
+
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    permissionFirst = 1;
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                break;
+
+                // other 'case' lines to check for other
+                // permissions this app might request
+                case PERMISSIONS_REQUEST_CAMERA:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    permissionSecond = 1;
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                break;
+        }
+
+        if(permissionFirst == 1 && permissionSecond == 1) {
             cameraIntentSenden();
+        } else {
+            if(permissionSecond == 0) {
+                setPermissionsRequestCamera();
+            }
+            if (permissionFirst == 0) {
+                setPermissionsRequestWriteExternalStorage();
+            }
         }
 
     }
