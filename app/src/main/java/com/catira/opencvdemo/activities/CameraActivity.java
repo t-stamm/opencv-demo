@@ -299,6 +299,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             BitmapFactory.Options options = new BitmapFactory.Options();
+            //http://de.androids.help/q7688
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             Bitmap bitmap = BitmapFactory.decodeFile(bildDatei.getAbsolutePath(), options);
             bikecycleImageView.setImageBitmap(bitmap);
