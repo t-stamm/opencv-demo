@@ -19,9 +19,7 @@ import com.catira.opencvdemo.activities.components.MoveViewComponent;
  */
 
 public class ZeichnenActivity extends AppCompatActivity implements View.OnTouchListener{
-    private ZeichnenView zview;
     private FrameLayout frameLayout;
-    private ZeichnenView highest_point_saddle_view;
     private MoveViewComponent testview, Blueview, Redview;
     private static SeekBar seekbar_BackTypre;
     private static SeekBar seekbar_FrontTypre;

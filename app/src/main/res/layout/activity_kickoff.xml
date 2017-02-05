@@ -2,36 +2,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
 
-    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background"
     tools:context="com.catira.opencvdemo.activities.KickoffActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp"
+        tools:context=".Fragment_Kickoff_List">
+
+        <ListView
+            android:id="@+id/listview_kickoff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+    </FrameLayout>
+
+
     <ImageButton
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:id="@+id/background"
-        android:background="@drawable/background_rectangle"
-        android:elevation="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="0dp"
         android:layout_centerHorizontal="true"
-        />
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/background_rectangle"
+        android:elevation="10dp" />
 
     <ImageButton
+        android:id="@+id/fa_button"
         android:layout_width="65dp"
         android:layout_height="65dp"
-        android:id="@+id/fa_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
         android:background="@drawable/fab_oval"
         android:elevation="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="35dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/fab_plus_icon"
-         />
-
+        android:src="@drawable/fab_plus_icon" />
 
 
 </RelativeLayout>
