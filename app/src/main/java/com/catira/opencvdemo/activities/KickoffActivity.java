@@ -23,6 +23,7 @@ public class KickoffActivity extends AppCompatActivity {
 
     ImageButton floatButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -32,6 +33,8 @@ public class KickoffActivity extends AppCompatActivity {
         ab.setLogo(R.drawable.ab_app_logo);
         ab.setDisplayUseLogoEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
+
+
 
         boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRunKick", true);
         if (isFirstRun) {
@@ -48,6 +51,12 @@ public class KickoffActivity extends AppCompatActivity {
                     .apply();
         }
 
+        Fragment_Kickoff_List fragment = new Fragment_Kickoff_List();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.add(fragment, "Kickoff");
+        transaction.commit();
+
         floatButton = (ImageButton) findViewById(R.id.fa_button);
         floatButton.setOnClickListener(new View.OnClickListener() {
 
@@ -57,6 +66,9 @@ public class KickoffActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
 
     //Mit Info Menü Button Dialog starten über Fragment Manager
     public void doInfo(MenuItem menuItem) {
