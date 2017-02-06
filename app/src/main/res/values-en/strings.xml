@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">CV Bike</string>
     <string name="title_activity_loading">Welcome</string>
-    <string name="title_activity_kickoff">New Optimizing</string>
+    <string name="title_activity_kickoff">Start</string>
     <string name="title_activity_dimension">Body dimensions</string>
     <string name="title_activity_setting">Settings</string>
     <string name="title_activity_camera">Picture</string>
@@ -29,6 +29,10 @@
     <string name="title_ab_set">Boundary conditions</string>
     <string name="text_ab_set"><![CDATA[<b>1.Ride set-up</b><br/>Choose your set-up<br/><br/>
                                             <b>2.Wheel size</b><br/>Choose your wheel size]]></string>
+
+    <string name="title_ab_cam">Bildaufnahme</string>
+    <string name="text_ab_cam"><![CDATA[<b>1.Ausrichtung</b><br/>Richte die Kamera für das Foto horizontal aus<br/><br/>
+                                            <b>2.Fokus</b><br/>Setze dein Rad in den Fokus und vermeide einen breiten Rand]]></string>
 
     <string name="toast_dimension">Please set your body dimensions first</string>
     <string name="toast_setting">Please chose your boundary conditions first</string>

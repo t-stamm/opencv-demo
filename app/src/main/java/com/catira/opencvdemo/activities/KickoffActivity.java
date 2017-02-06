@@ -29,10 +29,12 @@ public class KickoffActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kickoff);
+
+        /*Logo im Menü anzeigen
         android.support.v7.app.ActionBar ab = getSupportActionBar();
         ab.setLogo(R.drawable.ab_app_logo);
         ab.setDisplayUseLogoEnabled(true);
-        ab.setDisplayShowHomeEnabled(true);
+        ab.setDisplayShowHomeEnabled(true);*/
 
 
 
@@ -51,12 +53,6 @@ public class KickoffActivity extends AppCompatActivity {
                     .apply();
         }
 
-        Fragment_Kickoff_List fragment = new Fragment_Kickoff_List();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.add(fragment, "Kickoff");
-        transaction.commit();
-
         floatButton = (ImageButton) findViewById(R.id.fa_button);
         floatButton.setOnClickListener(new View.OnClickListener() {
 
@@ -67,10 +63,7 @@ public class KickoffActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-    //Mit Info Menü Button Dialog starten über Fragment Manager
+    //Mit Info Menü Button Dialog starten mit Fragment Manager
     public void doInfo(MenuItem menuItem) {
         Fragment_Impressum fragment = new Fragment_Impressum();
         FragmentManager fm = getSupportFragmentManager();
@@ -79,7 +72,7 @@ public class KickoffActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    //Mit Help Menü Button Dialog starten über Fragment Manager
+    //Mit Help Menü Button Dialog starten mit Fragment Manager
     public void doHelp(MenuItem menuItem) {
         Fragment_Help fragment = new Fragment_Help();
         FragmentManager fm = getSupportFragmentManager();
