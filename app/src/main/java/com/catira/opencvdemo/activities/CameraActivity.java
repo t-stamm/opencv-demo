@@ -65,6 +65,22 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRunCam", true);
+        if (isFirstRun) {
+            // Place your dialog code here to display the dialog
+            Fragment_Camera fragment = new Fragment_Camera();
+            FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+            transaction.add(fragment, "Kamera");
+            transaction.commit();
+
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRunCam", false)
+                    .apply();
+        }
+
 
         weiter = (ImageButton) findViewById(R.id.fa_button_check);
         weiter.setOnClickListener(new View.OnClickListener() {
