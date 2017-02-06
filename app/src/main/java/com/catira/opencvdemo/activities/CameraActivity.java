@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -295,14 +297,48 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             return null;
         }
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            //http://de.androids.help/q7688
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap bitmap = BitmapFactory.decodeFile(bildDatei.getAbsolutePath(), options);
-            bikecycleImageView.setImageBitmap(bitmap);
+
+            try {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                Bitmap bitmap = BitmapFactory.decodeFile(bildDatei.getAbsolutePath(), options);
+
+                Matrix mat = new Matrix();
+
+                ExifInterface exif = new ExifInterface(bildDatei.getAbsolutePath());
+                String ori = exif.getAttribute(ExifInterface.TAG_ORIENTATION).toString();
+
+                switch (ori) {
+                    case "0":
+                        mat.postRotate((float) 0);
+                        break;
+                    case "6":
+                        mat.postRotate((float) 90);
+                        break;
+                    case "3":
+                        mat.postRotate((float) 180);
+                        break;
+                    case "8":
+                        mat.postRotate((float) 270);
+                        break;
+                    default:
+                        bikecycleImageView.setImageBitmap(bitmap);
+                }
+                if(mat == null) {
+                    bikecycleImageView.setImageBitmap(bitmap);
+                } else {
+                    Bitmap bitmapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
+                    bikecycleImageView.setImageBitmap(bitmapRotate);
+                }
+
+            } catch (Exception e) {
+                System.out.println("onActivityResult");
+            }
+
             secondStep();
         }
         /*
