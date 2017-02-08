@@ -18,8 +18,8 @@ import org.opencv.core.Point;
 public class BikeDimensions implements JSONable {
 
 
-    protected Point mFrontWheel; /* Vorderrad Mittelpunkt */
-    protected Point mBackWheel; /* Hinterrad Mittelpunkt */
+    protected Circle mFrontWheel; /* Vorderrad Mittelpunkt */
+    protected Circle mBackWheel; /* Hinterrad Mittelpunkt */
     protected Point mForkHead; /* Gabelkopf */
     protected Point mSaddle; /* Sattel */
     protected Point mPaddles; /* Pedale */
@@ -32,7 +32,7 @@ public class BikeDimensions implements JSONable {
     // Point bicycleTrail; /* Nachlauf */
     // Point bendingRecess; /* Gabelbiegung Rücksprung */
 
-    public BikeDimensions(Point mFrontWheel, Point mBackWheel, Point mForkHead, Point mSaddle, Point mPaddles) {
+    public BikeDimensions(Circle mFrontWheel, Circle mBackWheel, Point mForkHead, Point mSaddle, Point mPaddles) {
         this.mFrontWheel = mFrontWheel;
         this.mBackWheel = mBackWheel;
         this.mForkHead = mForkHead;
@@ -41,14 +41,14 @@ public class BikeDimensions implements JSONable {
     }
 
     public double getWheelbase() throws NumberFormatException {
-        return Math.hypot(mFrontWheel.x, mBackWheel.x) + Math.hypot(mBackWheel.x, mBackWheel.y);
+        return Math.hypot(mFrontWheel.getCenter().x, mBackWheel.getCenter().x) + Math.hypot(mBackWheel.getCenter().x, mBackWheel.getCenter().y);
     }
 
-    public Point getFrontWheel() {
+    public Circle getFrontWheel() {
         return mFrontWheel;
     }
 
-    public Point getBackWheel() {
+    public Circle getBackWheel() {
         return mBackWheel;
     }
 
@@ -67,8 +67,8 @@ public class BikeDimensions implements JSONable {
     @Override
     public JSONObject getJson() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("frontWheel", "{x: " + mFrontWheel.x + ", y: " + mFrontWheel.y + "}");
-        json.put("backWheel", "{x: " + mBackWheel.x + ", y: " + mBackWheel.y + "}");
+        json.put("frontWheel", mFrontWheel.getJson());
+        json.put("backWheel", mBackWheel.getJson());
         json.put("forkHead", "{x: " + mForkHead.x + ", y: " + mForkHead.y + "}");
         json.put("saddle", "{x: " + mSaddle.x + ", y: " + mSaddle.y + "}");
         json.put("paddles", "{x: " + mPaddles.x + ", y: " + mPaddles.y + "}");
@@ -77,8 +77,8 @@ public class BikeDimensions implements JSONable {
     }
 
     public static BikeDimensions fromJson(JSONObject json) throws JSONException {
-        return new BikeDimensions(getPointFromJson("frontWheel", json),
-                getPointFromJson("backWheel", json),
+        return new BikeDimensions(Circle.fromJson(json.getJSONObject("frontWheel")),
+                Circle.fromJson(json.getJSONObject("backWheel")),
                 getPointFromJson("forkHead", json),
                 getPointFromJson("saddle", json),
                 getPointFromJson("paddles", json));
