@@ -13,9 +13,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -60,6 +64,22 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRunCam", true);
+        if (isFirstRun) {
+            // Place your dialog code here to display the dialog
+            Fragment_Camera fragment = new Fragment_Camera();
+            FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+            transaction.add(fragment, "Kamera");
+            transaction.commit();
+
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRunCam", false)
+                    .apply();
+        }
 
 
         weiter = (ImageButton) findViewById(R.id.fa_button_check);
@@ -360,5 +380,21 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         zview.onTouch(event);
         mZoomFragment.onTouch(v, event);
         return true;
+    }
+
+    // Laden der Menuressource
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_camera, menu);
+        return true;
+    }
+
+    //Mit Help Menü Button Dialog starten mit Fragment Manager
+    public void doCam(MenuItem menuItem) {
+        Fragment_Camera fragment = new Fragment_Camera();
+        FragmentManager fm = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+        transaction.add(fragment, "Kamera");
+        transaction.commit();
     }
 }

@@ -9,20 +9,18 @@
     android:background="@color/background"
     tools:context="com.catira.opencvdemo.activities.KickoffActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        tools:context=".Fragment_Kickoff_List">
-
-        <ListView
-            android:id="@+id/listview_kickoff"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
-    </FrameLayout>
+    <Button
+        android:id="@+id/openresult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:text="letztes Ergebnis"
+        android:background="@drawable/button_set"
+        android:drawableTop="@drawable/button_open_results"
+        android:textSize="16sp"
+        android:textColor="#ffffff"/>
 
 
     <ImageButton

@@ -3,7 +3,7 @@
 
 
     <string name="title_activity_loading">Willkommen</string>
-    <string name="title_activity_kickoff">Neue Optimierung</string>
+    <string name="title_activity_kickoff">Start</string>
     <string name="title_activity_dimension">Körpermaße</string>
     <string name="title_activity_setting">Einstellungen</string>
     <string name="title_activity_camera">Foto</string>
@@ -31,9 +31,17 @@
     <string name="text_ab_set"><![CDATA[<b>1.Sitzhaltung</b><br/>Wähle eine bevorzugte Sitzhaltung aus<br/><br/>
                                             <b>2.Reifengröße</b><br/>Wähle deine Reifengröße aus]]></string>
 
+    <string name="title_ab_cam">Picture recording</string>
+    <string name="text_ab_cam"><![CDATA[<b>1.Ausrichtung</b><br/>Richte die Kamera für das Foto horizontal aus<br/><br/>
+                                            <b>2.Fokus</b><br/>Setze dein Rad in den Fokus und vermeide einen breiten Rand]]></string>
+
 
     <string name="toast_dimension">Es wurden noch nicht alle Längen ausgefüllt</string>
     <string name="toast_setting">Es wurden noch nicht alle Randbedingungen getroffen</string>
+
+
+
+
 
 
 
