@@ -178,6 +178,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                 });
 
+        calSecondWheelPos();
+    }
+    public void calSecondWheelPos() {
         //Zweites Rad berechnen
         Log.d("FahrradApp", "Zoll: " + getIntent().getStringExtra("wheelSize") );
         double mmPixelFaktor = 2.5;
@@ -189,7 +192,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         resultFakWhDis = mmPixelFaktor * wheelDistance;
         Log.d("FahrradApp", "Punkt: " + resultFakWhDis);
         // das resultFakWhDis plus oder minus in der x-Achse zum Mittelpunkt eines Rades
-
     }
     public void thirdStep(){
         seekBarWrapper.setVisibility(View.GONE);
