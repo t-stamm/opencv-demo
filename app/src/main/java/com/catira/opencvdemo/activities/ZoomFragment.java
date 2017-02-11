@@ -3,17 +3,14 @@ package com.catira.opencvdemo.activities;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.services.BikeImageIdentifier;
 
 
 /**
@@ -85,6 +82,7 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
@@ -128,7 +126,9 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
 
         int x = Math.max(0, (int)((e.getX()*mZoomFactor)-(mSIZE*0.5)));
         int y = Math.max(0, (int)((e.getY()*mZoomFactor)-(mSIZE*0.5)));//-(v.getY()+mSIZE)*0.5)) + 60);
-        Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)), null, false);
-        mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, mSIZE, mSIZE, false));
+        if ((int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)) == 300) {
+            Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)), null, false);
+            mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, mSIZE, mSIZE, false));
+        }
     }
 }
