@@ -5,6 +5,7 @@
     tools:context=".activities.KickoffActivity"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--
     <item
         android:id="@+id/ab_info_id"
         android:title="@string/title_ab_info"
@@ -13,6 +14,7 @@
         android:onClick="doInfo"
         app:showAsAction="always"
         />
+    -->
 
     <item
         android:id="@+id/ab_help_id"

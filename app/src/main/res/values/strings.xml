@@ -9,13 +9,17 @@
     <string name="title_activity_camera">Foto</string>
     <string name="title_activity_result">Ergebnis</string>
 
+    <string name="button_last_result">letztes Ergebnis</string>
+    <string name="textview_no_choice">bitte auswählen</string>
+    <string name="button_seating_position">Sitzhaltung</string>
+    <string name="button_wheel_size">Reifengröße</string>
 
     <string name="toast_backpress_dimension_activity">Drücken Sie erneut Zurück um die App zu beenden</string>
 
     <string name="title_ab_info">Impressum</string>
-    <string name="text_ab_info">Das ist unser kleines aber feines Impressum.\n\nIhr erreicht uns unter info@xy.com</string>
+    <string name="text_ab_info">Fragen und Anregungen könnt Ihr sehr gerne per Mail an info@xy.com schicken</string>
 
-    <string name="title_ab_help">So wirds gemacht...</string>
+    <string name="title_ab_help">Give me five...</string>
         <string name="text_ab_help"><![CDATA[<b>1.Neue Vermessung</b><br/>Lege eine neue Vermessung an oder öffne ein abgeschlossene Optimierung<br/><br/>
                                             <b>2.Körpermaße</b><br/>Erfasse deine Körpermaße<br/><br/>
                                             <b>3.Randbedingungen</b><br/>Bevorzugte Sitzhaltung und Reifengröße sind erforderlich<br/><br/>
@@ -23,15 +27,22 @@
                                             <b>5.Optimierung</b><br/>Deine persönliche optimierte Sitzposition wird ausgegeben]]></string>
 
     <string name="title_ab_human">Deine Körpermaße</string>
-    <string name="text_ab_human"><![CDATA[<b>Armlänge</b><br/>Nimm ein Stift in die Faust und messe den Abstand von dem Stift bis zu der kleinen Aushöhlung auf der Schulter.<br/><br/>
-                                            <b>Körperlänge</b><br/>Nimm das Maß bis zu der kleinen v-förmigen Einbuchtung am Brustbein.<br/><br/>
-                                            <b>Schrittlänge</b><br/>Hierfür kannst du am besten ein Buch zwischen die Beine klemmen und bis zur Oberkannte des Buches messen.]]></string>
+    <string name="text_ab_human"><![CDATA[<b>Armlänge</b><br/>Nimm ein Stift in die Faust und messe den Abstand von dem Stift bis zu der kleinen Aushöhlung auf der Schulter<br/><br/>
+                                            <b>Körperlänge</b><br/>Nimm das Maß bis zu der kleinen v-förmigen Einbuchtung am Brustbein<br/><br/>
+                                            <b>Schrittlänge</b><br/>Hierfür kannst du am besten ein Buch zwischen die Beine klemmen und bis zur Oberkante des Buches messen]]></string>
 
     <string name="title_ab_set">Randbedingungen</string>
-    <string name="text_ab_set"><![CDATA[<b>1.Sitzhaltung</b><br/>Wähle eine bevorzugte Sitzhaltung aus<br/><br/>
+    <string name="text_ab_set"><![CDATA[<b>1.Sitzhaltung</b><br/>Wähle deine bevorzugte Sitzhaltung aus<br/><br/>
                                             <b>2.Reifengröße</b><br/>Wähle deine Reifengröße aus]]></string>
 
-    <string name="title_ab_cam">Picture recording</string>
+    <string name="title_set_list1_title">Sitzhaltung</string>
+    <string name="title_set_list1_option1">Touren-Position</string>
+    <string name="title_set_list1_option2">sportliche Haltung</string>
+    <string name="title_set_list1_option3">Race-Haltung</string>
+
+    <string name="title_set_list2_title">Reifengröße</string>
+
+    <string name="title_ab_cam">Bildaufnahme</string>
     <string name="text_ab_cam"><![CDATA[<b>1.Ausrichtung</b><br/>Richte die Kamera für das Foto horizontal aus<br/><br/>
                                             <b>2.Fokus</b><br/>Setze dein Rad in den Fokus und vermeide einen breiten Rand]]></string>
 

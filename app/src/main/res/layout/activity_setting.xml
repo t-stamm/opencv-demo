@@ -23,7 +23,7 @@
                 android:layout_width="300dp"
                 android:layout_height="40dp"
                 android:layout_centerHorizontal="true"
-                android:hint="keine Auswahl"
+                android:hint="@string/textview_no_choice"
                 android:textSize="18sp"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"
@@ -40,7 +40,7 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/button_set"
                 android:drawableLeft="@android:drawable/ic_menu_manage"
-                android:text="Sitzhaltung auswählen"
+                android:text="@string/button_seating_position"
                 android:textSize="16sp"
                 android:textColor="#ffffff" />
 
@@ -51,7 +51,7 @@
                 android:layout_below="@+id/choice_pos"
                 android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
-                android:hint="keine Auswahl"
+                android:hint="@string/textview_no_choice"
                 android:textSize="18sp"
                 android:textColor="@color/colorAccent"
                 android:gravity="center"
@@ -68,7 +68,7 @@
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/button_set"
                 android:drawableLeft="@android:drawable/ic_menu_manage"
-                android:text="Reifengröße auswählen"
+                android:text="@string/button_wheel_size"
                 android:textSize="16sp"
                 android:textColor="#ffffff" />
         </RelativeLayout>
