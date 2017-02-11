@@ -1,5 +1,6 @@
 package com.catira.opencvdemo.services;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.JsonReader;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
 
+import com.catira.opencvdemo.App;
 import com.catira.opencvdemo.R;
 import com.catira.opencvdemo.model.BikeCalculationHistoryEntry;
 
@@ -28,14 +30,32 @@ public class BikeCalculationHistoryStorage {
     private static String BIKE_HISTORY_SETTINGS = "bike_calculation_history";
     private final SharedPreferences mSharedPref;
     private Runnable mCallback;
+    private boolean mIsInitialized = false;
+    private static BikeCalculationHistoryStorage instance;
 
     private List<BikeCalculationHistoryEntry> entries;
 
-    public BikeCalculationHistoryStorage(Context context, Runnable callback) {
-        this.mSharedPref = context.getSharedPreferences(BIKE_HISTORY_SETTINGS, Context.MODE_PRIVATE);
-        this.mCallback = callback;
-        load();
+    private BikeCalculationHistoryStorage() {
+        if(instance == null) {
+            this.mSharedPref = App.getContext().getSharedPreferences(BIKE_HISTORY_SETTINGS, Context.MODE_PRIVATE);
+            load();
+            instance = this;
+        } else {
+            throw new InstantiationError("No further instances allowed. Use getInstance instead.");
+        }
     }
+
+    public static BikeCalculationHistoryStorage getInstance() {
+        if(instance == null) {
+            instance = new BikeCalculationHistoryStorage();
+        }
+        return instance;
+    }
+
+    public void setCallback(Runnable callback) {
+        this.mCallback = callback;
+    }
+
     private void load() {
         new Thread(new Runnable() {
             @Override
@@ -74,6 +94,7 @@ public class BikeCalculationHistoryStorage {
         } else {
             Log.i(this.getClass().getName(), "No settings found to load.");
         }
+        mIsInitialized = true;
     }
 
     public void addEntry(BikeCalculationHistoryEntry entry) {
@@ -106,5 +127,9 @@ public class BikeCalculationHistoryStorage {
         }
         editor.putString(BIKE_HISTORY_SETTINGS, array.toString());
         editor.commit();
+    }
+
+    public boolean isInitialized() {
+        return mIsInitialized;
     }
 }
