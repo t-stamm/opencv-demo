@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.catira.opencvdemo.R;
+import com.catira.opencvdemo.services.BikeImageIdentifier;
 
 
 /**
@@ -125,8 +126,8 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
             getView().setX(0f);
         }
 
-        int x = Math.max(0, (int)((e.getX()*mZoomFactor-(v.getX()+mSIZE)*0.5))+34);
-        int y = Math.max(0, (int)((e.getY()*mZoomFactor-v.getY()+mSIZE*0.5))-80);
+        int x = Math.max(0, (int)((e.getX()*mZoomFactor)-(mSIZE*0.5)));
+        int y = Math.max(0, (int)((e.getY()*mZoomFactor)-(mSIZE*0.5)));//-(v.getY()+mSIZE)*0.5)) + 60);
         Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)), null, false);
         mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, mSIZE, mSIZE, false));
     }
