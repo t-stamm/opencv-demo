@@ -63,7 +63,7 @@ public class KickoffActivity extends AppCompatActivity {
         });
     }
 
-    //Mit Info Menü Button Dialog starten mit Fragment Manager
+    /*Mit Info Menü Button Dialog starten mit Fragment Manager
     public void doInfo(MenuItem menuItem) {
         Fragment_Impressum fragment = new Fragment_Impressum();
         FragmentManager fm = getSupportFragmentManager();
@@ -71,6 +71,7 @@ public class KickoffActivity extends AppCompatActivity {
         transaction.add(fragment, "Impressum");
         transaction.commit();
     }
+    */
 
     //Mit Help Menü Button Dialog starten mit Fragment Manager
     public void doHelp(MenuItem menuItem) {

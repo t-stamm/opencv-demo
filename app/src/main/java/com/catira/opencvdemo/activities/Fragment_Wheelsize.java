@@ -18,7 +18,7 @@ public class Fragment_Wheelsize extends AppCompatDialogFragment {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Reifengröße auswählen...");
+        builder.setTitle(getString(R.string.title_set_list2_title));
         final String[] typen = new String[]{"571", "622", "630"};
 
         builder.setItems(typen, new DialogInterface.OnClickListener() {

@@ -16,7 +16,7 @@
         android:padding="16dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"
-        android:text="letztes Ergebnis"
+        android:text="@string/button_last_result"
         android:background="@drawable/button_set"
         android:drawableTop="@drawable/button_open_results"
         android:textSize="16sp"

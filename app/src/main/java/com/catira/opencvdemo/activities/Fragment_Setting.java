@@ -18,8 +18,8 @@ public class Fragment_Setting extends AppCompatDialogFragment {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle("Sitzposition auswählen...");
-        final String[] typen = new String[]{"Touren-Position", "sportliche Haltung", "Race-Haltung"};
+        builder.setTitle(getString(R.string.title_set_list1_title));
+        final String[] typen = new String[]{getString(R.string.title_set_list1_option1), getString(R.string.title_set_list1_option2), getString(R.string.title_set_list1_option3)};
 
         builder.setItems(typen, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
