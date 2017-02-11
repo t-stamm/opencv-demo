@@ -38,6 +38,8 @@ public class MoveViewComponent extends View {
     private float circleBackTyreSize = 70;
     private float circleFrontTyreSize = 70;
     private boolean circleBackTyre = false;
+    String nearestPoint = null;
+    String nearestTyre = null;
     //temporär
     private float xDir = -1;
     private float yDir = -1;
@@ -339,8 +341,6 @@ public class MoveViewComponent extends View {
         double aYellow = touchX - xFrontTyre;
         double bYellow = touchY - yFrontTyre;
 
-
-
         double cGreen = Math.sqrt(Math.pow(aGreen,2)+ Math.pow(bGreen,2));
         double cYellow = Math.sqrt(Math.pow(aYellow,2)+ Math.pow(bYellow,2));
 
@@ -352,19 +352,18 @@ public class MoveViewComponent extends View {
         if (cYellow < cGreen ){
             circleTyre = "yellow";
         }
-
-
         return circleTyre;
     }
 
 
     public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
+
         //bicycle circle
         if(circleBackTyre == true){
-
-            String nearestTyre = null;
-            nearestTyre = whichCircleTyre(event);
+            if (action == MotionEvent.ACTION_DOWN ) {
+                nearestTyre = whichCircleTyre(event);
+            }
 
             if(nearestTyre == "green") {
                 float dx = event.getX() - xBackTyre;
@@ -424,14 +423,14 @@ public class MoveViewComponent extends View {
         }
         if(circleBackTyre == false){
 
-            String nearestPoint = null;
             int countPoint = 3;
             touch = 1;
             //Canvas Position ermitteln!?
 
-            //neareset Circle
-            nearestPoint = whichCircle(event, countPoint);
-            //Test blau/red erkannt
+            if (action == MotionEvent.ACTION_DOWN ) {
+                //neareset Circle
+                nearestPoint = whichCircle(event, countPoint);
+            }
 
             if (nearestPoint == "blue") {
 
