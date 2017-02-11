@@ -7,10 +7,9 @@ import android.view.View;
 import android.widget.ImageButton;
 
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.services.BikeCalculationHistoryStorage;
 
 
-public class ResultActivity extends AppCompatActivity implements Runnable {
+public class ResultActivity extends AppCompatActivity {
 
     ImageButton saveBtn;
 
