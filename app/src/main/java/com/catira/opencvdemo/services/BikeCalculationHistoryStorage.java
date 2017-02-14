@@ -38,8 +38,9 @@ public class BikeCalculationHistoryStorage {
     private BikeCalculationHistoryStorage() {
         if(instance == null) {
             this.mSharedPref = App.getContext().getSharedPreferences(BIKE_HISTORY_SETTINGS, Context.MODE_PRIVATE);
-            load();
             instance = this;
+            entries = new ArrayList<>();
+            load();
         } else {
             throw new InstantiationError("No further instances allowed. Use getInstance instead.");
         }

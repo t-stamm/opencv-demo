@@ -40,6 +40,8 @@ public class BikeDimensions implements JSONable {
         this.mPaddles = mPaddles;
     }
 
+
+
     public double getWheelbase() throws NumberFormatException {
         return Math.hypot(mFrontWheel.getCenter().x, mBackWheel.getCenter().x) + Math.hypot(mBackWheel.getCenter().x, mBackWheel.getCenter().y);
     }

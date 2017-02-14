@@ -2,10 +2,12 @@ package com.catira.opencvdemo.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.catira.opencvdemo.R;
+import com.catira.opencvdemo.model.BikeCalculationHistoryEntry;
+import com.catira.opencvdemo.model.BikeDimensions;
+import com.catira.opencvdemo.model.Circle;
+import com.catira.opencvdemo.model.PersonDimensions;
+
+import org.opencv.core.Point;
+
+import java.util.Date;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -93,6 +103,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
     }
+
 
     //Mit Help Menü Button Dialog starten über Fragment Manager
     public void doSet(MenuItem menuItem) {

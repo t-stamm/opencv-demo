@@ -1,9 +1,8 @@
 package com.catira.opencvdemo.model;
 
-import android.graphics.Point;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.opencv.core.Point;
 
 /**
  * Created by timos on 08.02.2017.
