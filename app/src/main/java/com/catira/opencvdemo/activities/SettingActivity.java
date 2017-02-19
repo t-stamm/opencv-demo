@@ -63,8 +63,11 @@ public class SettingActivity extends AppCompatActivity {
                     toast.show();
                     return;
                 } else {
+                    //final Intent mContext = new Intent(getApplicationContext(), MeasurmentContext.class);
+                    MeasurmentContext.currentSettingPos = positionEditText.getText().toString();
+                    MeasurmentContext.currentSettingWheelSize = Integer.parseInt(wheelsizeEditText.getText().toString());
                     Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
-                    intent.putExtra("wheelSize", wheelsizeEditText.getText());
+                    //intent.putExtra("wheelSize", wheelsizeEditText.getText());
                     startActivity(intent);
                 }}
         });
