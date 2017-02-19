@@ -25,17 +25,17 @@
     <FrameLayout
         android:id="@+id/framelayout1"
         android:background="#000000"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/buttonReset"
         >
 
         <ImageView
             android:id="@+id/bikecycleImageView"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:layout_gravity="top|left"
             android:layout_margin="0dp"
             android:src="@drawable/default_fahrrad">
     </ImageView>
