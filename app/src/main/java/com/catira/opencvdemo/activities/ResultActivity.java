@@ -3,15 +3,10 @@ package com.catira.opencvdemo.activities;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.model.BikeCalculationHistoryEntry;
-import com.catira.opencvdemo.services.BikeCalculationHistoryStorage;
-
-import java.util.Date;
 
 
 public class ResultActivity extends AppCompatActivity {
@@ -34,12 +29,12 @@ public class ResultActivity extends AppCompatActivity {
                 */
                 //BikeCalculationHistoryStorage entry = new BikeCalculationHistoryStorage();
                 // Instantiate a Date object
-                Date date = new Date();
-                BikeCalculationHistoryEntry entry = new BikeCalculationHistoryEntry(date);
-                BikeCalculationHistoryStorage instance =  BikeCalculationHistoryStorage.getInstance();
-                instance.addEntry(entry);
+                //Date date = new Date();
+                //BikeCalculationHistoryEntry entry = new BikeCalculationHistoryEntry(date);
+                //BikeCalculationHistoryStorage instance =  BikeCalculationHistoryStorage.getInstance();
+                //instance.addEntry(entry);
                 //String text = instance.load();
-                Log.i("Storage", "hello");
+                //Log.i("Storage", "hello");
             }
         });
     }
