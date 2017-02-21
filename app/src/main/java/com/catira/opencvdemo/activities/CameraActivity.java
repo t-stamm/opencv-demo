@@ -30,7 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.activities.components.MoveViewComponent;
+import com.catira.opencvdemo.activities.components.MoveableBikeComponentsView;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,9 +54,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     //Drawing View
     private FrameLayout frameLayout;
     private RelativeLayout seekBarWrapper;
-    private MoveViewComponent zview;
+    /*private MoveableBikeComponentsView zview;
     private static SeekBar seekbar_BackTypre;
-    private static SeekBar seekbar_FrontTypre;
+    private static SeekBar seekbar_FrontTypre;*/
     private ZoomFragment mZoomFragment;
 
 
@@ -99,8 +99,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         //create framelayout and zview
         frameLayout = (FrameLayout) findViewById(R.id.framelayout1);
         seekBarWrapper = (RelativeLayout) findViewById(R.id.seekBarWrapper);
-        zview = new MoveViewComponent(this);
-        frameLayout.addView(zview);
+        /*zview = new MoveableBikeComponentsView(this);
+        frameLayout.addView(zview);*/
 
         mZoomFragment = ZoomFragment.newInstance(R.id.bikecycleImageView);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -130,13 +130,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         setPointsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                zview.updateMouse();
+                //zview.updateMouse();
                 thirdStep();
             }
         });
 
         // set seekbar
-        seekbar_BackTypre = (SeekBar) findViewById(R.id.seekBarBackTypre);
+        /*seekbar_BackTypre = (SeekBar) findViewById(R.id.seekBarBackTypre);
         seekbar_BackTypre.setProgress(70);
         seekbar_BackTypre.setMax(200);
         seekbar_BackTypre.setOnSeekBarChangeListener(
@@ -144,7 +144,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_BackTypre(prozess);
+                        //zview.setSeekbar_BackTypre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -165,7 +165,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_FrontTypre(prozess);
+                        //zview.setSeekbar_FrontTypre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -178,7 +178,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                 });
 
-        calSecondWheelPos();
+        calSecondWheelPos();*/
     }
     public void calSecondWheelPos() {
         //Zweites Rad berechnen
@@ -201,7 +201,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         backToCycButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                zview.updateMouse();
+                //zview.updateMouse();
                 secondStep();
             }
         });
@@ -377,8 +377,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        zview.onTouch(event);
-        mZoomFragment.onTouch(v, event);
+        mZoomFragment.onTouch(bikecycleImageView, event);
+        //zview.onTouch(event);
         return true;
     }
 

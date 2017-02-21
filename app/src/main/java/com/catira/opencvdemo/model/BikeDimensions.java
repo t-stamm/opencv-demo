@@ -21,6 +21,8 @@ public class BikeDimensions implements JSONable {
     protected Circle mFrontWheel; /* Vorderrad Mittelpunkt */
     protected Circle mBackWheel; /* Hinterrad Mittelpunkt */
     protected Point mForkHead; /* Gabelkopf */
+
+
     protected Point mSaddle; /* Sattel */
     protected Point mPaddles; /* Pedale */
 
@@ -39,8 +41,6 @@ public class BikeDimensions implements JSONable {
         this.mSaddle = mSaddle;
         this.mPaddles = mPaddles;
     }
-
-
 
     public double getWheelbase() throws NumberFormatException {
         return Math.hypot(mFrontWheel.getCenter().x, mBackWheel.getCenter().x) + Math.hypot(mBackWheel.getCenter().x, mBackWheel.getCenter().y);
@@ -64,6 +64,26 @@ public class BikeDimensions implements JSONable {
 
     public Point getPaddles() {
         return mPaddles;
+    }
+
+    public void setFrontWheel(Circle mFrontWheel) {
+        this.mFrontWheel = mFrontWheel;
+    }
+
+    public void setBackWheel(Circle mBackWheel) {
+        this.mBackWheel = mBackWheel;
+    }
+
+    public void setForkHead(Point mForkHead) {
+        this.mForkHead = mForkHead;
+    }
+
+    public void setSaddle(Point mSaddle) {
+        this.mSaddle = mSaddle;
+    }
+
+    public void setPaddles(Point mPaddles) {
+        this.mPaddles = mPaddles;
     }
 
     @Override

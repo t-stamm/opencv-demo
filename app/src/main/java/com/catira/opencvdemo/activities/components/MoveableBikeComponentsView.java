@@ -10,41 +10,70 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
+import com.catira.opencvdemo.model.BikeDimensions;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ck on 10.01.2017.
  */
 
-public class MoveViewComponent extends View {
+public class MoveableBikeComponentsView extends View implements Runnable {
+
+    private int mPointRadius = 13;
+
+    private BikeDimensions mBikeDimensions;
+
+    private DrawableCircle mPaddles;
     private float xpos = -1;
     private float ypos = -1;
+
+    private DrawableCircle mSaddleStart;
     private float xRed = -1;
     private float yRed = -1;
+
+    private DrawableCircle mCradle;
     private float xGreen = -1;
     private float yGreen = -1;
+
+    private DrawableCircle mCrank;
     private float xCyan = -1;
     private float yCyan = -1;
+
+    private DrawableCircle mSaddle;
     private float xBlack = -1;
     private float yBlack = -1;
+
+    private DrawableCircle mSteeringHeight;
     private float xGray = -1;
     private float yGray = -1;
+
+    private DrawableCircle mSteeringFront;
     private float xMagenta = -1;
     private float yMagenta = -1;
-    private float xBackTyre = -1;
-    private float yBackTyre= -1;
-    private float xFrontTyre = -1;
-    private float yFrontTyre= -1;
-    private Path triangle;
+
+    private DrawableCircle mBackWheel;
+    private DrawableCircle mFrontWheel;
+
+
+    public float xBackTyre = -1;
+    public float yBackTyre= -1;
+    public float circleBackTyreSize = 70;
+
+    public float xFrontTyre = -1;
+    public float yFrontTyre= -1;
+    public float circleFrontTyreSize = 70;
+
+    private List<DrawableCircle> mDrawableCircles;
+
+    private Path mPath;
     private ScaleGestureDetector SGD;
-    private float circleBackTyreSize = 70;
-    private float circleFrontTyreSize = 70;
-    private boolean circleBackTyre = false;
-    //temporär
-    private float xDir = -1;
-    private float yDir = -1;
 
-    private String farbe;
+    //private boolean circleBackTyre = true;
 
-    private Canvas canvasRed, canvasBlue, canvasGreen, canvasCyan, canvasBlack, canvasGray, canvasMagenta;
+
+    public Canvas mCanvasSaddleStart, mCanvasPaddle, mCanvasCradle, mCanvasCrank, mCanvasSaddle, mCanvasSteeringHeight, mCanvasSteeringFront;
     private Bitmap pointBlueBitmap, pointRedBitmap, pointGreenBitmap, pointCyanBitmap,
             pointBlackBitmap, pointGrayBitmap, pointMagentaBitmap;
     private Paint paint, paintRed, paintBlue, paintGreen, paintCyan, paintBlack, paintGray, paintMagenta;
@@ -52,12 +81,12 @@ public class MoveViewComponent extends View {
 
     Paint red_paintbrush_fill, blue_paintbrush_fill, green_paintbrush_fill, cyan_paintbrush_fill,
             black_paintbrush_fill;
-    Paint red_paintbrush_stroke, blue_paintbrush_stroke, green_paintbrush_stroke, yellow_paintbrush_stroke,
+    Paint mPaintRed, blue_paintbrush_stroke, mPaintYellow, yellow_paintbrush_stroke,
             cyan_paintbrush_stroke, black_paintbrush_stroke;
 
     private int touch = 0;
 
-    private boolean drawingPoints = false;
+    private boolean drawingPoints = true;
 
     /*
     Initialisierung mit allen Elementen die in der View verschoben werden können.
@@ -67,8 +96,12 @@ public class MoveViewComponent extends View {
      */
 
     //  view = new ZeichnenView(this);
-    public MoveViewComponent(Context c) {
+    public MoveableBikeComponentsView(Context c, BikeDimensions bikeDimensions) {
         super(c);
+        this.mBikeDimensions = bikeDimensions;
+
+        SGD = new ScaleGestureDetector(c, new touchZoomListener());
+/*
         if (init = true) {
             //Ereignisse empfängbar
             //Paint Objekte vorbereiten
@@ -77,20 +110,113 @@ public class MoveViewComponent extends View {
             SGD = new ScaleGestureDetector(c, new touchZoomListener());
 
             setFocusable(true);
-        }
+        }*/
 
     }
 
-    public void updateMouse() {
-        if(circleBackTyre == false) {
-            circleBackTyre = true;
-            drawingPoints = false;
-        } else {
-            circleBackTyre = false;
-            drawingPoints = true;
+    private void init(Canvas c) {
+        //mCradle = new DrawableCircle(c, mPointRadius, Color.GREEN, mPointRadius);
+        mPaddles = new DrawableCircle(Color.CYAN, mPointRadius);
+        //mSaddleStart = new DrawableCircle(c, null, mPointRadius, Color.RED, mPointRadius);
+        mSaddle = new DrawableCircle(Color.BLACK, mPointRadius);
+        mSteeringFront = new DrawableCircle(Color.MAGENTA, mPointRadius);
+        //mSteeringHeight = new DrawableCircle(c, null, mPointRadius, Color.GRAY, mPointRadius);
+        //mCrank = new DrawableCircle(c, null, mPointRadius, Color.BLUE, mPointRadius);
+        mFrontWheel = new DrawableCircle(Color.YELLOW, mPointRadius);
+        mBackWheel = new DrawableCircle(Color.YELLOW, mPointRadius);
+
+        mDrawableCircles = new ArrayList<>();
+        //mDrawableCircles.add(mCradle);
+        mDrawableCircles.add(mPaddles);
+        //mDrawableCircles.add(mSaddleStart);
+        mDrawableCircles.add(mSaddle);
+        mDrawableCircles.add(mSteeringFront);
+        //mDrawableCircles.add(mSteeringHeight);
+        //mDrawableCircles.add(mCrank);
+        mDrawableCircles.add(mFrontWheel);
+        mDrawableCircles.add(mBackWheel);
+
+        mPaintRed = new Paint();
+        mPaintRed.setColor(Color.RED);
+        mPaintRed.setStyle(Paint.Style.STROKE);
+        mPaintRed.setStrokeWidth(10);
+
+        mPaintYellow = new Paint();
+        mPaintYellow.setColor(Color.YELLOW);
+        mPaintYellow.setStyle(Paint.Style.STROKE);
+        mPaintYellow.setStrokeWidth(10);
+
+        setFocusable(true);
+    }
+
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if(mSaddle == null) {
+            init(canvas);
+        }
+
+        mSteeringFront.draw(canvas, mBikeDimensions.getForkHead(), mPointRadius);
+        mPaddles.draw(canvas, mBikeDimensions.getPaddles(), mPointRadius);
+        mSaddle.draw(canvas, mBikeDimensions.getSaddle(), mPointRadius);
+        mFrontWheel.draw(canvas, mBikeDimensions.getFrontWheel().getCenter(), mBikeDimensions.getFrontWheel().getRadius());
+        mBackWheel.draw(canvas, mBikeDimensions.getBackWheel().getCenter(), mBikeDimensions.getBackWheel().getRadius());
+
+
+        /*canvas.drawBitmap(mSteeringFront.getBitmap(), (float)mBikeDimensions.getForkHead().x, (float)mBikeDimensions.getForkHead().y, mSteeringFront.getPaint());
+        canvas.drawBitmap(mPaddles.getBitmap(), (float)mBikeDimensions.getPaddles().x, (float)mBikeDimensions.getPaddles().y, mPaddles.getPaint());
+        canvas.drawBitmap(mSaddle.getBitmap(), (float)mBikeDimensions.getSaddle().x, (float)mBikeDimensions.getSaddle().y, mSaddle.getPaint());
+
+        canvas.drawCircle((float)mBikeDimensions.getFrontWheel().getCenter().x, (float)mBikeDimensions.getFrontWheel().getCenter().y, mBikeDimensions.getFrontWheel().getRadius(), mPaintYellow);
+        canvas.drawCircle((float)mBikeDimensions.getBackWheel().getCenter().x, (float)mBikeDimensions.getBackWheel().getCenter().y, mBikeDimensions.getFrontWheel().getRadius(), mPaintYellow);
+
+        mFrontTire.setRadius(mBikeDimensions.getFrontWheel().getRadius());
+        canvas.drawBitmap(mFrontTire.getBitmap(), (float)mBikeDimensions.getFrontWheel().getCenter().x, (float)mBikeDimensions.getFrontWheel().getCenter().y, mFrontTire.getPaint());
+
+        mBackTire.setRadius(mBikeDimensions.getFrontWheel().getRadius());
+        canvas.drawBitmap(mBackTire.getBitmap(), (float)mBikeDimensions.getBackWheel().getCenter().x, (float)mBikeDimensions.getBackWheel().getCenter().y, mBackTire.getPaint());
+*/
+        mPath = new Path();
+        mPath.moveTo((float)mBikeDimensions.getForkHead().x, (float)mBikeDimensions.getForkHead().y);
+        mPath.lineTo((float)mBikeDimensions.getFrontWheel().getCenter().x, (float)mBikeDimensions.getFrontWheel().getCenter().y);
+        mPath.moveTo((float)mBikeDimensions.getForkHead().x, (float)mBikeDimensions.getForkHead().y);
+        mPath.lineTo((float)mBikeDimensions.getPaddles().x, (float)mBikeDimensions.getPaddles().y);
+        mPath.moveTo((float)mBikeDimensions.getForkHead().x, (float)mBikeDimensions.getForkHead().y);
+        mPath.lineTo((float)mBikeDimensions.getSaddle().x, (float)mBikeDimensions.getSaddle().y);
+        mPath.lineTo((float)mBikeDimensions.getPaddles().x, (float)mBikeDimensions.getPaddles().y);
+        mPath.lineTo((float)mBikeDimensions.getBackWheel().getCenter().x, (float)mBikeDimensions.getBackWheel().getCenter().y);
+
+        canvas.drawPath(mPath, mPaintRed);
+    }
+
+    public boolean onTouch(MotionEvent event) {
+        int action = event.getAction();
+        //bicycle circle
+
+        DrawableCircle nearestPoint = getClosestPoint(event);
+
+        if (nearestPoint != null) {
+            float dx = event.getX();
+            float dy = event.getY();
+
+
+            if(action == MotionEvent.ACTION_DOWN) {
+                dx =  Math.signum(dx) * 25;
+                dy = Math.signum(dy) * 25;
+            }
+
+            if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_DOWN) {
+                nearestPoint.getCenter().x = (int)Math.max(0, Math.min(getWidth(), dx));
+                nearestPoint.getCenter().y += (int)Math.max(0, Math.min(getHeight(), dy));
+            }
         }
         invalidate();
+        return true;
     }
+
+/*
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -163,102 +289,102 @@ public class MoveViewComponent extends View {
 
         paintRed = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointRedBitmap  = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        canvasRed = new Canvas(pointRedBitmap);
+        mCanvasSaddleStart = new Canvas(pointRedBitmap);
         paintRed.setColor(Color.RED);
         paintRed.setStrokeWidth(20);
-        canvasRed.drawCircle(xRed, yRed, 17, paintRed);
+        mCanvasSaddleStart.drawCircle(xRed, yRed, 17, paintRed);
         canvas.drawBitmap(pointRedBitmap, 0, 0, paintRed);
 
         paintBlue = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointBlueBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        canvasBlue = new Canvas(pointBlueBitmap);
+        mCanvasPaddle = new Canvas(pointBlueBitmap);
         paintBlue.setColor(Color.BLUE);
         paintBlue.setStrokeWidth(20);
-        canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
-        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        mCanvasPaddle.drawCircle(xpos, ypos, 17, paintBlue);
+        //mCanvasPaddle.drawCircle(xpos, ypos, 17, paintBlue);
         //canvas.drawCircle(xpos, ypos, 17, paintBlue);
         canvas.drawBitmap(pointBlueBitmap, 0, 0, paintBlue);
 
         paintGreen = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointGreenBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        canvasGreen = new Canvas(pointGreenBitmap);
+        mCanvasCradle = new Canvas(pointGreenBitmap);
         paintGreen.setColor(Color.GREEN);
         paintGreen.setStrokeWidth(20);
-        canvasGreen.drawCircle(xGreen, yGreen, 17, paintGreen);
-        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        mCanvasCradle.drawCircle(xGreen, yGreen, 17, paintGreen);
+        //mCanvasPaddle.drawCircle(xpos, ypos, 17, paintBlue);
         //canvas.drawCircle(xpos, ypos, 17, paintBlue);
         canvas.drawBitmap(pointGreenBitmap, 0, 0, paintGreen);
 
         paintCyan = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointCyanBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        canvasCyan = new Canvas(pointCyanBitmap);
+        mCanvasCrank = new Canvas(pointCyanBitmap);
         paintCyan.setColor(Color.CYAN);
         paintCyan.setStrokeWidth(20);
-        canvasCyan.drawCircle(xCyan, yCyan, 17, paintCyan);
-        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        mCanvasCrank.drawCircle(xCyan, yCyan, 17, paintCyan);
+        //mCanvasPaddle.drawCircle(xpos, ypos, 17, paintBlue);
         //canvas.drawCircle(xpos, ypos, 17, paintBlue);
         canvas.drawBitmap(pointCyanBitmap, 0, 0, paintCyan);
 
         paintBlack = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointBlackBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        canvasBlack = new Canvas(pointBlackBitmap);
+        mCanvasSaddle = new Canvas(pointBlackBitmap);
         paintBlack.setColor(Color.BLACK);
         paintBlack.setStrokeWidth(20);
-        canvasBlack.drawCircle(xBlack, yBlack, 17, paintBlack);
-        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        mCanvasSaddle.drawCircle(xBlack, yBlack, 17, paintBlack);
+        //mCanvasPaddle.drawCircle(xpos, ypos, 17, paintBlue);
         //canvas.drawCircle(xpos, ypos, 17, paintBlue);
         canvas.drawBitmap(pointBlackBitmap, 0, 0, paintBlack);
 
         paintGray = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointGrayBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        canvasGray = new Canvas(pointGrayBitmap);
+        mCanvasSteeringHeight = new Canvas(pointGrayBitmap);
         paintGray.setColor(Color.GRAY);
         paintGray.setStrokeWidth(20);
-        canvasGray.drawCircle(xGray, yGray, 17, paintGray);
-        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        mCanvasSteeringHeight.drawCircle(xGray, yGray, 17, paintGray);
+        //mCanvasPaddle.drawCircle(xpos, ypos, 17, paintBlue);
         //canvas.drawCircle(xpos, ypos, 17, paintBlue);
         canvas.drawBitmap(pointGrayBitmap, 0, 0, paintGray);
 
         paintMagenta = new Paint(Paint.ANTI_ALIAS_FLAG);
         pointMagentaBitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
-        canvasMagenta = new Canvas(pointBlackBitmap);
+        mCanvasSteeringFront = new Canvas(pointBlackBitmap);
         paintMagenta.setColor(Color.MAGENTA);
         paintMagenta.setStrokeWidth(20);
-        canvasMagenta.drawCircle(xMagenta, yMagenta, 17, paintMagenta);
-        //canvasBlue.drawCircle(xpos, ypos, 17, paintBlue);
+        mCanvasSteeringFront.drawCircle(xMagenta, yMagenta, 17, paintMagenta);
+        //mCanvasPaddle.drawCircle(xpos, ypos, 17, paintBlue);
         //canvas.drawCircle(xpos, ypos, 17, paintBlue);
         canvas.drawBitmap(pointMagentaBitmap, 0, 0, paintMagenta);
     }
-
+*//*
     private void linefromPointToPoint (Canvas canvas, float xpos, float ypos, float xRed, float yRed,
                                        float xGreen, float yGreen, float xCyan, float yCyan,
                                        float xBlack, float yBlack, float xGray, float yGray,
                                        float xMagenta, float yMagenta) {
-        triangle = new Path();
-        triangle.moveTo(xRed, yRed);
-        triangle.lineTo(xGreen, yGreen);
-        triangle.moveTo(xGreen, yGreen);
-        triangle.lineTo(xGray, yGray);
-        triangle.moveTo(xGray, yGray);
-        triangle.lineTo(xMagenta, yMagenta);
-        triangle.moveTo(xGreen, yGreen);
-        triangle.lineTo(xpos, ypos);
-        triangle.lineTo(xCyan, yCyan);
-        triangle.moveTo(xpos, ypos);
-        triangle.lineTo(xRed, yRed);
-        triangle.lineTo(xBlack, yBlack);
+        mPath = new Path();
+        mPath.moveTo(xRed, yRed);
+        mPath.lineTo(xGreen, yGreen);
+        mPath.moveTo(xGreen, yGreen);
+        mPath.lineTo(xGray, yGray);
+        mPath.moveTo(xGray, yGray);
+        mPath.lineTo(xMagenta, yMagenta);
+        mPath.moveTo(xGreen, yGreen);
+        mPath.lineTo(xpos, ypos);
+        mPath.lineTo(xCyan, yCyan);
+        mPath.moveTo(xpos, ypos);
+        mPath.lineTo(xRed, yRed);
+        mPath.lineTo(xBlack, yBlack);
 
 
-        canvas.drawPath(triangle, red_paintbrush_stroke);
-    }
-
+        canvas.drawPath(mPath, mPaintRed);
+    }*/
+/*
     private void bicycle_tyre_circle(Canvas canvas,
                                      float xBackTyre, float yBackTyre,
                                      float xFrontTyre, float yFrontTyre,
                                      float circleBackTyreSize, float circleFrontTyreSize){
-        canvas.drawCircle(xBackTyre, yBackTyre, circleBackTyreSize, green_paintbrush_stroke);
+        canvas.drawCircle(xBackTyre, yBackTyre, circleBackTyreSize, mPaintYellow);
         canvas.drawCircle(xFrontTyre, yFrontTyre, circleFrontTyreSize, yellow_paintbrush_stroke);
-    }
+    }*/
 
     private String whichCircle(MotionEvent event, int countPoint) {
         String circle = null;
@@ -328,43 +454,35 @@ public class MoveViewComponent extends View {
 
         return circle;
     }
-    private String whichCircleTyre(MotionEvent event) {
-        String circleTyre = null;
-        float touchX = event.getX();
-        float touchY = event.getY();
+    private DrawableCircle getClosestPoint(MotionEvent event) {
+        final float touchX = event.getX();
+        final float touchY = event.getY();
 
-        double aGreen = touchX - xBackTyre;
-        double bGreen = touchY - yBackTyre;
+        DrawableCircle closestCircle = null;
+        double closestDiff = 0d;
 
-        double aYellow = touchX - xFrontTyre;
-        double bYellow = touchY - yFrontTyre;
-
-
-
-        double cGreen = Math.sqrt(Math.pow(aGreen,2)+ Math.pow(bGreen,2));
-        double cYellow = Math.sqrt(Math.pow(aYellow,2)+ Math.pow(bYellow,2));
-
-
-        //for (int i=0;i<countPoint;i++)
-        if (cGreen < cYellow ) {
-            circleTyre = "green";
-        }
-        if (cYellow < cGreen ){
-            circleTyre = "yellow";
+        //mBikeDimensions.getClosestComponent(new Point(touchX, touchY));
+        if(mDrawableCircles != null) {
+            for (DrawableCircle circle : mDrawableCircles) {
+                double diff = Math.sqrt(Math.pow(touchX - circle.getCenter().x, 2) + Math.pow(touchY - circle.getCenter().y, 2));
+                if (closestCircle == null || diff < closestDiff) {
+                    closestCircle = circle;
+                    closestDiff = diff;
+                }
+            }
         }
 
-
-        return circleTyre;
+        return closestCircle;
     }
 
 
-    public boolean onTouch(MotionEvent event) {
+    /*public boolean onTouch(MotionEvent event) {
         int action = event.getAction();
         //bicycle circle
         if(circleBackTyre == true){
 
             String nearestTyre = null;
-            nearestTyre = whichCircleTyre(event);
+            nearestTyre = getClosestPoint(event);
 
             if(nearestTyre == "green") {
                 float dx = event.getX() - xBackTyre;
@@ -634,8 +752,8 @@ public class MoveViewComponent extends View {
         }
         invalidate();
         return true;
-    }
-
+    }*/
+/*
     private void prePaintBrushes() {
         red_paintbrush_fill = new Paint();
         red_paintbrush_fill.setColor(Color.RED);
@@ -653,20 +771,16 @@ public class MoveViewComponent extends View {
         cyan_paintbrush_fill.setColor(Color.CYAN);
         cyan_paintbrush_fill.setStyle(Paint.Style.FILL);
 
-        red_paintbrush_stroke = new Paint();
-        red_paintbrush_stroke.setColor(Color.RED);
-        red_paintbrush_stroke.setStyle(Paint.Style.STROKE);
-        red_paintbrush_stroke.setStrokeWidth(10);
 
         blue_paintbrush_stroke = new Paint();
         blue_paintbrush_stroke.setColor(Color.RED);
         blue_paintbrush_stroke.setStyle(Paint.Style.STROKE);
         blue_paintbrush_stroke.setStrokeWidth(10);
 
-        green_paintbrush_stroke = new Paint();
-        green_paintbrush_stroke.setColor(Color.GREEN);
-        green_paintbrush_stroke.setStyle(Paint.Style.STROKE);
-        green_paintbrush_stroke.setStrokeWidth(10);
+        mPaintYellow = new Paint();
+        mPaintYellow.setColor(Color.GREEN);
+        mPaintYellow.setStyle(Paint.Style.STROKE);
+        mPaintYellow.setStrokeWidth(10);
 
         yellow_paintbrush_stroke = new Paint();
         yellow_paintbrush_stroke.setColor(Color.YELLOW);
@@ -683,6 +797,21 @@ public class MoveViewComponent extends View {
         black_paintbrush_stroke.setStyle(Paint.Style.STROKE);
         black_paintbrush_stroke.setStrokeWidth(10);
     }
+
+    public void setSeekbar_BackTypre(int prozess) {
+        circleBackTyreSize = (float)prozess;
+        invalidate();
+    }
+    public void setSeekbar_FrontTypre(int prozess) {
+        circleFrontTyreSize = (float)prozess;
+        invalidate();
+    }
+*/
+    @Override
+    public void run() {
+        invalidate();
+    }
+
 
     private class touchZoomListener extends ScaleGestureDetector.SimpleOnScaleGestureListener{
         @Override
@@ -702,14 +831,5 @@ public class MoveViewComponent extends View {
 
             return true;
         }
-    }
-
-    public void setSeekbar_BackTypre(int prozess) {
-        circleBackTyreSize = (float)prozess;
-        invalidate();
-    }
-    public void setSeekbar_FrontTypre(int prozess) {
-        circleFrontTyreSize = (float)prozess;
-        invalidate();
     }
 }

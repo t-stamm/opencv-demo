@@ -23,12 +23,6 @@ public class PersonDimensionsActivity extends AppCompatActivity {
 
         String LOG_TAG = PersonDimensionsActivity.class.getSimpleName();
 
-        Log.v(LOG_TAG, "verbose     - Meldung");
-        Log.d(LOG_TAG, "debug       - Meldung");
-        Log.i(LOG_TAG, "information - Meldung");
-        Log.w(LOG_TAG, "warning     - Meldung");
-        Log.e(LOG_TAG, "error       - Meldung");
-
         BikeSizeCalculator objBikeSizeCalc = new BikeSizeCalculator();
         //getInsideLeg ist ne eigene Methode
         //String toastInfo = String.valueOf(objBikeSizeCalc.getFrameSize(getInsideLeg()));
