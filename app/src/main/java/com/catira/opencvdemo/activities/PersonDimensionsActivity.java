@@ -23,25 +23,19 @@ public class PersonDimensionsActivity extends AppCompatActivity {
 
         String LOG_TAG = PersonDimensionsActivity.class.getSimpleName();
 
-        Log.v(LOG_TAG, "verbose     - Meldung");
-        Log.d(LOG_TAG, "debug       - Meldung");
-        Log.i(LOG_TAG, "information - Meldung");
-        Log.w(LOG_TAG, "warning     - Meldung");
-        Log.e(LOG_TAG, "error       - Meldung");
-
         BikeSizeCalculator objBikeSizeCalc = new BikeSizeCalculator();
         //getInsideLeg ist ne eigene Methode
-        //String toastInfo = String.valueOf(objBikeSizeCalc.getFrameSize(getInsideLeg()));
+        //String toastInfo = String.valueOf(objBikeSizeCalc.getFrameHeight(getInsideLeg()));
         String toastInfoCrank = String.valueOf(objBikeSizeCalc.getSaddleHeight(getInsideLeg()));
         Log.i(LOG_TAG, "CrankLength: " + toastInfoCrank);
 
-        String toastInfoOOL = String.valueOf(objBikeSizeCalc.getOOLength(getInsideLeg(),getTrunkLength(),getArmLength(),getSeatPosIndex()));
+       /* String toastInfoOOL = String.valueOf(objBikeSizeCalc.getFrameLength(getInsideLeg(),getTrunkLength(),getArmLength(),getSeatPosIndex()));
         Log.i(LOG_TAG, "Schrittlänge: " + getInsideLeg() +
                 " Rumpflänge: " + getTrunkLength() +
                 " Armlänge: " + getArmLength() +
                 " Sitzpositions-Index H: " + getSeatPosIndex()
         );
-        Log.i(LOG_TAG, "Oberrohrlänge: " + toastInfoOOL);
+        Log.i(LOG_TAG, "Oberrohrlänge: " + toastInfoOOL);*/
 
         Toast.makeText(this, "Sattelhöhe: " + toastInfoCrank,
                 Toast.LENGTH_SHORT).show();
@@ -70,29 +64,29 @@ public class PersonDimensionsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public String getInsideLeg() {
+    public double getInsideLeg() {
         // Auslesen der ausgewählten Schrittlänge aus den SharedPreferences
         SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String prefSeatPosKey = getString(R.string.preferenceInsideLegKey);
         String prefSeatPosDefault = getString(R.string.preferenceInsideLegDefault);
         String valInsideLeg = sPrefs.getString(prefSeatPosKey, prefSeatPosDefault);
-        return valInsideLeg;
+        return Double.valueOf(valInsideLeg);
     }
-    public String getTrunkLength() {
+    public double getTrunkLength() {
         // Auslesen der ausgewählten Schrittlänge aus den SharedPreferences
         SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String prefTrunkKey = getString(R.string.preferenceTrunkLengthKey);
         String prefTrunkLengthDefault = getString(R.string.preferenceTrunkLengthDefault);
         String valTrunkLength = sPrefs.getString(prefTrunkKey, prefTrunkLengthDefault);
-        return valTrunkLength;
+        return Double.valueOf(valTrunkLength);
     }
-    public String getArmLength() {
+    public double getArmLength() {
         // Auslesen der ausgewählten Schrittlänge aus den SharedPreferences
         SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String prefArmLengthKey = getString(R.string.preferenceArmLengthKey);
         String prefArmLengthDefault = getString(R.string.preferenceArmLengthDefault);
         String valArmLength = sPrefs.getString(prefArmLengthKey, prefArmLengthDefault);
-        return valArmLength;
+        return Double.valueOf(valArmLength);
     }
     public String getSeatPosIndex() {
         // Auslesen der ausgewählten Schrittlänge aus den SharedPreferences
@@ -120,7 +114,7 @@ public class PersonDimensionsActivity extends AppCompatActivity {
         //Toast.makeText(this, ArrayDefault, Toast.LENGTH_SHORT).show();
 
         BikeSizeCalculator objBikeSizeCalc = new BikeSizeCalculator();
-        String toastInfo = String.valueOf(objBikeSizeCalc.getFrameSize(getInsideLeg()));
+        String toastInfo = String.valueOf(objBikeSizeCalc.getFrameHeight(getInsideLeg()));
         Toast.makeText(this, "Rahmenhöhe: " + toastInfo +" cm", Toast.LENGTH_SHORT).show();
 
     }

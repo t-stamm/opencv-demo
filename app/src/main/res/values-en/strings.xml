@@ -34,10 +34,10 @@
     <string name="text_ab_set"><![CDATA[<b>1.Ride set-up</b><br/>Select your preferred seating position<br/><br/>
                                             <b>2.Wheel size</b><br/>Choose your wheel size]]></string>
 
-    <string name="title_set_list1_title">Seating position</string>
-    <string name="title_set_list1_option1">Tour</string>
-    <string name="title_set_list1_option2">Sport</string>
-    <string name="title_set_list1_option3">Race</string>
+    <string name="cycling_position_title">Seating position</string>
+    <string name="cycling_position_touring">Tour</string>
+    <string name="cycling_position_sport">Sport</string>
+    <string name="cycling_position_race">Race</string>
 
     <string name="title_set_list2_title">Wheel size</string>
 

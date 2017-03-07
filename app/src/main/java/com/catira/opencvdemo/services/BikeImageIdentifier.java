@@ -2,10 +2,13 @@ package com.catira.opencvdemo.services;
 
 
 import android.content.Context;
+import android.graphics.Matrix;
 import android.util.Log;
 
-import com.catira.opencvdemo.model.BikeDimensions;
+import com.catira.opencvdemo.model.BikePartPositions;
+import com.catira.opencvdemo.model.BikeSize;
 import com.catira.opencvdemo.model.Circle;
+import com.catira.opencvdemo.model.CyclingPosition;
 
 import org.opencv.android.InstallCallbackInterface;
 import org.opencv.android.LoaderCallbackInterface;
@@ -25,13 +28,14 @@ import java.util.List;
 
 public class BikeImageIdentifier implements LoaderCallbackInterface {
 
-
+    private static final int DEFAULT_DEGREES = -17; // 73° to left
+    private Context mContext;
     public BikeImageIdentifier(Context c) {
-
+        this.mContext = c;
         OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_1_0, c, this);
     }
 
-    public BikeDimensions test(Mat frame, Point center) {
+    public BikePartPositions createPrediction(Mat frame, Point center, BikeSize bikeSize, int wheelSize, CyclingPosition cyclingPosition) {
         int colorChannels = (frame.channels() == 3) ? Imgproc.COLOR_BGR2GRAY
                 : ((frame.channels() == 4) ? Imgproc.COLOR_BGRA2GRAY : 1);
         Imgproc.cvtColor(frame, frame, colorChannels);
@@ -87,28 +91,54 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
             }
         }
         if(preferedIndex >= 0) {
-            return new BikeDimensions(foundWheels.get(preferedIndex)[0], foundWheels.get(preferedIndex)[1], null, null, null);
+            return createBikeDimensions(foundWheels.get(preferedIndex)[0], foundWheels.get(preferedIndex)[1], bikeSize, wheelSize, cyclingPosition);
         }
 
         return null;
-        /*
-                    // get the circle which is the closest to the center and where the whole
-                    // circle will not exceed the image boundaries
-                    int newMatchDistance = getDistanceFromPoint(foundCenter, center);
-                    if ((bestMatch == null
-                            || newMatchDistance < bestMatchDistance)
-                            && (
-                            (foundCenter.x - radius) >= 0
-                                    && (foundCenter.x + radius) <= frame.width()
-                                    && (foundCenter.y - radius) >= 0
-                                    && (foundCenter.y + radius) <= frame.height()
-                    )
-                            ) {
-                        bestMatchDistance = newMatchDistance;
-                        bestMatch = new Circle(foundCenter, radius);
-                        System.out.println("Found circle at " + foundCenter.x + " / " + foundCenter.y + " with " + radius + " r. (" + frame.width() + " / " + frame.height() + ")");
-                    }
-         */
+    }
+
+    private BikePartPositions createBikeDimensions(Circle frontWheel, Circle rearWheel, BikeSize bikeSize, int wheelSize, CyclingPosition cyclingPosition) {
+        int directionMultiplier = (frontWheel.getCenter().x > rearWheel.getCenter().x) ? 1 : -1;
+        // mContext.getResources().getDisplayMetrics().densityDpi * 25.4)
+        double imageScale = frontWheel.getRadius() * 2 / ((double)wheelSize / 10); // wheelsize is in mm. Bikecalculation returns values in cm;
+        BikeSizeCalculator calc = new BikeSizeCalculator();
+
+        // frame height from calc
+        // scaledSteering = frame height + cycling position
+        // scaledSteering and frame height 73°
+        // frame length horizontally between those to points
+
+        double leftWheelX = Math.min(frontWheel.getCenter().x, rearWheel.getCenter().x);
+        Point pedal = new Point(((frontWheel.getCenter().x + rearWheel.getCenter().x - leftWheelX) * 0.33) + leftWheelX, (frontWheel.getCenter().y + rearWheel.getCenter().y) * .5 + (7 * imageScale));
+        double scaledFrameHeight = bikeSize.getFrameHeight() * imageScale;
+
+        Point scaledFrameBack = rotatePoint(pedal, new Point(pedal.x, pedal.y - scaledFrameHeight), DEFAULT_DEGREES);
+
+        double scaledSaddleHeight = bikeSize.getSaddleHeight() * imageScale;
+
+        Point scaledSaddle = rotatePoint(pedal, new Point(pedal.x, pedal.y - scaledSaddleHeight), DEFAULT_DEGREES);
+        Point scaledFrameFront = rotatePoint(frontWheel.getCenter(), new Point(frontWheel.getCenter().x, frontWheel.getCenter().y - scaledFrameHeight), DEFAULT_DEGREES);
+        scaledFrameFront.y = scaledFrameBack.y;
+
+        Point scaledSteering = rotatePoint(scaledFrameFront, new Point(scaledFrameFront.x, scaledFrameFront.y - 10 * imageScale), DEFAULT_DEGREES);
+        Point steeringLength = new Point(scaledSteering.x + (10 * imageScale) * directionMultiplier, scaledSteering.y - 3 * imageScale);
+        return new BikePartPositions(frontWheel, rearWheel,
+                scaledFrameFront,
+                scaledFrameBack,
+                scaledSteering, steeringLength,
+                pedal,
+                new Point((pedal.x + bikeSize.getCrankLength()) * imageScale, pedal.y),
+                scaledSaddle, wheelSize);
+    }
+
+    private Point rotatePoint(Point pointSource, Point pointTarget, int degrees) {
+        Matrix transform = new Matrix();
+        transform.setRotate(degrees, (float)pointSource.x, (float)pointSource.y);
+        float[] values = new float[2];
+        values[0] = (float)pointTarget.x;
+        values[1] = (float)pointTarget.y;
+        transform.mapPoints(values);
+        return new Point((double)values[0], (double) values[1]);
     }
 
     private boolean horizontalPositionDoesNotMatch(Circle circle, Circle circle1) {
@@ -173,7 +203,6 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
         System.out.println(" cols: "+circles.cols()+", rows: "+circles.rows());
         Circle bestMatch = null;
         int bestMatchDistance = Integer.MAX_VALUE;
-        int bestMatchRadius = 0;
         if(circles.cols() > 0) {
             for (int x = 0; x < circles.cols(); x++) {
                 double circle[] = circles.get(0, x);

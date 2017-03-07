@@ -2,12 +2,10 @@ package com.catira.opencvdemo.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,14 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.model.BikeCalculationHistoryEntry;
-import com.catira.opencvdemo.model.BikeDimensions;
-import com.catira.opencvdemo.model.Circle;
-import com.catira.opencvdemo.model.PersonDimensions;
-
-import org.opencv.core.Point;
-
-import java.util.Date;
+import com.catira.opencvdemo.model.CyclingPosition;
+import com.catira.opencvdemo.model.MeasurementContext;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -73,9 +65,9 @@ public class SettingActivity extends AppCompatActivity {
                     toast.show();
                     return;
                 } else {
-                    //final Intent mContext = new Intent(getApplicationContext(), MeasurmentContext.class);
-                    MeasurmentContext.currentSettingPos = positionEditText.getText().toString();
-                    MeasurmentContext.currentSettingWheelSize = Integer.parseInt(wheelsizeEditText.getText().toString());
+                    //final Intent mContext = new Intent(getApplicationContext(), MeasurementContext.class);
+                    MeasurementContext.currentCyclingPosition = CyclingPosition.fromString(positionEditText.getText().toString());
+                    MeasurementContext.currentWheelSize = Integer.parseInt(wheelsizeEditText.getText().toString());
                     Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
                     //intent.putExtra("wheelSize", wheelsizeEditText.getText());
                     startActivity(intent);

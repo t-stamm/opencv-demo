@@ -157,7 +157,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
                         zview.setSeekbar_BackTypre(prozess);
-
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -374,9 +373,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     Bitmap bitmapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
                     bikecycleImageView.setImageBitmap(bitmapRotate);
                 }
-
-
-
 
             } catch (Exception e) {
                 System.out.println("onActivityResult");
