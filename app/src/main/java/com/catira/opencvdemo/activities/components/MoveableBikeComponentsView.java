@@ -157,10 +157,10 @@ public class MoveableBikeComponentsView extends View implements Runnable {
     }
 
     private void drawMeasurement(Canvas c, double currentLength, double optimalLength, Point a, Point b) {
-        float x = (float)(Math.min(a.x, b.x) + Math.abs(a.x - b.x) / 2 - 50);
-        float y = (float)(Math.min(a.y, b.y) + Math.abs(a.y - b.y) / 2 + 20);
+        float x = (float) (Math.min(a.x, b.x) + Math.abs(a.x - b.x) / 2 - 50);
+        float y = (float) (Math.min(a.y, b.y) + Math.abs(a.y - b.y) / 2 + 20);
 
-        String lengthText = currentLength+" cm";
+        String lengthText = currentLength + " cm";
 
         c.drawText(lengthText, x, y, mTextBorder);
         c.drawText(lengthText, x, y, mTextColor);
@@ -175,17 +175,17 @@ public class MoveableBikeComponentsView extends View implements Runnable {
         // maxDiff = ff0000
         int greenValue = 255;
         int redValue = 0;
-        if(absDiff > 0) {
+        if (absDiff > 0) {
             double half = maxDiff / 2d;
             double diffFactor = 255 / half;
             // diff of 0 - half should result in 255. anything half - maxDiff should be substracted from 255 so maxDiff is 0 for green.
             //greenValue = Math.max(0, 255 - (int)(diffFactor * Math.max(0, absDiff - half)));
-            greenValue = Math.max(0, 255 - (int)(diffFactor * Math.min(half, absDiff)));
-            redValue = Math.min(255, (int)(diffFactor * Math.min(half, absDiff)));
+            greenValue = Math.max(0, 255 - (int) (diffFactor * Math.min(half, absDiff)));
+            redValue = Math.min(255, (int) (diffFactor * Math.min(half, absDiff)));
         }
 
         int diffColor = 255 << 24 | redValue << 16 | greenValue << 8;
-        String diffText = (diff > 0 ? "+": "")+(int)diff;
+        String diffText = (diff > 0 ? "+" : "") + (int) diff;
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -195,6 +195,15 @@ public class MoveableBikeComponentsView extends View implements Runnable {
 
         c.drawText(diffText, x + mTextBorder.measureText(lengthText) + 5, y, mTextBorder);
         c.drawText(diffText, x + mTextBorder.measureText(lengthText) + 5, y, paint);
+    }
+
+    public void setSeekbar_BackTyre(int prozess) {
+        //circleBackTyreSize = (float)prozess;
+        invalidate();
+    }
+    public void setSeekbar_FrontTyre(int prozess) {
+        //circleFrontTyreSize = (float)prozess;
+        invalidate();
     }
 
     public boolean onTouch(MotionEvent event) {
