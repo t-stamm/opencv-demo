@@ -30,7 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.activities.components.MoveViewComponent;
+import com.catira.opencvdemo.activities.components.MoveableBikeComponentsView;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     //Drawing View
     private FrameLayout frameLayout;
     private RelativeLayout seekBarWrapper;
-    private MoveViewComponent zview;
+    private MoveableBikeComponentsView zview;
     private static SeekBar seekbar_BackTypre;
     private static SeekBar seekbar_FrontTypre;
     private ZoomFragment mZoomFragment;
@@ -123,7 +123,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public void secondStep() {
 
         if (mCreateCycle == false) {
-            zview = new MoveViewComponent(this);
+            zview = new MoveableBikeComponentsView (this);
             frameLayout.addView(zview);
             mCreateCycle = true;
         }
@@ -142,7 +142,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         setPointsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                zview.updateMouse();
+                //zview.updateMouse();
                 thirdStep();
             }
         });
@@ -156,7 +156,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_BackTypre(prozess);
+                        zview.setSeekbar_BackTyre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -177,7 +177,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_FrontTypre(prozess);
+                        zview.setSeekbar_FrontTyre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -213,7 +213,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         backToCycButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                zview.updateMouse();
+                //zview.updateMouse();
                 secondStep();
             }
         });
