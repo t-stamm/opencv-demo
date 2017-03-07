@@ -1,33 +1,6 @@
 package com.catira.opencvdemo.test.services;
 
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
-
-import com.catira.opencvdemo.model.BikeDimensions;
-import com.catira.opencvdemo.services.BikeImageIdentifier;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.InstallCallbackInterface;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 /**
  * Created by Timo on 01.11.2016.
  */

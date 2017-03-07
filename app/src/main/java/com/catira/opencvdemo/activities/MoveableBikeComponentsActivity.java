@@ -16,8 +16,13 @@ import android.widget.SeekBar;
 
 import com.catira.opencvdemo.R;
 import com.catira.opencvdemo.activities.components.MoveableBikeComponentsView;
-import com.catira.opencvdemo.model.BikeDimensions;
+import com.catira.opencvdemo.model.BikePartPositions;
+import com.catira.opencvdemo.model.BikeSize;
+import com.catira.opencvdemo.model.CyclingPosition;
+import com.catira.opencvdemo.model.MeasurementContext;
+import com.catira.opencvdemo.model.PersonDimensions;
 import com.catira.opencvdemo.services.BikeImageIdentifier;
+import com.catira.opencvdemo.services.BikeSizeCalculator;
 
 import org.opencv.android.Utils;
 import org.opencv.core.CvType;
@@ -29,14 +34,12 @@ import org.opencv.core.Mat;
 
 public class MoveableBikeComponentsActivity extends AppCompatActivity implements View.OnTouchListener{
     private FrameLayout frameLayout;
-    private MoveableBikeComponentsView testview, mBikeComponents, Redview;
-    private static SeekBar seekbar_BackTypre;
-    private static SeekBar seekbar_FrontTypre;
+    private MoveableBikeComponentsView mBikeComponents;
+    private static SeekBar seekbar_BackTyre;
+    private static SeekBar seekbar_FrontTyre;
     private ZoomFragment mZoomFragment;
     private BikeImageIdentifier mBikeImageIdentifier;
-    private BikeDimensions mBikePrediction;
-
-    public static final String EXTRA_IMAGE = "extra_image";
+    private BikePartPositions mBikePrediction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +62,11 @@ public class MoveableBikeComponentsActivity extends AppCompatActivity implements
 
 
         // set seekbar
-        seekbar_BackTypre = (SeekBar) findViewById(R.id.seekBarBackTypre);
-        seekbar_BackTypre.setProgress(70);
-        seekbar_BackTypre.setMax(200);
+        seekbar_BackTyre = (SeekBar) findViewById(R.id.seekBarBackTyre);
+        seekbar_BackTyre.setProgress(70);
+        seekbar_BackTyre.setMax(200);
 
-        seekbar_BackTypre.setOnSeekBarChangeListener(
+        seekbar_BackTyre.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -80,11 +83,11 @@ public class MoveableBikeComponentsActivity extends AppCompatActivity implements
                     }
 
                 });
-        seekbar_FrontTypre = (SeekBar) findViewById(R.id.seekBarFrontTypre);
-        seekbar_FrontTypre.setProgress(70);
-        seekbar_FrontTypre.setMax(200);
+        seekbar_FrontTyre = (SeekBar) findViewById(R.id.seekBarFrontTyre);
+        seekbar_FrontTyre.setProgress(70);
+        seekbar_FrontTyre.setMax(200);
 
-        seekbar_FrontTypre.setOnSeekBarChangeListener(
+        seekbar_FrontTyre.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
@@ -103,19 +106,16 @@ public class MoveableBikeComponentsActivity extends AppCompatActivity implements
                 });
 
         frameLayout.setOnTouchListener(this);
-
-        final Button resetButton = (Button) findViewById(R.id.buttonReset);
-        resetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //mBikeComponents.updateMouse();
-            }
-        });
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(mBikePrediction == null) {
+
+        // TODO remove for production
+        /*MeasurementContext.currentPersDimen = new PersonDimensions(60,90,80);
+        MeasurementContext.currentCyclingPosition = CyclingPosition.SPORT;
+*/
+        if(mBikePrediction == null && MeasurementContext.currentWheelSize != 0 && MeasurementContext.currentPersDimen != null) {
             ImageView image = (ImageView)v.findViewById(R.id.bikecycleImageView);
 
             Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
@@ -143,8 +143,10 @@ public class MoveableBikeComponentsActivity extends AppCompatActivity implements
             image.setImageBitmap(bitmap);*/
             Point center = new Point((int)(event.getX() - image.getX()), (int)(event.getY() - image.getY()));
 
-            mBikePrediction = mBikeImageIdentifier.test(m, center);
-            mBikeComponents = new MoveableBikeComponentsView(this, mBikePrediction);
+            BikeSize bikeSize = new BikeSizeCalculator().calculateBikeSize(MeasurementContext.currentPersDimen, MeasurementContext.currentCyclingPosition);
+            mBikePrediction = mBikeImageIdentifier.createPrediction(m, center, bikeSize, MeasurementContext.currentWheelSize,  MeasurementContext.currentCyclingPosition);
+            MeasurementContext.currentBikeDimen = mBikePrediction;
+            mBikeComponents = new MoveableBikeComponentsView(this, mBikePrediction, bikeSize);
             frameLayout.addView(mBikeComponents);
             if(mBikePrediction != null) {
                 System.out.println("::::Found front Wheel at "+ mBikePrediction.getFrontWheel().getCenter().x+" / "+ mBikePrediction.getFrontWheel().getCenter().y+" with r "+ mBikePrediction.getFrontWheel().getRadius());

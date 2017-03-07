@@ -1,8 +1,8 @@
 package com.catira.opencvdemo.services;
 
-import com.catira.opencvdemo.model.BikeDimensions;
+import com.catira.opencvdemo.model.BikeSize;
+import com.catira.opencvdemo.model.CyclingPosition;
 import com.catira.opencvdemo.model.PersonDimensions;
-
 
 
 /**
@@ -12,64 +12,57 @@ import com.catira.opencvdemo.model.PersonDimensions;
 public class BikeSizeCalculator {
 
 
-    public BikeDimensions getOptimalBikeDimensions(PersonDimensions biker) {
+    /*public BikePartPositions getOptimalBikeDimensions(PersonDimensions biker) {
         return null;
-    }
+    }*/
 
     public static final double FRAME_SIZE_FACTOR = 0.665;
     public static final double SADDLE_HEIGHT_FACTOR = 0.885;
 
-    private double mFrameSize = 0;
-    private double mSaddleHeight = 0;
-    private double mVB = 0;
-    private double mCrankLength = 0;
-    private double mOOL = 0;
-
-    private double StringToDouble(String string) {
-        // 90 cm steht gerade für Schrittlänge
-        String stringRep = string.replaceAll(",",".");
-        double valDouble = Double.parseDouble(stringRep);
-        return valDouble;
+    public BikeSize calculateBikeSize(PersonDimensions person, CyclingPosition cyclingPosition) {
+        return new BikeSize(getFrameHeight(person.getLegLength()), getFrameLength(person.getLegLength(), person.getBodyHeight(), person.getArmLength(), cyclingPosition), getSteeringLength(person.getLegLength()), getSaddleHeight(person.getLegLength()), getCrankLength(person.getLegLength()));
     }
-    public double getFrameSize(String valInsideLeg) {
 
-        try {
-            mFrameSize =  StringToDouble(valInsideLeg) * FRAME_SIZE_FACTOR;
-        } catch (Exception e) {
-            System.out.println("Expetion" + e);
-        }
-        return mFrameSize;
+    public double getFrameHeight(double valInsideLeg) {
+        return valInsideLeg * FRAME_SIZE_FACTOR;
     }
     //VB = Vorbaulänge
-    public double getVBLength(String valInsideLeg) {
+    public double getSteeringLength(double valInsideLeg) {
 
-        mFrameSize = getFrameSize(valInsideLeg);
-        int i = (int)mFrameSize;
+        double frameSize = getFrameHeight(valInsideLeg);
+        int i = (int)frameSize;
 
-        try {
-            if (i < 55) mVB = 8;
-            if (i > 55 && i <= 58) mVB = 10;
-            if (i > 58 && i <= 61) mVB = 12;
-            if (i > 58 && i <= 61) mVB = 14;
-            if (i > 61) mVB = 14;
-        } catch (Exception e) {
-            System.out.println("Expetion" + e);
-        }
+        int vB = 0;
+        if (i < 55) vB = 8;
+        if (i > 55 && i <= 58) vB = 10;
+        if (i > 58 && i <= 61) vB = 12;
+        if (i > 58 && i <= 61) vB = 14;
+        if (i > 61) vB = 14;
 
-        return mVB;
+        return vB;
 
     }
     //OOLength = Oberrohrlänge
-    public double getOOLength(String valInsideLeg, String TrunkLength, String ArmLength, String SeatPosIndex) {
+    public double getFrameLength(double valInsideLeg, double trunkLength, double armLength, CyclingPosition cyclingPosition) {
 
-        mVB = getVBLength(valInsideLeg);
+        double steering = getSteeringLength(valInsideLeg);
         //Rumpflänge
-        double mTrunkLength = StringToDouble(TrunkLength);
-        double mArmLength = StringToDouble(ArmLength);
-        double indexH = StringToDouble(SeatPosIndex);
         //TODOs
         // Input speichern (mbody, armelength) und dann in die Methode geben für die Berechnung.
-        mOOL = (mTrunkLength+mArmLength) * indexH - mVB;
+        double seatPosIndex = 0;
+        switch (cyclingPosition) {
+            case TOURING:
+                seatPosIndex = .52;
+                break;
+            case SPORT:
+                seatPosIndex = .54;
+                break;
+            case RACE:
+                seatPosIndex = .56;
+                break;
+        }
+
+        double ool = (trunkLength + armLength) * seatPosIndex - steering;
         /*
         String LOG_TAG = BikeSizeCalculator.class.getSimpleName();
         Log.i(LOG_TAG, "Schrittlänge: " + valInsideLeg +
@@ -79,38 +72,27 @@ public class BikeSizeCalculator {
                 " Vorbaulänge: " + mVB
         );
         */
-        return mOOL;
+        return ool;
 
     }
     //KL = Kurbellänge (crank length)
-    public double getCrankLength(String valInsideLeg) {
+    public double getCrankLength(double valInsideLeg) {
+        double crankLength = 0;
+        if(valInsideLeg < 70) crankLength = 16.5;
+        else if(valInsideLeg >= 70 && valInsideLeg < 73) crankLength = 16.5;
+        else if(valInsideLeg >= 73 && valInsideLeg < 76) crankLength = 16.75;
+        else if(valInsideLeg >= 76 && valInsideLeg < 79) crankLength = 17.0;
+        else if(valInsideLeg >= 79 && valInsideLeg < 82) crankLength = 17.25;
+        else if(valInsideLeg >= 82 && valInsideLeg < 86) crankLength = 17.5;
+        else if(valInsideLeg >= 86 && valInsideLeg < 90) crankLength = 17.75;
+        else if(valInsideLeg >= 90) crankLength = 18.0;
 
-        double i = StringToDouble(valInsideLeg);
-        try {
-            if(i < 70) mCrankLength = 16.5;System.out.println("InsideLeg smaller than 70cm");
-            if(i >= 70 && i < 73) mCrankLength = 16.5;
-            if(i >= 73 && i < 76) mCrankLength = 16.75;
-            if(i >= 76 && i < 79) mCrankLength = 17.0;
-            if(i >= 79 && i < 82) mCrankLength = 17.25;
-            if(i >= 82 && i < 86) mCrankLength = 17.5;
-            if(i >= 86 && i < 90) mCrankLength = 17.75;
-            if(i >= 90) mCrankLength = 18.0;
-        } catch (Exception e) {
-            System.out.println("Expetion" + e);
-        }
-
-        return mCrankLength;
+        return crankLength;
     }
-    public double getSaddleHeight(String valInsideLeg) {
+    public double getSaddleHeight(double valInsideLeg) {
 
-        try {
-            // 90 cm steht gerade für Schrittlänge
-            mSaddleHeight = StringToDouble(valInsideLeg) * SADDLE_HEIGHT_FACTOR;
-
-        } catch (Exception e) {
-            System.out.println("Expetion" + e);
-        }
-        return mSaddleHeight;
+        // 90 cm steht gerade für Schrittlänge
+        return valInsideLeg * SADDLE_HEIGHT_FACTOR;
     }
 
 }
