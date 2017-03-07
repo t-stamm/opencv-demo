@@ -44,4 +44,8 @@ public class Circle implements JSONable {
 
         return json;
     }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
 }
