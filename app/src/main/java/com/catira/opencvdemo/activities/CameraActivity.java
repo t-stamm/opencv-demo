@@ -58,7 +58,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private static SeekBar seekbar_BackTypre;
     private static SeekBar seekbar_FrontTypre;
     private ZoomFragment mZoomFragment;
-
+    private ZoomFragment mZoomFragmentSeekbar;
+    private boolean mCreateCycle = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     .apply();
         }
 
-
         weiter = (ImageButton) findViewById(R.id.fa_button_check);
         weiter.setOnClickListener(new View.OnClickListener() {
 
@@ -91,23 +91,29 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        //Kamera einbinden, Bild aufnehmen und auch anzeigen
+
+        // Default help picture
         bikecycleImageView = (ImageView) findViewById(R.id.bikecycleImageView);
+        bikecycleImageView.setImageDrawable(getDrawable(R.drawable.handy_orientation_picture));
+        //Kamera einbinden, Bild aufnehmen und auch anzeigen
         picture = (ImageButton) findViewById(R.id.fa_button_camera);
         picture.setOnClickListener(this);
 
         //create framelayout and zview
         frameLayout = (FrameLayout) findViewById(R.id.framelayout1);
         seekBarWrapper = (RelativeLayout) findViewById(R.id.seekBarWrapper);
-        zview = new MoveViewComponent(this);
-        frameLayout.addView(zview);
+
 
         mZoomFragment = ZoomFragment.newInstance(R.id.bikecycleImageView);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.framelayout1, mZoomFragment).commit();
 
+        mZoomFragmentSeekbar = ZoomFragment.newInstance(R.id.bikecycleImageView);
+        FragmentTransaction ftSeekbar = getFragmentManager().beginTransaction();
+        ftSeekbar.add(R.id.framelayout1, mZoomFragmentSeekbar).commit();
+
         frameLayout.setOnTouchListener(this);
-        frameLayout.setVisibility(View.GONE);
+        //frameLayout.setVisibility(View.GONE);
         seekBarWrapper.setVisibility(View.GONE);
 
         fa_button_check = (ImageView) findViewById(R.id.fa_button_check);
@@ -116,7 +122,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     public void secondStep() {
 
-        frameLayout.setVisibility(View.VISIBLE);
+        if (mCreateCycle == false) {
+            zview = new MoveViewComponent(this);
+            frameLayout.addView(zview);
+            mCreateCycle = true;
+        }
+
+        //frameLayout.setVisibility(View.VISIBLE);
         seekBarWrapper.setVisibility(View.VISIBLE);
         fa_button_check.setVisibility(View.GONE);
 
@@ -145,6 +157,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
                         zview.setSeekbar_BackTypre(prozess);
+
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -322,6 +335,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        boolean tryAgain = false;
+
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
             try {
@@ -340,6 +355,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         break;
                     case "6":
                         mat.postRotate((float) 90);
+
                         break;
                     case "3":
                         mat.postRotate((float) 180);
@@ -350,18 +366,25 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     default:
                         bikecycleImageView.setImageBitmap(bitmap);
                 }
-                if(mat == null) {
-                    bikecycleImageView.setImageBitmap(bitmap);
+
+                if (ori.equals("6") || ori.equals("8")) {
+                    bikecycleImageView.setImageDrawable(getDrawable(R.drawable.handy_orientation_picture));
+                    tryAgain = true;
                 } else {
                     Bitmap bitmapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
                     bikecycleImageView.setImageBitmap(bitmapRotate);
                 }
 
+
+
+
             } catch (Exception e) {
                 System.out.println("onActivityResult");
             }
 
-            secondStep();
+            if (tryAgain == false) {
+                secondStep();
+            }
         }
         /*
         if(resultCode == RESULT_OK){
