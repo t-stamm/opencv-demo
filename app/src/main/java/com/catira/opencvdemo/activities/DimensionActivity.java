@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.catira.opencvdemo.R;
+import com.catira.opencvdemo.model.PersonDimensions;
 
 public class DimensionActivity extends AppCompatActivity {
 
@@ -60,6 +61,13 @@ public class DimensionActivity extends AppCompatActivity {
                     toast.show();
                     return;
                 } else {
+                    PersonDimensions person = new PersonDimensions(
+                            Double.parseDouble(lengthEditText1.getText().toString()),
+                            Double.parseDouble(lengthEditText2.getText().toString()),
+                            Double.parseDouble(lengthEditText3.getText().toString())
+                    );
+                    final Intent mContext = new Intent(getApplicationContext(), MeasurmentContext.class);
+                    MeasurmentContext.currentPersDimen = person;
                     Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
                     startActivity(intent);
                 }
@@ -82,6 +90,5 @@ public class DimensionActivity extends AppCompatActivity {
         transaction.add(fragment, "Dimension");
         transaction.commit();
     }
-
 
 }
