@@ -49,18 +49,19 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
         //for(int i = 1; i < 10; i++) {
         Imgproc.HoughCircles(frame, circlesMat,
                     Imgproc.CV_HOUGH_GRADIENT, 2, 5, 70,
-                    72, (frame.width() / 12), ((frame.width() / 5)));
+                    72, (frame.width() / 10), ((frame.width() / 5)));
             System.out.println(" cols: " + circlesMat.cols() + ", rows: " + circlesMat.rows());
-            Circle bestMatch = null;
+            /*Circle bestMatch = null;
             int bestMatchDistance = Integer.MAX_VALUE;
-            int bestMatchRadius = 0;
+            int bestMatchRadius = 0;*/
+            double tolerance = .1;
             if (circlesMat.cols() > 0) {
                 System.out.println("Looking for circles at "+center.x+"/"+center.y);
                 for (int x = 0; x < circlesMat.cols(); x++) {
                     double circle[] = circlesMat.get(0, x);
                     Point foundCenter = new Point((int) Math.round(circle[0]), (int) Math.round(circle[1]));
                     int radius = (int) Math.round(circle[2]);
-                    if(Math.abs(foundCenter.x - center.x) < 20 && Math.abs(foundCenter.y - center.y) < 20) {
+                    if(Math.abs(foundCenter.x - center.x) < frame.width() * tolerance && Math.abs(foundCenter.y - center.y) < frame.height() * tolerance) {
                         System.out.println("Found Circle at "+foundCenter.x+"/"+foundCenter.y+" with r "+radius);
                         circles.add(new Circle(foundCenter, radius));
                     }

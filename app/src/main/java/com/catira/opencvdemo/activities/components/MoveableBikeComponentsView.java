@@ -23,7 +23,7 @@ import java.util.List;
 
 public class MoveableBikeComponentsView extends View implements Runnable {
 
-    private final BikeSize mBikeSize;
+    private BikeSize mBikeSize;
     private int mStrikeWidth = 10;
     private int mPointRadius = 12;
 
@@ -62,52 +62,73 @@ public class MoveableBikeComponentsView extends View implements Runnable {
         super(c);
         this.mBikeSize = bikeSize;
         this.mBikePartPositions = bikePartPositions;
-        mDefaultTyreSize = this.mBikePartPositions.getFrontWheel().getRadius();
         SGD = new ScaleGestureDetector(c, new touchZoomListener());
     }
 
+    public boolean isInitialized() {
+        return this.mBikePartPositions != null && this.mBikeSize != null;
+    }
+
+    //  view = new ZeichnenView(this);
+    public MoveableBikeComponentsView(Context c) {
+        super(c);
+        SGD = new ScaleGestureDetector(c, new touchZoomListener());
+    }
+
+    public void setBikeSize(BikeSize bikeSize) {
+        this.mBikeSize = bikeSize;
+    }
+
+    public void setBikePartPositions(BikePartPositions positions) {
+        this.mBikePartPositions = positions;
+    }
+
     private void init(Canvas c) {
-        mPaddleLength = new DrawableCircle(Color.GREEN, mStrikeWidth);
-        mPaddles = new DrawableCircle(Color.CYAN, mStrikeWidth);
-        mSaddle = new DrawableCircle(Color.BLACK, mStrikeWidth);
-        mSteeringLength = new DrawableCircle(Color.MAGENTA, mStrikeWidth);
-        mFrameFront = new DrawableCircle(Color.GRAY, mStrikeWidth);
-        mFrontWheel = new DrawableCircle(Color.YELLOW, mStrikeWidth);
-        mBackWheel = new DrawableCircle(Color.YELLOW, mStrikeWidth);
+        if(this.mBikePartPositions != null && this.mBikeSize != null) {
+            mDefaultTyreSize = this.mBikePartPositions.getFrontWheel().getRadius();
 
-        mDrawableCircles = new ArrayList<>();
-        mDrawableCircles.add(mPaddleLength);
-        mDrawableCircles.add(mPaddles);
-        mDrawableCircles.add(mSaddle);
-        mDrawableCircles.add(mSteeringLength);
-        mDrawableCircles.add(mFrameFront);
-        mDrawableCircles.add(mFrontWheel);
-        mDrawableCircles.add(mBackWheel);
+            mPaddleLength = new DrawableCircle(Color.GREEN, mStrikeWidth);
+            mPaddles = new DrawableCircle(Color.CYAN, mStrikeWidth);
+            mSaddle = new DrawableCircle(Color.BLACK, mStrikeWidth);
+            mSteeringLength = new DrawableCircle(Color.MAGENTA, mStrikeWidth);
+            mFrameFront = new DrawableCircle(Color.GRAY, mStrikeWidth);
+            mFrontWheel = new DrawableCircle(Color.YELLOW, mStrikeWidth);
+            mBackWheel = new DrawableCircle(Color.YELLOW, mStrikeWidth);
 
-        mPaintRed = new Paint();
-        mPaintRed.setColor(Color.RED);
-        mPaintRed.setStyle(Paint.Style.STROKE);
-        mPaintRed.setStrokeWidth(mStrikeWidth);
+            mDrawableCircles = new ArrayList<>();
+            mDrawableCircles.add(mPaddleLength);
+            mDrawableCircles.add(mPaddles);
+            mDrawableCircles.add(mSaddle);
+            mDrawableCircles.add(mSteeringLength);
+            mDrawableCircles.add(mFrameFront);
+            mDrawableCircles.add(mFrontWheel);
+            mDrawableCircles.add(mBackWheel);
 
-        mPaintYellow = new Paint();
-        mPaintYellow.setColor(Color.YELLOW);
-        mPaintYellow.setStyle(Paint.Style.STROKE);
-        mPaintYellow.setStrokeWidth(mStrikeWidth);
+            mPaintRed = new Paint();
+            mPaintRed.setColor(Color.RED);
+            mPaintRed.setStyle(Paint.Style.STROKE);
+            mPaintRed.setStrokeWidth(mStrikeWidth);
 
-        mTextColor = new Paint();
-        mTextColor.setAntiAlias(true);
-        mTextColor.setTextSize(36);
-        mTextColor.setColor(Color.BLACK);
-        mTextColor.setStyle(Paint.Style.FILL);
+            mPaintYellow = new Paint();
+            mPaintYellow.setColor(Color.YELLOW);
+            mPaintYellow.setStyle(Paint.Style.STROKE);
+            mPaintYellow.setStrokeWidth(mStrikeWidth);
 
-        mTextBorder = new Paint();
-        mTextBorder.setAntiAlias(true);
-        mTextBorder.setTextSize(36);
-        mTextBorder.setColor(Color.WHITE);
-        mTextBorder.setStyle(Paint.Style.STROKE);
-        mTextBorder.setStrokeWidth(9);
+            mTextColor = new Paint();
+            mTextColor.setAntiAlias(true);
+            mTextColor.setTextSize(36);
+            mTextColor.setColor(Color.BLACK);
+            mTextColor.setStyle(Paint.Style.FILL);
 
-        setFocusable(true);
+            mTextBorder = new Paint();
+            mTextBorder.setAntiAlias(true);
+            mTextBorder.setTextSize(36);
+            mTextBorder.setColor(Color.WHITE);
+            mTextBorder.setStyle(Paint.Style.STROKE);
+            mTextBorder.setStrokeWidth(9);
+
+            setFocusable(true);
+        }
     }
 
 
@@ -118,43 +139,45 @@ public class MoveableBikeComponentsView extends View implements Runnable {
             init(canvas);
         }
 
-        if(!mHideFrame) {
-            mPath = new Path();
-            mPath.moveTo((float) mBikePartPositions.getFrontWheel().getCenter().x, (float) mBikePartPositions.getFrontWheel().getCenter().y);
-            mPath.lineTo((float) mBikePartPositions.getFrameFront().x, (float) mBikePartPositions.getFrameFront().y);
-            mPath.lineTo((float) mBikePartPositions.getSteering().x, (float) mBikePartPositions.getSteering().y);
-            mPath.lineTo((float) mBikePartPositions.getSteeringLength().x, (float) mBikePartPositions.getSteeringLength().y);
-            mPath.moveTo((float) mBikePartPositions.getFrameFront().x, (float) mBikePartPositions.getFrameFront().y);
-            mPath.lineTo((float) mBikePartPositions.getPaddles().x, (float) mBikePartPositions.getPaddles().y);
-            mPath.moveTo((float) mBikePartPositions.getFrameFront().x, (float) mBikePartPositions.getFrameFront().y);
-            mPath.lineTo((float) mBikePartPositions.getFrameBack().x, (float) mBikePartPositions.getFrameBack().y);
-            mPath.lineTo((float) mBikePartPositions.getSaddle().x, (float) mBikePartPositions.getSaddle().y);
-            mPath.moveTo((float) mBikePartPositions.getFrameBack().x, (float) mBikePartPositions.getFrameBack().y);
-            mPath.lineTo((float) mBikePartPositions.getPaddles().x, (float) mBikePartPositions.getPaddles().y);
-            mPath.lineTo((float) mBikePartPositions.getBackWheel().getCenter().x, (float) mBikePartPositions.getBackWheel().getCenter().y);
-            canvas.drawPath(mPath, mPaintRed);
+        if(this.mBikePartPositions != null && this.mBikeSize != null) {
+            if (!mHideFrame) {
+                mPath = new Path();
+                mPath.moveTo((float) mBikePartPositions.getFrontWheel().getCenter().x, (float) mBikePartPositions.getFrontWheel().getCenter().y);
+                mPath.lineTo((float) mBikePartPositions.getFrameFront().x, (float) mBikePartPositions.getFrameFront().y);
+                mPath.lineTo((float) mBikePartPositions.getSteering().x, (float) mBikePartPositions.getSteering().y);
+                mPath.lineTo((float) mBikePartPositions.getSteeringLength().x, (float) mBikePartPositions.getSteeringLength().y);
+                mPath.moveTo((float) mBikePartPositions.getFrameFront().x, (float) mBikePartPositions.getFrameFront().y);
+                mPath.lineTo((float) mBikePartPositions.getPaddles().x, (float) mBikePartPositions.getPaddles().y);
+                mPath.moveTo((float) mBikePartPositions.getFrameFront().x, (float) mBikePartPositions.getFrameFront().y);
+                mPath.lineTo((float) mBikePartPositions.getFrameBack().x, (float) mBikePartPositions.getFrameBack().y);
+                mPath.lineTo((float) mBikePartPositions.getSaddle().x, (float) mBikePartPositions.getSaddle().y);
+                mPath.moveTo((float) mBikePartPositions.getFrameBack().x, (float) mBikePartPositions.getFrameBack().y);
+                mPath.lineTo((float) mBikePartPositions.getPaddles().x, (float) mBikePartPositions.getPaddles().y);
+                mPath.lineTo((float) mBikePartPositions.getBackWheel().getCenter().x, (float) mBikePartPositions.getBackWheel().getCenter().y);
+                canvas.drawPath(mPath, mPaintRed);
 
-            mPaddles.draw(canvas, mBikePartPositions.getPaddles(), mPointRadius);
-            mPaddleLength.draw(canvas, mBikePartPositions.getPaddlesLength(), mPointRadius);
-            mSaddle.draw(canvas, mBikePartPositions.getSaddle(), mPointRadius);
-            mFrameFront.draw(canvas, mBikePartPositions.getFrameFront(), mPointRadius);
-            mSteeringLength.draw(canvas, mBikePartPositions.getSteeringLength(), mPointRadius);
-        }
-        mFrontWheel.draw(canvas, mBikePartPositions.getFrontWheel().getCenter(), mPointRadius, mBikePartPositions.getFrontWheel().getRadius());
-        mBackWheel.draw(canvas, mBikePartPositions.getBackWheel().getCenter(), mPointRadius, mBikePartPositions.getBackWheel().getRadius());
+                mPaddles.draw(canvas, mBikePartPositions.getPaddles(), mPointRadius);
+                mPaddleLength.draw(canvas, mBikePartPositions.getPaddlesLength(), mPointRadius);
+                mSaddle.draw(canvas, mBikePartPositions.getSaddle(), mPointRadius);
+                mFrameFront.draw(canvas, mBikePartPositions.getFrameFront(), mPointRadius);
+                mSteeringLength.draw(canvas, mBikePartPositions.getSteeringLength(), mPointRadius);
+            }
+            mFrontWheel.draw(canvas, mBikePartPositions.getFrontWheel().getCenter(), mPointRadius, mBikePartPositions.getFrontWheel().getRadius());
+            mBackWheel.draw(canvas, mBikePartPositions.getBackWheel().getCenter(), mPointRadius, mBikePartPositions.getBackWheel().getRadius());
 
-        double pixelToCm = mBikePartPositions.getFrontWheel().getRadius() * 2 / ((double) mBikePartPositions.getWheelSize() / 10);
+            double pixelToCm = mBikePartPositions.getFrontWheel().getRadius() * 2 / ((double) mBikePartPositions.getWheelSize() / 10);
 
-        int frameLength = (int)(getDistance(mBikePartPositions.getFrameFront(), mBikePartPositions.getFrameBack()) / pixelToCm);
-        int frameHeight = (int)(getDistance(mBikePartPositions.getFrameBack(), mBikePartPositions.getPaddles()) / pixelToCm);
-        int saddleHeight = (int)(getDistance(mBikePartPositions.getSaddle(), mBikePartPositions.getFrameBack()) / pixelToCm);
-        int steeringLength = (int)(getDistance(mBikePartPositions.getSteering(), mBikePartPositions.getSteeringLength()) / pixelToCm);
+            int frameLength = (int) (getDistance(mBikePartPositions.getFrameFront(), mBikePartPositions.getFrameBack()) / pixelToCm);
+            int frameHeight = (int) (getDistance(mBikePartPositions.getFrameBack(), mBikePartPositions.getPaddles()) / pixelToCm);
+            int saddleHeight = (int) (getDistance(mBikePartPositions.getSaddle(), mBikePartPositions.getFrameBack()) / pixelToCm);
+            int steeringLength = (int) (getDistance(mBikePartPositions.getSteering(), mBikePartPositions.getSteeringLength()) / pixelToCm);
 
-        if(!mHideFrame) {
-            drawMeasurement(canvas, frameLength, mBikeSize.getFrameLength(), mBikePartPositions.getFrameFront(), mBikePartPositions.getFrameBack());
-            drawMeasurement(canvas, frameHeight, mBikeSize.getFrameHeight(), mBikePartPositions.getFrameBack(), mBikePartPositions.getPaddles());
-            drawMeasurement(canvas, saddleHeight, mBikeSize.getSaddleHeight() - mBikeSize.getFrameHeight(), mBikePartPositions.getSaddle(), mBikePartPositions.getFrameBack());
-            drawMeasurement(canvas, steeringLength, mBikeSize.getSteeringLength(), mBikePartPositions.getSteering(), mBikePartPositions.getSteeringLength());
+            if (!mHideFrame) {
+                drawMeasurement(canvas, frameLength, mBikeSize.getFrameLength(), mBikePartPositions.getFrameFront(), mBikePartPositions.getFrameBack());
+                drawMeasurement(canvas, frameHeight, mBikeSize.getFrameHeight(), mBikePartPositions.getFrameBack(), mBikePartPositions.getPaddles());
+                drawMeasurement(canvas, saddleHeight, mBikeSize.getSaddleHeight() - mBikeSize.getFrameHeight(), mBikePartPositions.getSaddle(), mBikePartPositions.getFrameBack());
+                drawMeasurement(canvas, steeringLength, mBikeSize.getSteeringLength(), mBikePartPositions.getSteering(), mBikePartPositions.getSteeringLength());
+            }
         }
     }
 
