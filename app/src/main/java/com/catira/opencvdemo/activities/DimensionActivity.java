@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.catira.opencvdemo.BuildConfig;
 import com.catira.opencvdemo.R;
 import com.catira.opencvdemo.model.MeasurementContext;
 import com.catira.opencvdemo.model.PersonDimensions;
@@ -74,6 +75,12 @@ public class DimensionActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (BuildConfig.DEBUG) {
+            ((TextView) findViewById(R.id.arm_length)).setText("80");
+            ((TextView) findViewById(R.id.inside_leg_length)).setText("90");
+            ((TextView) findViewById(R.id.body_length)).setText("60");
+        }
     }
 
     // Laden der Menuressource

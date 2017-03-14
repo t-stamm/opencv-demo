@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.catira.opencvdemo.BuildConfig;
 import com.catira.opencvdemo.R;
 import com.catira.opencvdemo.model.CyclingPosition;
 import com.catira.opencvdemo.model.MeasurementContext;
@@ -97,6 +98,13 @@ public class SettingActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+
+
+
+        if (BuildConfig.DEBUG) {
+            ((TextView) findViewById(R.id.set_pos)).setText(CyclingPosition.SPORT.toString());
+            ((TextView) findViewById(R.id.set_zoll)).setText("630");
+        }
     }
 
 
