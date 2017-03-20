@@ -255,7 +255,7 @@ public class MoveableBikeComponentsView extends View implements Runnable {
     }
 
     private int getScaledTyreSize(int percent) {
-        return (int)(mDefaultTyreSize + (mDefaultTyreSize * (percent - 50 * 0.01)));
+        return (int)(mDefaultTyreSize + (mDefaultTyreSize * ((percent - 50) * 0.01)));
     }
 
     public boolean onTouch(MotionEvent event) {
