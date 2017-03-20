@@ -478,7 +478,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public boolean onTouch(View v, MotionEvent event) {
         if(zview != null && !zview.isInitialized()) {
             initZView(v, event);
-            //secondStep();
+            secondStep();
         } else {
             zview.onTouch(event);
         }
