@@ -21,6 +21,8 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Created by Timo on 26.10.2016.
@@ -44,44 +46,71 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
 
         Mat circlesMat = new Mat(frame.width(),
                 frame.height(), CvType.CV_8UC1);
-        List<Circle> circles = new ArrayList<>();
+        List<Circle> frontWheelCircles = new ArrayList<>();
 
+        int maxWheelSize = frame.height() / 5;
+        int minWheelSize = maxWheelSize / 2;
         //for(int i = 1; i < 10; i++) {
         Imgproc.HoughCircles(frame, circlesMat,
                     Imgproc.CV_HOUGH_GRADIENT, 2, 5, 70,
-                    72, (frame.width() / 10), ((frame.width() / 5)));
+                    72, minWheelSize, maxWheelSize);
             System.out.println(" cols: " + circlesMat.cols() + ", rows: " + circlesMat.rows());
             /*Circle bestMatch = null;
             int bestMatchDistance = Integer.MAX_VALUE;
             int bestMatchRadius = 0;*/
+            // tolerance of center point in percent of total image size
             double tolerance = .1;
             if (circlesMat.cols() > 0) {
-                System.out.println("Looking for circles at "+center.x+"/"+center.y);
+                System.out.println("Looking for frontWheelCircles at "+center.x+"/"+center.y);
                 for (int x = 0; x < circlesMat.cols(); x++) {
                     double circle[] = circlesMat.get(0, x);
                     Point foundCenter = new Point((int) Math.round(circle[0]), (int) Math.round(circle[1]));
                     int radius = (int) Math.round(circle[2]);
-                    if(Math.abs(foundCenter.x - center.x) < frame.width() * tolerance && Math.abs(foundCenter.y - center.y) < frame.height() * tolerance) {
+                    System.out.println("Center difference: "+Math.abs(foundCenter.x - center.x)+" < "+frame.width() * tolerance + " / "+Math.abs(foundCenter.y - center.y) +" < "+frame.height() * tolerance);
+                    if(Math.abs(foundCenter.x - center.x) < frame.width() * tolerance
+                            && Math.abs(foundCenter.y - center.y) < frame.height() * tolerance
+                            && foundCenter.x + radius < frame.width()
+                            && foundCenter.x - radius > 0
+                            && foundCenter.y + radius < frame.height()
+                            && foundCenter.y - radius > 0) {
                         System.out.println("Found Circle at "+foundCenter.x+"/"+foundCenter.y+" with r "+radius);
-                        circles.add(new Circle(foundCenter, radius));
+                        frontWheelCircles.add(new Circle(foundCenter, radius));
                     }
                 }
             }
         //}
 
-        List<Circle[]> foundWheels = new ArrayList<>();
 
-        for(int i = 0; i < circles.size(); i++) {
+        //List<Circle[]> foundWheels = new ArrayList<>();
+
+        Circle bestFrontWheel = null;
+        Circle bestBackWheel = null;
+        double bestScore = Double.MAX_VALUE;
+
+        for(int i = 0; i < frontWheelCircles.size(); i++) {
             for(int j = 0; j < circlesMat.cols(); j++) {
                 double circle[] = circlesMat.get(0, j);
                 Circle foundCircle = new Circle((int) Math.round(circle[0]), (int) Math.round(circle[1]), (int)Math.round(circle[2]));
-                 if (radiusMatches(circles.get(i), foundCircle) && verticalPositionMatches(circles.get(i), foundCircle) && horizontalPositionDoesNotMatch(circles.get(i), foundCircle)) {
-                    foundWheels.add(new Circle[]{circles.get(i), foundCircle});
-                 }
-                System.out.println("");
+
+                if(horizontalPositionIsOk(frontWheelCircles.get(i), foundCircle)) {
+                    Double score = getFoundWheelsScore(center, frontWheelCircles.get(i), foundCircle);
+                    if(score < bestScore) {
+                        bestScore = score;
+                        bestFrontWheel = frontWheelCircles.get(i);
+                        bestBackWheel = foundCircle;
+                    }
+                }
+                /*if (radiusMatches(frontWheelCircles.get(i), foundCircle) && verticalPositionMatches(frontWheelCircles.get(i), foundCircle) && horizontalPositionIsOk(frontWheelCircles.get(i), foundCircle)) {
+                    foundWheels.add(new Circle[]{frontWheelCircles.get(i), foundCircle});
+                }*/
+                //System.out.println("");
             }
         }
 
+        if(bestFrontWheel != null) {
+            return createBikeDimensions(bestFrontWheel, bestBackWheel, bikeSize, wheelSize, cyclingPosition, frame.width(), frame.height());
+        }
+/*
         int preferedRadius = 0;
         int preferedIndex = -1;
         for(int i = 0; i < foundWheels.size(); i++) {
@@ -93,12 +122,20 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
         }
         if(preferedIndex >= 0) {
             return createBikeDimensions(foundWheels.get(preferedIndex)[0], foundWheels.get(preferedIndex)[1], bikeSize, wheelSize, cyclingPosition);
-        }
+        }*/
 
         return null;
     }
 
-    private BikePartPositions createBikeDimensions(Circle frontWheel, Circle rearWheel, BikeSize bikeSize, int wheelSize, CyclingPosition cyclingPosition) {
+    private double getFoundWheelsScore(Point center, Circle frontWheel, Circle circle) {
+        double centerDiff = Math.sqrt(Math.pow(center.x - frontWheel.getCenter().x, 2) + Math.pow(center.y - frontWheel.getCenter().y, 2));
+        double verticalDiff = verticalPositionDiff(frontWheel, circle);
+        double radiusDiff = radiusDiff(frontWheel, circle);
+
+        return centerDiff * 2 + verticalDiff + radiusDiff;
+    }
+
+    private BikePartPositions createBikeDimensions(Circle frontWheel, Circle rearWheel, BikeSize bikeSize, int wheelSize, CyclingPosition cyclingPosition, int width, int height) {
         int directionMultiplier = (frontWheel.getCenter().x > rearWheel.getCenter().x) ? 1 : -1;
         // mContext.getResources().getDisplayMetrics().densityDpi * 25.4)
         double imageScale = frontWheel.getRadius() * 2 / ((double)wheelSize / 10); // wheelsize is in mm. Bikecalculation returns values in cm;
@@ -110,7 +147,7 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
         // frame length horizontally between those to points
 
         double leftWheelX = Math.min(frontWheel.getCenter().x, rearWheel.getCenter().x);
-        Point pedal = new Point(((frontWheel.getCenter().x + rearWheel.getCenter().x - leftWheelX) * 0.33) + leftWheelX, (frontWheel.getCenter().y + rearWheel.getCenter().y) * .5 + (7 * imageScale));
+        Point pedal = new Point(((frontWheel.getCenter().x + rearWheel.getCenter().x - leftWheelX) * 0.66) + leftWheelX, (frontWheel.getCenter().y + rearWheel.getCenter().y) * .5 + (7 * imageScale));
         double scaledFrameHeight = bikeSize.getFrameHeight() * imageScale;
 
         Point scaledFrameBack = rotatePoint(pedal, new Point(pedal.x, pedal.y - scaledFrameHeight), DEFAULT_DEGREES);
@@ -129,7 +166,7 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
                 scaledSteering, steeringLength,
                 pedal,
                 new Point((pedal.x + bikeSize.getCrankLength()) * imageScale, pedal.y),
-                scaledSaddle, wheelSize);
+                scaledSaddle, wheelSize, width, height);
     }
 
     private Point rotatePoint(Point pointSource, Point pointTarget, int degrees) {
@@ -142,7 +179,7 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
         return new Point((double)values[0], (double) values[1]);
     }
 
-    private boolean horizontalPositionDoesNotMatch(Circle circle, Circle circle1) {
+    private boolean horizontalPositionIsOk(Circle circle, Circle circle1) {
         Circle a,b;
         if(circle.getCenter().x > circle1.getCenter().x) {
             a = circle;
@@ -152,33 +189,24 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
             a = circle1;
         }
 
-        System.out.print("horizontal diff: "+ ((b.getCenter().x - b.getRadius()) - (a.getCenter().x - a.getRadius())) +"  ");
-        return (a.getCenter().x - a.getRadius()) > (b.getCenter().x + b.getRadius());
+        boolean success = (a.getCenter().x - a.getRadius()) > (b.getCenter().x + b.getRadius());
+        System.out.print("horizontal diff: "+ ((b.getCenter().x - b.getRadius()) - (a.getCenter().x - a.getRadius())) +" : "+success);
+        return success;
     }
 
-    /**
-     * If difference of vertical position is < 10% of bigger radius
-     * @param circle
-     * @param circle1
-     * @return
-     */
-    private boolean verticalPositionMatches(Circle circle, Circle circle1) {
-        System.out.print("vertical diff: "+ Math.abs(circle.getCenter().y - circle1.getCenter().y)+"  ");
-        return Math.abs(circle.getCenter().y - circle1.getCenter().y) < Math.max(circle.getCenter().y, circle1.getCenter().y) * .2;
+    private double verticalPositionDiff(Circle circle, Circle circle1) {
+        /*boolean success = Math.abs(circle.getCenter().y - circle1.getCenter().y) < Math.max(circle.getCenter().y, circle1.getCenter().y) * .2;
+        System.out.print("vertical diff: "+ Math.abs(circle.getCenter().y - circle1.getCenter().y)+": "+success);*/
+
+        return Math.abs(circle.getCenter().y - circle1.getCenter().y);
     }
 
-
-    /**
-     * If difference of radius is < 10% of bigger radius
-     * @param circle
-     * @param circle1
-     * @return
-     */
-    private boolean radiusMatches(Circle circle, Circle circle1) {
-        System.out.print("radius diff: "+Math.abs(circle.getRadius() - circle1.getRadius())+"  ");
-        return Math.abs(circle.getRadius() - circle1.getRadius()) < Math.max(circle.getRadius(), circle1.getRadius()) * .1;
+    private double radiusDiff(Circle circle, Circle circle1) {
+        /*boolean success = Math.abs(circle.getRadius() - circle1.getRadius()) < Math.max(circle.getRadius(), circle1.getRadius()) * .1;
+        System.out.print("radius diff: "+Math.abs(circle.getRadius() - circle1.getRadius())+": "+success+". ");*/
+        return Math.abs(circle.getRadius() - circle1.getRadius());
     }
-
+/*
     public Circle getWheel(Mat frame, Point center) {
         int colorChannels = (frame.channels() == 3) ? Imgproc.COLOR_BGR2GRAY
                 : ((frame.channels() == 4) ? Imgproc.COLOR_BGRA2GRAY : 1);
@@ -239,7 +267,7 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
 
     private int getDistanceFromPoint(Point foundCenter, Point center) {
         return (int) (Math.abs(foundCenter.x - center.x) + Math.abs(foundCenter.y - center.y));
-    }
+    }*/
 
     @Override
     public void onManagerConnected(int status) {

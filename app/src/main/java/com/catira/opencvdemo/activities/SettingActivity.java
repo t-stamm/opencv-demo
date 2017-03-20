@@ -99,10 +99,8 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-
-
         if (BuildConfig.DEBUG) {
-            ((TextView) findViewById(R.id.set_pos)).setText(CyclingPosition.SPORT.toString());
+            ((TextView) findViewById(R.id.set_pos)).setText("sportliche Haltung");
             ((TextView) findViewById(R.id.set_zoll)).setText("630");
         }
     }

@@ -227,14 +227,17 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             float scaleX = Math.min(1, (float)image.getHeight() / (float)image.getDrawable().getIntrinsicHeight());
             float scaleY = Math.min(1, (float)image.getWidth() / (float)image.getDrawable().getIntrinsicWidth());
 
-            int scaledHeight = (int)Math.ceil(image.getHeight() * scaleY);
-            int scaledWidth = (int)Math.ceil(image.getWidth() * scaleX);
-            if(scaledHeight != image.getHeight() || scaledWidth != image.getWidth()) {
-                int startRow = Math.max(1, (image.getHeight() - scaledHeight) / 2);
-                int startCol = Math.max(1, (image.getWidth() - scaledWidth) / 2);
+            float scale = Math.min(scaleX, scaleY);
+
+            /*int scaledHeight = (int)Math.ceil(image.getHeight() * scale);
+            int scaledWidth = (int)Math.ceil(image.getWidth() * scale);
+            int startRow = Math.max(1, (image.getHeight() - scaledHeight) / 2);
+            int startCol = Math.max(1, (image.getWidth() - scaledWidth) / 2);*/
+            Utils.bitmapToMat(bitmap, m);
+            /*if(scaledHeight != image.getHeight() || scaledWidth != image.getWidth()) {
                 m = m.submat(startRow, Math.min(m.rows(), scaledHeight + startRow), startCol, (Math.min(m.cols(), scaledWidth + startCol)));
-            }
-            Utils.bitmapToMat(bitmap, m);/*
+            }*/
+            /*
 
             bitmap = Bitmap.createBitmap(rectWidth, rectHeight, Bitmap.Config.ARGB_8888);
             Utils.matToBitmap(m.submat(y, y + rectHeight, x, x + rectWidth), bitmap);
@@ -474,7 +477,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public boolean onTouch(View v, MotionEvent event) {
         if(zview != null && !zview.isInitialized()) {
             initZView(v, event);
-            secondStep();
+            //secondStep();
         } else {
             zview.onTouch(event);
         }
