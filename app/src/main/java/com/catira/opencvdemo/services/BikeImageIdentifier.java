@@ -146,8 +146,9 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
         // scaledSteering and frame height 73°
         // frame length horizontally between those to points
 
+        double pedalFactor = (frontWheel.getCenter().x > rearWheel.getCenter().x?.33:.66);
         double leftWheelX = Math.min(frontWheel.getCenter().x, rearWheel.getCenter().x);
-        Point pedal = new Point(((frontWheel.getCenter().x + rearWheel.getCenter().x - leftWheelX) * 0.66) + leftWheelX, (frontWheel.getCenter().y + rearWheel.getCenter().y) * .5 + (7 * imageScale));
+        Point pedal = new Point((leftWheelX + (Math.abs(frontWheel.getCenter().x - rearWheel.getCenter().x) * pedalFactor)), (frontWheel.getCenter().y + rearWheel.getCenter().y) * .5 + (7 * imageScale));
         double scaledFrameHeight = bikeSize.getFrameHeight() * imageScale;
 
         Point scaledFrameBack = rotatePoint(pedal, new Point(pedal.x, pedal.y - scaledFrameHeight), DEFAULT_DEGREES);

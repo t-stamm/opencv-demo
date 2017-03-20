@@ -254,6 +254,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 zview.setBikePartPositions(mBikePrediction);
                 zview.setBikeSize(bikeSize);
             }
+            zview.setLayoutParams(new FrameLayout.LayoutParams(image.getWidth(), image.getHeight()));
             mFrameLayout.addView(zview);
             if(mBikePrediction != null) {
                 System.out.println("::::Found front Wheel at "+ mBikePrediction.getFrontWheel().getCenter().x+" / "+ mBikePrediction.getFrontWheel().getCenter().y+" with r "+ mBikePrediction.getFrontWheel().getRadius());
