@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -28,9 +29,20 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.catira.opencvdemo.R;
-import com.catira.opencvdemo.activities.components.MoveViewComponent;
+import com.catira.opencvdemo.activities.components.MoveableBikeComponentsView;
+import com.catira.opencvdemo.model.BikePartPositions;
+import com.catira.opencvdemo.model.BikeSize;
+import com.catira.opencvdemo.model.MeasurementContext;
+import com.catira.opencvdemo.services.BikeImageIdentifier;
+import com.catira.opencvdemo.services.BikeSizeCalculator;
+
+import org.opencv.android.Utils;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,19 +58,22 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     final static int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1, PERMISSIONS_REQUEST_CAMERA = 2;
     private int permissionFirst = 0, permissionSecond = 0;
 
+    private BikePartPositions mBikePrediction;
+
     Bitmap bmp;
     private File bildDatei;
 
     ImageButton weiter;
 
     //Drawing View
-    private FrameLayout frameLayout;
+    private FrameLayout mFrameLayout;
     private RelativeLayout seekBarWrapper;
-    private MoveViewComponent zview;
-    private static SeekBar seekbar_BackTypre;
-    private static SeekBar seekbar_FrontTypre;
+    private MoveableBikeComponentsView zview;
+    private static SeekBar mSeekbarBackTyre;
+    private static SeekBar mSeekbarFrontTyre;
     private ZoomFragment mZoomFragment;
-
+    private ZoomFragment mZoomFragmentSeekbar;
+    private TextView mTip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +96,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     .apply();
         }
 
-
         weiter = (ImageButton) findViewById(R.id.fa_button_check);
         weiter.setOnClickListener(new View.OnClickListener() {
 
@@ -91,33 +105,50 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        //Kamera einbinden, Bild aufnehmen und auch anzeigen
+
+        // Default help picture
         bikecycleImageView = (ImageView) findViewById(R.id.bikecycleImageView);
+        bikecycleImageView.setImageDrawable(getDrawable(R.drawable.handy_orientation_picture));
+        //Kamera einbinden, Bild aufnehmen und auch anzeigen
         picture = (ImageButton) findViewById(R.id.fa_button_camera);
         picture.setOnClickListener(this);
 
+        mTip = (TextView) findViewById(R.id.textViewFrontTyreTip);
+        mTip.setVisibility(View.GONE);
+
         //create framelayout and zview
-        frameLayout = (FrameLayout) findViewById(R.id.framelayout1);
+        mFrameLayout = (FrameLayout) findViewById(R.id.framelayout1);
         seekBarWrapper = (RelativeLayout) findViewById(R.id.seekBarWrapper);
-        zview = new MoveViewComponent(this);
-        frameLayout.addView(zview);
 
         mZoomFragment = ZoomFragment.newInstance(R.id.bikecycleImageView);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.framelayout1, mZoomFragment).commit();
 
-        frameLayout.setOnTouchListener(this);
-        frameLayout.setVisibility(View.GONE);
+        mZoomFragmentSeekbar = ZoomFragment.newInstance(R.id.bikecycleImageView);
+        FragmentTransaction ftSeekbar = getFragmentManager().beginTransaction();
+        ftSeekbar.add(R.id.framelayout1, mZoomFragmentSeekbar).commit();
+
+        mFrameLayout.setOnTouchListener(this);
         seekBarWrapper.setVisibility(View.GONE);
 
         fa_button_check = (ImageView) findViewById(R.id.fa_button_check);
         fa_button_check.setVisibility(View.GONE);
     }
 
-    public void secondStep() {
+    private void firstStep() {
+        zview = new MoveableBikeComponentsView(this);
+        zview.hideFrame(true);
+        zview.disableTyres(false);
+        mFrameLayout.setVisibility(View.VISIBLE);
+        mTip.setVisibility(View.VISIBLE);
+        seekBarWrapper.setVisibility(View.GONE);
+    }
 
-        frameLayout.setVisibility(View.VISIBLE);
+    public void secondStep() {
+        mTip.setVisibility(View.GONE);
+
         seekBarWrapper.setVisibility(View.VISIBLE);
+
         fa_button_check.setVisibility(View.GONE);
 
         fa_button_camera = (ImageView) findViewById(R.id.fa_button_camera);
@@ -130,21 +161,21 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         setPointsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                zview.updateMouse();
+                //zview.updateMouse();
                 thirdStep();
             }
         });
 
         // set seekbar
-        seekbar_BackTypre = (SeekBar) findViewById(R.id.seekBarBackTypre);
-        seekbar_BackTypre.setProgress(70);
-        seekbar_BackTypre.setMax(200);
-        seekbar_BackTypre.setOnSeekBarChangeListener(
+        mSeekbarBackTyre = (SeekBar) findViewById(R.id.seekBarBackTypre);
+        mSeekbarBackTyre.setProgress(70);
+        mSeekbarBackTyre.setMax(200);
+        mSeekbarBackTyre.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_BackTypre(prozess);
+                        zview.setSeekbar_BackTyre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -157,15 +188,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                 });
 
-        seekbar_FrontTypre = (SeekBar) findViewById(R.id.seekBarFrontTypre);
-        seekbar_FrontTypre.setProgress(70);
-        seekbar_FrontTypre.setMax(200);
-        seekbar_FrontTypre.setOnSeekBarChangeListener(
+        mSeekbarFrontTyre = (SeekBar) findViewById(R.id.seekBarFrontTypre);
+        mSeekbarFrontTyre.setProgress(70);
+        mSeekbarFrontTyre.setMax(200);
+        mSeekbarFrontTyre.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_FrontTypre(prozess);
+                        zview.setSeekbar_FrontTyre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -180,6 +211,64 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
         calSecondWheelPos();
     }
+
+    private void initZView(View v, MotionEvent event) {
+        if(zview != null && !zview.isInitialized() && mBikePrediction == null && MeasurementContext.currentWheelSize != 0 && MeasurementContext.currentPersDimen != null) {
+            ImageView image = (ImageView)v.findViewById(R.id.bikecycleImageView);
+
+            Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas mDrawableCanvas = new Canvas(bitmap);
+            image.draw(mDrawableCanvas);
+            Mat m = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC1);
+
+            // bitmap might be scaled if it doesn't fit entirely on the screen
+            // make sure the mat reflects that because otherwise the search for
+            // elements might be flawed
+            float scaleX = Math.min(1, (float)image.getHeight() / (float)image.getDrawable().getIntrinsicHeight());
+            float scaleY = Math.min(1, (float)image.getWidth() / (float)image.getDrawable().getIntrinsicWidth());
+
+            float scale = Math.min(scaleX, scaleY);
+
+            /*int scaledHeight = (int)Math.ceil(image.getHeight() * scale);
+            int scaledWidth = (int)Math.ceil(image.getWidth() * scale);
+            int startRow = Math.max(1, (image.getHeight() - scaledHeight) / 2);
+            int startCol = Math.max(1, (image.getWidth() - scaledWidth) / 2);*/
+            Utils.bitmapToMat(bitmap, m);
+            /*if(scaledHeight != image.getHeight() || scaledWidth != image.getWidth()) {
+                m = m.submat(startRow, Math.min(m.rows(), scaledHeight + startRow), startCol, (Math.min(m.cols(), scaledWidth + startCol)));
+            }*/
+            /*
+
+            bitmap = Bitmap.createBitmap(rectWidth, rectHeight, Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(m.submat(y, y + rectHeight, x, x + rectWidth), bitmap);
+            image.setImageBitmap(bitmap);*/
+            Point center = new Point((int)(event.getX() - image.getX()), (int)(event.getY() - image.getY()));
+
+            BikeSize bikeSize = new BikeSizeCalculator().calculateBikeSize(MeasurementContext.currentPersDimen, MeasurementContext.currentCyclingPosition);
+            BikeImageIdentifier identifier = new BikeImageIdentifier(this);
+            mBikePrediction = identifier.createPrediction(m, center, bikeSize, MeasurementContext.currentWheelSize,  MeasurementContext.currentCyclingPosition);
+            MeasurementContext.currentBikeDimen = mBikePrediction;
+            if(zview != null) {
+                zview = new MoveableBikeComponentsView(this, mBikePrediction, bikeSize);
+            } else {
+                zview.setBikePartPositions(mBikePrediction);
+                zview.setBikeSize(bikeSize);
+            }
+            zview.setLayoutParams(new FrameLayout.LayoutParams(image.getWidth(), image.getHeight()));
+            mFrameLayout.addView(zview);
+            if(mBikePrediction != null) {
+                System.out.println("::::Found front Wheel at "+ mBikePrediction.getFrontWheel().getCenter().x+" / "+ mBikePrediction.getFrontWheel().getCenter().y+" with r "+ mBikePrediction.getFrontWheel().getRadius());
+                /*mBikeComponents.xBackTyre = (float) mBikePrediction.getBackWheel().getCenter().x;
+                mBikeComponents.yBackTyre = (float) mBikePrediction.getBackWheel().getCenter().y;
+                mBikeComponents.circleBackTyreSize = mBikePrediction.getBackWheel().getRadius();
+
+                mBikeComponents.xFrontTyre = (float) mBikePrediction.getFrontWheel().getCenter().x;
+                mBikeComponents.yFrontTyre = (float) mBikePrediction.getFrontWheel().getCenter().y;
+                mBikeComponents.circleFrontTyreSize = mBikePrediction.getFrontWheel().getRadius();*/
+            }
+        }
+    }
+
     public void calSecondWheelPos() {
         //Zweites Rad berechnen
         Log.d("FahrradApp", "Zoll: " + getIntent().getStringExtra("wheelSize") );
@@ -194,6 +283,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         // das resultFakWhDis plus oder minus in der x-Achse zum Mittelpunkt eines Rades
     }
     public void thirdStep(){
+        zview.hideFrame(false);
+        zview.disableTyres(true);
+
         seekBarWrapper.setVisibility(View.GONE);
         fa_button_check.setVisibility(View.VISIBLE);
 
@@ -201,7 +293,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         backToCycButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                zview.updateMouse();
+                //zview.updateMouse();
                 secondStep();
             }
         });
@@ -322,6 +414,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
+        boolean tryAgain = false;
+
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
             try {
@@ -340,6 +434,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         break;
                     case "6":
                         mat.postRotate((float) 90);
+
                         break;
                     case "3":
                         mat.postRotate((float) 180);
@@ -350,8 +445,10 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     default:
                         bikecycleImageView.setImageBitmap(bitmap);
                 }
-                if(mat == null) {
-                    bikecycleImageView.setImageBitmap(bitmap);
+
+                if (ori.equals("6") || ori.equals("8")) {
+                    bikecycleImageView.setImageDrawable(getDrawable(R.drawable.handy_orientation_picture));
+                    tryAgain = true;
                 } else {
                     Bitmap bitmapRotate = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mat, true);
                     bikecycleImageView.setImageBitmap(bitmapRotate);
@@ -361,7 +458,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 System.out.println("onActivityResult");
             }
 
-            secondStep();
+            if (tryAgain == false) {
+                firstStep();
+            }
         }
         /*
         if(resultCode == RESULT_OK){
@@ -377,7 +476,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        zview.onTouch(event);
+        if(zview != null && !zview.isInitialized()) {
+            initZView(v, event);
+            secondStep();
+        } else {
+            zview.onTouch(event);
+        }
         mZoomFragment.onTouch(v, event);
         return true;
     }

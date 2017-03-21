@@ -16,7 +16,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.catira.opencvdemo.BuildConfig;
 import com.catira.opencvdemo.R;
+import com.catira.opencvdemo.model.CyclingPosition;
+import com.catira.opencvdemo.model.MeasurementContext;
 
 
 public class SettingActivity extends AppCompatActivity {
@@ -63,8 +66,11 @@ public class SettingActivity extends AppCompatActivity {
                     toast.show();
                     return;
                 } else {
+                    //final Intent mContext = new Intent(getApplicationContext(), MeasurementContext.class);
+                    MeasurementContext.currentCyclingPosition = CyclingPosition.fromString(positionEditText.getText().toString());
+                    MeasurementContext.currentWheelSize = Integer.parseInt(wheelsizeEditText.getText().toString());
                     Intent intent = new Intent(getApplicationContext(), CameraActivity.class);
-                    intent.putExtra("wheelSize", wheelsizeEditText.getText());
+                    //intent.putExtra("wheelSize", wheelsizeEditText.getText());
                     startActivity(intent);
                 }}
         });
@@ -92,7 +98,13 @@ public class SettingActivity extends AppCompatActivity {
                 transaction.commit();
             }
         });
+
+        if (BuildConfig.DEBUG) {
+            ((TextView) findViewById(R.id.set_pos)).setText("sportliche Haltung");
+            ((TextView) findViewById(R.id.set_zoll)).setText("630");
+        }
     }
+
 
     //Mit Help Menü Button Dialog starten über Fragment Manager
     public void doSet(MenuItem menuItem) {

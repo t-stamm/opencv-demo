@@ -9,6 +9,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.catira.opencvdemo.R;
+import com.catira.opencvdemo.model.CyclingPosition;
+import com.catira.opencvdemo.model.MeasurementContext;
 
 
 public class Fragment_Setting extends AppCompatDialogFragment {
@@ -18,8 +20,14 @@ public class Fragment_Setting extends AppCompatDialogFragment {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(getActivity());
 
-        builder.setTitle(getString(R.string.title_set_list1_title));
-        final String[] typen = new String[]{getString(R.string.title_set_list1_option1), getString(R.string.title_set_list1_option2), getString(R.string.title_set_list1_option3)};
+        builder.setTitle(getString(R.string.cycling_position_title));
+
+        int[] resourceIds = CyclingPosition.getRessouces();
+        final String[] typen = new String[resourceIds.length];
+
+        for(int i = 0; i < resourceIds.length; i++) {
+            typen[i] = getString(resourceIds[i]);
+        }
 
         builder.setItems(typen, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
@@ -31,7 +39,7 @@ public class Fragment_Setting extends AppCompatDialogFragment {
                 //Auf das Layout in der zugehörigen Activity zugreifen und die TextView updaten
                 TextView textFeld = (TextView) getActivity().findViewById(R.id.set_pos);
                 textFeld.setText(checkedItem);
-
+                MeasurementContext.currentCyclingPosition = CyclingPosition.fromString(checkedItem);
                 dialog.dismiss();
             }
         });

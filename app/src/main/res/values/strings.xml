@@ -35,10 +35,10 @@
     <string name="text_ab_set"><![CDATA[<b>1.Sitzhaltung</b><br/>Wähle deine bevorzugte Sitzhaltung aus<br/><br/>
                                             <b>2.Reifengröße</b><br/>Wähle deine Reifengröße aus]]></string>
 
-    <string name="title_set_list1_title">Sitzhaltung</string>
-    <string name="title_set_list1_option1">Touren-Position</string>
-    <string name="title_set_list1_option2">sportliche Haltung</string>
-    <string name="title_set_list1_option3">Race-Haltung</string>
+    <string name="cycling_position_title">Sitzhaltung</string>
+    <string name="cycling_position_touring">Touren-Position</string>
+    <string name="cycling_position_sport">sportliche Haltung</string>
+    <string name="cycling_position_race">Race-Haltung</string>
 
     <string name="title_set_list2_title">Reifengröße (ETRTO)</string>
 
