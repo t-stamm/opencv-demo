@@ -81,7 +81,7 @@
                 android:layout_below="@+id/seekBarFrontTypre"
                 android:id="@+id/buttonNextStepSetPoints"
                 android:layout_centerInParent="true"
-                android:background="@drawable/button_set"
+                android:background="@drawable/button_set_2"
                 android:textColor="#ffffff"
                 android:textAlignment="center"
                 android:layout_marginTop="50px" />
@@ -98,7 +98,7 @@
         android:visibility="gone"
         android:textAlignment="center"
         android:layout_centerInParent="true"
-        android:background="@drawable/button_set"
+        android:background="@drawable/button_set_2"
         android:textColor="#ffffff"
         android:layout_marginTop="50px" />
 
