@@ -20,7 +20,7 @@
         android:background="@drawable/button_set"
         android:drawableTop="@drawable/button_open_results"
         android:textSize="16sp"
-        android:textColor="#ffffff"/>
+        android:textColor="@color/colorAccent"/>
 
 
     <ImageButton

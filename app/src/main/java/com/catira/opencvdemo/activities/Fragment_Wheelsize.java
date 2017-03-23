@@ -19,7 +19,7 @@ public class Fragment_Wheelsize extends AppCompatDialogFragment {
         builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle(getString(R.string.title_set_list2_title));
-        final String[] typen = new String[]{"571", "622", "630"};
+        final String[] typen = new String[]{"559", "571", "622", "630"};
 
         builder.setItems(typen, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
