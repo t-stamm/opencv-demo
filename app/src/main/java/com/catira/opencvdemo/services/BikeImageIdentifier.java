@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Matrix;
 import android.util.Log;
 
+import com.catira.opencvdemo.R;
 import com.catira.opencvdemo.model.BikePartPositions;
 import com.catira.opencvdemo.model.BikeSize;
 import com.catira.opencvdemo.model.Circle;
@@ -278,5 +279,19 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
     @Override
     public void onPackageInstall(int operation, InstallCallbackInterface callback) {
         callback.install();
+    }
+
+    public BikePartPositions createDefault(Mat m, Point center, BikeSize bikeSize, int currentWheelSize, CyclingPosition currentCyclingPosition) {
+        Circle frontWheel, backWheel;
+        double radius = center.y / 3;
+        if(center.x > m.width() / 2) {
+            frontWheel = new Circle((int)center.x, (int)center.y, (int)radius);
+            backWheel = new Circle((int)Math.max(radius, center.x - radius * 4), (int)center.y, (int)radius);
+        } else {
+            backWheel = new Circle((int)center.x, (int)center.y, (int)radius);
+            frontWheel = new Circle((int)Math.min(m.width() - radius, center.x + radius * 4), (int)center.y, (int)radius);
+        }
+
+        return createBikeDimensions(frontWheel, backWheel, bikeSize, currentWheelSize, currentCyclingPosition, m.width(), m.height());
     }
 }
