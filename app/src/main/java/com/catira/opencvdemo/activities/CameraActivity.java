@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.icu.util.Measure;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -104,7 +105,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(intent);
             }
         });
-
 
         // Default help picture
         bikecycleImageView = (ImageView) findViewById(R.id.bikecycleImageView);
@@ -246,7 +246,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
             BikeSize bikeSize = new BikeSizeCalculator().calculateBikeSize(MeasurementContext.currentPersDimen, MeasurementContext.currentCyclingPosition);
             BikeImageIdentifier identifier = new BikeImageIdentifier(this);
-            mBikePrediction = identifier.createPrediction(m, center, bikeSize, MeasurementContext.currentWheelSize,  MeasurementContext.currentCyclingPosition);
+            //mBikePrediction = identifier.createPrediction(m, center, bikeSize, MeasurementContext.currentWheelSize,  MeasurementContext.currentCyclingPosition);
+
+            if(mBikePrediction == null) {
+                mBikePrediction = identifier.createDefault(m, center, bikeSize, MeasurementContext.currentWheelSize, MeasurementContext.currentCyclingPosition);
+            }
+
             MeasurementContext.currentBikeDimen = mBikePrediction;
             if(zview != null) {
                 zview = new MoveableBikeComponentsView(this, mBikePrediction, bikeSize);
