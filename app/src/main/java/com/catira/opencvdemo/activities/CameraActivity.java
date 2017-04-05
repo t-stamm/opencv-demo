@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.icu.util.Measure;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -165,38 +164,46 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 thirdStep();
             }
         });
-
+        //get CurrentProzess for Seekbar
+        int defaultCurrentProzess = (int) ((float)mBikePrediction.getBackWheel().getRadius() * 2 / (float)mBikePrediction.getReferenceWidth() * 100);
         // set seekbar
         mSeekbarBackTyre = (SeekBar) findViewById(R.id.seekBarBackTypre);
-        mSeekbarBackTyre.setProgress(70);
-        mSeekbarBackTyre.setMax(200);
+        mSeekbarBackTyre.setProgress(defaultCurrentProzess);
+        mSeekbarBackTyre.setMax(100);
         mSeekbarBackTyre.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
+                        if(prozess < 20 ) prozess = 20;
                         zview.setSeekbar_BackTyre(prozess);
+                        double RadiusBackWheelY =  mBikePrediction.getBackWheel().getCenter().y - mBikePrediction.getBackWheel().getRadius();
+                        mZoomFragmentSeekbar.updateImageSeekbar(mFrameLayout, mBikePrediction.getBackWheel().getCenter().x, RadiusBackWheelY);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
+
                     }
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        mZoomFragmentSeekbar.hide();
                     }
 
                 });
 
         mSeekbarFrontTyre = (SeekBar) findViewById(R.id.seekBarFrontTypre);
-        mSeekbarFrontTyre.setProgress(70);
-        mSeekbarFrontTyre.setMax(200);
+        mSeekbarFrontTyre.setProgress(defaultCurrentProzess);
+        mSeekbarFrontTyre.setMax(100);
         mSeekbarFrontTyre.setOnSeekBarChangeListener(
                 new SeekBar.OnSeekBarChangeListener() {
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
+                        if(prozess < 20 ) prozess = 20;
                         zview.setSeekbar_FrontTyre(prozess);
+                        double RadiusFrontWheelY =  mBikePrediction.getFrontWheel().getCenter().y - mBikePrediction.getFrontWheel().getRadius();
+                        mZoomFragmentSeekbar.updateImageSeekbar(mFrameLayout, mBikePrediction.getFrontWheel().getCenter().x, RadiusFrontWheelY);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -204,13 +211,14 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        mZoomFragmentSeekbar.hide();
                     }
 
                 });
 
         calSecondWheelPos();
     }
+
 
     private void initZView(View v, MotionEvent event) {
         if(zview != null && !zview.isInitialized() && mBikePrediction == null && MeasurementContext.currentWheelSize != 0 && MeasurementContext.currentPersDimen != null) {
