@@ -51,6 +51,17 @@
     <string name="toast_setting">Es wurden noch nicht alle Randbedingungen getroffen</string>
 
 
+    <string name="info_FrontTyreTip">Bitte in die Mitte es Vorderreifens tippen!</string>
+
+    <string name="seek_fronttyre">Größe Vorderreifen</string>
+    <string name="seek_backtyre">Größe Hinterreifen</string>
+
+    <string name="camera_nextbutton">Weiter</string>
+
+    <string name="back_TyreSet">Reifengröße korrigieren</string>
+
+
+
 
 
 

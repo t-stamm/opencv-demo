@@ -48,5 +48,14 @@
     <string name="toast_dimension">Please set your body dimensions first</string>
     <string name="toast_setting">Please chose your boundary conditions first</string>
 
+    <string name="info_FrontTyreTip">Please tip into the center of the front tyre!</string>
+
+    <string name="seek_fronttyre">Size front tyre</string>
+    <string name="seek_backtyre">Size back tyre</string>
+
+    <string name="camera_nextbutton">Continue</string>
+
+    <string name="back_TyreSet">Correct wheelsize</string>
+
 
 </resources>
