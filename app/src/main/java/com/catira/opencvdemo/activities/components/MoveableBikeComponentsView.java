@@ -177,7 +177,7 @@ public class MoveableBikeComponentsView extends ImageView implements Runnable {
                 Do something like this:
                 drawCanvas.drawPath(mPath, drawPaint);
                 canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
-                */
+
 
                 mPaddles.draw(canvas, mBikePartPositions.getPaddles(), mPointRadius);
                 mPaddleLength.draw(canvas, mBikePartPositions.getPaddlesLength(), mPointRadius);
