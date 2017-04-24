@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -18,9 +17,7 @@ import com.catira.opencvdemo.R;
 import com.catira.opencvdemo.activities.components.MoveableBikeComponentsView;
 import com.catira.opencvdemo.model.BikePartPositions;
 import com.catira.opencvdemo.model.BikeSize;
-import com.catira.opencvdemo.model.CyclingPosition;
 import com.catira.opencvdemo.model.MeasurementContext;
-import com.catira.opencvdemo.model.PersonDimensions;
 import com.catira.opencvdemo.services.BikeImageIdentifier;
 import com.catira.opencvdemo.services.BikeSizeCalculator;
 
@@ -50,13 +47,13 @@ public class MoveableBikeComponentsActivity extends AppCompatActivity implements
 
         frameLayout = (FrameLayout) findViewById(R.id.framelayout1);
 
-        ImageView imageView = (ImageView) frameLayout.findViewById(R.id.bikecycleImageView);
+        ImageView imageView = (ImageView) frameLayout.findViewById(R.id.bicycleImageView);
         int imageResource = R.drawable.kratzbild;
         Drawable image2 = getResources().getDrawable(imageResource);
         //imageView.setImageBitmap(BitmapFactory.decodeFile(filePath));
         imageView.setImageDrawable(image2);
 
-        mZoomFragment = ZoomFragment.newInstance(R.id.bikecycleImageView);
+        mZoomFragment = ZoomFragment.newInstance(R.id.bicycleImageView);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.framelayout1, mZoomFragment).commit();
 
@@ -116,7 +113,7 @@ public class MoveableBikeComponentsActivity extends AppCompatActivity implements
         MeasurementContext.currentCyclingPosition = CyclingPosition.SPORT;
 */
         if(mBikePrediction == null && MeasurementContext.currentWheelSize != 0 && MeasurementContext.currentPersDimen != null) {
-            ImageView image = (ImageView)v.findViewById(R.id.bikecycleImageView);
+            ImageView image = (ImageView)v.findViewById(R.id.bicycleImageView);
 
             Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas mDrawableCanvas = new Canvas(bitmap);
@@ -146,8 +143,8 @@ public class MoveableBikeComponentsActivity extends AppCompatActivity implements
             BikeSize bikeSize = new BikeSizeCalculator().calculateBikeSize(MeasurementContext.currentPersDimen, MeasurementContext.currentCyclingPosition);
             mBikePrediction = mBikeImageIdentifier.createPrediction(m, center, bikeSize, MeasurementContext.currentWheelSize,  MeasurementContext.currentCyclingPosition);
             MeasurementContext.currentBikeDimen = mBikePrediction;
-            mBikeComponents = new MoveableBikeComponentsView(this, mBikePrediction, bikeSize);
-            frameLayout.addView(mBikeComponents);
+            //mBikeComponents = new MoveableBikeComponentsView(this, mBikePrediction, bikeSize);
+            //frameLayout.addView(mBikeComponents);
             if(mBikePrediction != null) {
                 System.out.println("::::Found front Wheel at "+ mBikePrediction.getFrontWheel().getCenter().x+" / "+ mBikePrediction.getFrontWheel().getCenter().y+" with r "+ mBikePrediction.getFrontWheel().getRadius());
                 /*mBikeComponents.xBackTyre = (float) mBikePrediction.getBackWheel().getCenter().x;

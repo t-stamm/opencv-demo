@@ -14,15 +14,17 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="center_vertical|center_horizontal">
+
         <ImageView
             android:layout_width="match_parent"
             app:srcCompat="@color/common_google_signin_btn_text_dark_default"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:id="@+id/bikecycleImageView"
+            android:id="@+id/bicycleImageView"
             android:src="@drawable/default_fahrrad"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
+
     </FrameLayout>
     <TextView
         android:text="Please tip onto the center of the front tyre to start measurement."
@@ -37,7 +39,7 @@
         android:id="@+id/seekBarWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bikecycleImageView">
+        android:layout_below="@+id/bicycleImageView">
             <TextView
                 android:text="BackTyre: "
                 android:layout_width="wrap_content"

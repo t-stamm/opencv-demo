@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.icu.util.Measure;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -69,7 +70,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     //Drawing View
     private FrameLayout mFrameLayout;
     private RelativeLayout seekBarWrapper;
-    private MoveableBikeComponentsView zview;
+    private MoveableBikeComponentsView mBikeComponentsView;
     private static SeekBar mSeekbarBackTyre;
     private static SeekBar mSeekbarFrontTyre;
     private ZoomFragment mZoomFragment;
@@ -107,7 +108,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         // Default help picture
-        bikecycleImageView = (ImageView) findViewById(R.id.bikecycleImageView);
+        bikecycleImageView = (ImageView) findViewById(R.id.bicycleImageView);
         bikecycleImageView.setImageDrawable(getDrawable(R.drawable.handy_orientation_picture));
         //Kamera einbinden, Bild aufnehmen und auch anzeigen
         picture = (ImageButton) findViewById(R.id.fa_button_camera);
@@ -116,15 +117,20 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         mTip = (TextView) findViewById(R.id.textViewFrontTyreTip);
         mTip.setVisibility(View.GONE);
 
-        //create framelayout and zview
+        //create framelayout and mBikeComponentsView
         mFrameLayout = (FrameLayout) findViewById(R.id.framelayout1);
+
+        mBikeComponentsView = new MoveableBikeComponentsView(this);
+        mFrameLayout.addView(mBikeComponentsView);
+        mBikeComponentsView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+
         seekBarWrapper = (RelativeLayout) findViewById(R.id.seekBarWrapper);
 
-        mZoomFragment = ZoomFragment.newInstance(R.id.bikecycleImageView);
+        mZoomFragment = ZoomFragment.newInstance(R.id.bicycleImageView);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.framelayout1, mZoomFragment).commit();
 
-        mZoomFragmentSeekbar = ZoomFragment.newInstance(R.id.bikecycleImageView);
+        mZoomFragmentSeekbar = ZoomFragment.newInstance(R.id.bicycleImageView);
         FragmentTransaction ftSeekbar = getFragmentManager().beginTransaction();
         ftSeekbar.add(R.id.framelayout1, mZoomFragmentSeekbar).commit();
 
@@ -136,9 +142,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void firstStep() {
-        zview = new MoveableBikeComponentsView(this);
-        zview.hideFrame(true);
-        zview.disableTyres(false);
+        mBikeComponentsView.hideFrame(true);
+        mBikeComponentsView.disableTyres(false);
         mFrameLayout.setVisibility(View.VISIBLE);
         mTip.setVisibility(View.VISIBLE);
         seekBarWrapper.setVisibility(View.GONE);
@@ -161,7 +166,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         setPointsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //zview.updateMouse();
+                //mBikeComponentsView.updateMouse();
                 thirdStep();
             }
         });
@@ -175,7 +180,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_BackTyre(prozess);
+                        mBikeComponentsView.setSeekbar_BackTyre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -196,7 +201,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int prozess, boolean fromUser) {
-                        zview.setSeekbar_FrontTyre(prozess);
+                        mBikeComponentsView.setSeekbar_FrontTyre(prozess);
                     }
                     @Override
                     public void onStartTrackingTouch(SeekBar seekBar) {
@@ -213,21 +218,22 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initZView(View v, MotionEvent event) {
-        if(zview != null && !zview.isInitialized() && mBikePrediction == null && MeasurementContext.currentWheelSize != 0 && MeasurementContext.currentPersDimen != null) {
-            ImageView image = (ImageView)v.findViewById(R.id.bikecycleImageView);
+        if(mBikeComponentsView != null && !mBikeComponentsView.isInitialized() && mBikePrediction == null && MeasurementContext.currentWheelSize != 0 && MeasurementContext.currentPersDimen != null) {
+            ImageView image = (ImageView)v.findViewById(R.id.bicycleImageView);
 
-            Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
+            /*Bitmap bitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), Bitmap.Config.ARGB_8888);
             Canvas mDrawableCanvas = new Canvas(bitmap);
-            image.draw(mDrawableCanvas);
+            image.draw(mDrawableCanvas);*/
+
+            mBikeComponentsView.setSource(bitmap.copy(bitmap.getConfig(), false));
             Mat m = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC1);
 
             // bitmap might be scaled if it doesn't fit entirely on the screen
             // make sure the mat reflects that because otherwise the search for
             // elements might be flawed
-            float scaleX = Math.min(1, (float)image.getHeight() / (float)image.getDrawable().getIntrinsicHeight());
-            float scaleY = Math.min(1, (float)image.getWidth() / (float)image.getDrawable().getIntrinsicWidth());
-
-            float scale = Math.min(scaleX, scaleY);
+            //float scaleX = Math.min(1, (float)image.getHeight() / (float)image.getDrawable().getIntrinsicHeight());
+            //float scaleY = Math.min(1, (float)image.getWidth() / (float)image.getDrawable().getIntrinsicWidth());
 
             /*int scaledHeight = (int)Math.ceil(image.getHeight() * scale);
             int scaledWidth = (int)Math.ceil(image.getWidth() * scale);
@@ -246,21 +252,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
             BikeSize bikeSize = new BikeSizeCalculator().calculateBikeSize(MeasurementContext.currentPersDimen, MeasurementContext.currentCyclingPosition);
             BikeImageIdentifier identifier = new BikeImageIdentifier(this);
-            //mBikePrediction = identifier.createPrediction(m, center, bikeSize, MeasurementContext.currentWheelSize,  MeasurementContext.currentCyclingPosition);
+            mBikePrediction = identifier.createPrediction(m, center, bikeSize, MeasurementContext.currentWheelSize,  MeasurementContext.currentCyclingPosition);
 
             if(mBikePrediction == null) {
                 mBikePrediction = identifier.createDefault(m, center, bikeSize, MeasurementContext.currentWheelSize, MeasurementContext.currentCyclingPosition);
             }
 
             MeasurementContext.currentBikeDimen = mBikePrediction;
-            if(zview != null) {
-                zview = new MoveableBikeComponentsView(this, mBikePrediction, bikeSize);
-            } else {
-                zview.setBikePartPositions(mBikePrediction);
-                zview.setBikeSize(bikeSize);
-            }
-            zview.setLayoutParams(new FrameLayout.LayoutParams(image.getWidth(), image.getHeight()));
-            mFrameLayout.addView(zview);
+            mBikeComponentsView.setBikePartPositions(mBikePrediction);
+            mBikeComponentsView.setBikeSize(bikeSize);
             if(mBikePrediction != null) {
                 System.out.println("::::Found front Wheel at "+ mBikePrediction.getFrontWheel().getCenter().x+" / "+ mBikePrediction.getFrontWheel().getCenter().y+" with r "+ mBikePrediction.getFrontWheel().getRadius());
                 /*mBikeComponents.xBackTyre = (float) mBikePrediction.getBackWheel().getCenter().x;
@@ -288,8 +288,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         // das resultFakWhDis plus oder minus in der x-Achse zum Mittelpunkt eines Rades
     }
     public void thirdStep(){
-        zview.hideFrame(false);
-        zview.disableTyres(true);
+        mBikeComponentsView.hideFrame(false);
+        mBikeComponentsView.disableTyres(true);
 
         seekBarWrapper.setVisibility(View.GONE);
         fa_button_check.setVisibility(View.VISIBLE);
@@ -298,7 +298,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         backToCycButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //zview.updateMouse();
+                //mBikeComponentsView.updateMouse();
                 secondStep();
             }
         });
@@ -374,9 +374,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
 
-                // other 'case' lines to check for other
-                // permissions this app might request
-                case PERMISSIONS_REQUEST_CAMERA:
+            // other 'case' lines to check for other
+            // permissions this app might request
+            case PERMISSIONS_REQUEST_CAMERA:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -481,11 +481,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     }
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if(zview != null && !zview.isInitialized()) {
+        if(mBikeComponentsView != null && !mBikeComponentsView.isInitialized()) {
             initZView(v, event);
             secondStep();
         } else {
-            zview.onTouch(event);
+            mBikeComponentsView.onTouch(event);
         }
         mZoomFragment.onTouch(v, event);
         return true;

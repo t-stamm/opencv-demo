@@ -1,13 +1,15 @@
 package com.catira.opencvdemo.activities.components;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.View;
+import android.widget.ImageView;
 
 import com.catira.opencvdemo.model.BikePartPositions;
 import com.catira.opencvdemo.model.BikeSize;
@@ -21,7 +23,7 @@ import java.util.List;
  * Created by ck on 10.01.2017.
  */
 
-public class MoveableBikeComponentsView extends View implements Runnable {
+public class MoveableBikeComponentsView extends ImageView implements Runnable {
 
     private BikeSize mBikeSize;
     private int mStrikeWidth = 10;
@@ -43,13 +45,14 @@ public class MoveableBikeComponentsView extends View implements Runnable {
     private Path mPath;
     private Paint mTextColor;
     private Paint mTextBorder;
-    private ScaleGestureDetector SGD;
+    //private ScaleGestureDetector SGD;
 
     Paint mPaintRed, mPaintYellow;
     private DrawableCircle mNearestPressedPoint;
     private boolean mHideFrame = false;
     private boolean mTyresDisabled = false;
     private int mDefaultTyreSize = 0;
+    private Bitmap mSource;
     /*
     Initialisierung mit allen Elementen die in der View verschoben werden können.
      D. h. die Komponente wird maximal einmal pro View instanziiert.
@@ -62,7 +65,8 @@ public class MoveableBikeComponentsView extends View implements Runnable {
         super(c);
         this.mBikeSize = bikeSize;
         this.mBikePartPositions = bikePartPositions;
-        SGD = new ScaleGestureDetector(c, new touchZoomListener());
+        //SGD = new ScaleGestureDetector(c, new touchZoomListener());
+        draw();
     }
 
     public boolean isInitialized() {
@@ -72,19 +76,22 @@ public class MoveableBikeComponentsView extends View implements Runnable {
     //  view = new ZeichnenView(this);
     public MoveableBikeComponentsView(Context c) {
         super(c);
-        SGD = new ScaleGestureDetector(c, new touchZoomListener());
+        //SGD = new ScaleGestureDetector(c, new touchZoomListener());
     }
 
     public void setBikeSize(BikeSize bikeSize) {
         this.mBikeSize = bikeSize;
+        draw();
     }
 
     public void setBikePartPositions(BikePartPositions positions) {
         this.mBikePartPositions = positions;
+        draw();
     }
 
-    private void init(Canvas c) {
+    private void init() {
         if(this.mBikePartPositions != null && this.mBikeSize != null) {
+
             mDefaultTyreSize = this.mBikePartPositions.getFrontWheel().getRadius();
 
             mPaddleLength = new DrawableCircle(Color.GREEN, mStrikeWidth);
@@ -131,9 +138,7 @@ public class MoveableBikeComponentsView extends View implements Runnable {
         }
     }
 
-
-    @Override
-    protected void onDraw(Canvas canvas) {
+    /*protected void draw(Canvas canvas) {
         super.onDraw(canvas);
         if(mSaddle == null) {
             init(canvas);
@@ -185,6 +190,59 @@ public class MoveableBikeComponentsView extends View implements Runnable {
                 drawMeasurement(canvas, saddleHeight, mBikeSize.getSaddleHeight() - mBikeSize.getFrameHeight(), mBikePartPositions.getSaddle(), mBikePartPositions.getFrameBack());
                 drawMeasurement(canvas, steeringLength, mBikeSize.getSteeringLength(), mBikePartPositions.getSteering(), mBikePartPositions.getSteeringLength());
             }
+        }
+    }*/
+
+
+    private void draw() {
+        if(mFrontWheel == null) {
+            init();
+        }
+
+        if(mSource != null && mBikePartPositions != null && mBikeSize != null) {
+            Bitmap b = Bitmap.createBitmap(mSource.getWidth(), mSource.getHeight(), Bitmap.Config.ARGB_8888);
+            Canvas c = new Canvas(b);
+            c.drawBitmap(mSource, 0, 0, null);
+            if (!mHideFrame) {
+                mPath = new Path();
+                mPath.moveTo((float)mBikePartPositions.getFrontWheel().getCenter().x, (float)mBikePartPositions.getFrontWheel().getCenter().y);
+                mPath.lineTo((float)mBikePartPositions.getFrameFront().x, (float)mBikePartPositions.getFrameFront().y);
+                mPath.lineTo((float)mBikePartPositions.getSteering().x, (float)mBikePartPositions.getSteering().y);
+                mPath.lineTo((float)mBikePartPositions.getSteeringLength().x,(float)mBikePartPositions.getSteeringLength().y);
+                mPath.moveTo((float)mBikePartPositions.getFrameFront().x, (float)mBikePartPositions.getFrameFront().y);
+                mPath.lineTo((float)mBikePartPositions.getPaddles().x, (float)mBikePartPositions.getPaddles().y);
+                mPath.moveTo((float)mBikePartPositions.getFrameFront().x, (float)mBikePartPositions.getFrameFront().y);
+                mPath.lineTo((float)mBikePartPositions.getFrameBack().x, (float)mBikePartPositions.getFrameBack().y);
+                mPath.lineTo((float)mBikePartPositions.getSaddle().x, (float)mBikePartPositions.getSaddle().y);
+                mPath.moveTo((float)mBikePartPositions.getFrameBack().x, (float)mBikePartPositions.getFrameBack().y);
+                mPath.lineTo((float)mBikePartPositions.getPaddles().x, (float)mBikePartPositions.getPaddles().y);
+                mPath.lineTo((float)mBikePartPositions.getBackWheel().getCenter().x, (float)mBikePartPositions.getBackWheel().getCenter().y);
+                c.drawPath(mPath, mPaintRed);
+
+                mPaddles.draw(c, mBikePartPositions.getPaddles(), mPointRadius);
+                mPaddleLength.draw(c, mBikePartPositions.getPaddlesLength(), mPointRadius);
+                mSaddle.draw(c, mBikePartPositions.getSaddle(), mPointRadius);
+                mFrameFront.draw(c, mBikePartPositions.getFrameFront(), mPointRadius);
+                mSteeringLength.draw(c, mBikePartPositions.getSteeringLength(), mPointRadius);
+            }
+            mFrontWheel.draw(c, mBikePartPositions.getFrontWheel().getCenter(), mPointRadius, mBikePartPositions.getFrontWheel().getRadius());
+            mBackWheel.draw(c, mBikePartPositions.getBackWheel().getCenter(), mPointRadius, mBikePartPositions.getBackWheel().getRadius());
+
+            double pixelToCm = mBikePartPositions.getFrontWheel().getRadius() * 2 / ((double) mBikePartPositions.getWheelSize() / 10);
+
+            int frameLength = (int) (getDistance(mBikePartPositions.getFrameFront(), mBikePartPositions.getFrameBack()) / pixelToCm);
+            int frameHeight = (int) (getDistance(mBikePartPositions.getFrameBack(), mBikePartPositions.getPaddles()) / pixelToCm);
+            int saddleHeight = (int) (getDistance(mBikePartPositions.getSaddle(), mBikePartPositions.getFrameBack()) / pixelToCm);
+            int steeringLength = (int) (getDistance(mBikePartPositions.getSteering(), mBikePartPositions.getSteeringLength()) / pixelToCm);
+
+            if (!mHideFrame) {
+                drawMeasurement(c, frameLength, mBikeSize.getFrameLength(), mBikePartPositions.getFrameFront(), mBikePartPositions.getFrameBack());
+                drawMeasurement(c, frameHeight, mBikeSize.getFrameHeight(), mBikePartPositions.getFrameBack(), mBikePartPositions.getPaddles());
+                drawMeasurement(c, saddleHeight, mBikeSize.getSaddleHeight() - mBikeSize.getFrameHeight(), mBikePartPositions.getSaddle(), mBikePartPositions.getFrameBack());
+                drawMeasurement(c, steeringLength, mBikeSize.getSteeringLength(), mBikePartPositions.getSteering(), mBikePartPositions.getSteeringLength());
+            }
+
+            setImageBitmap(b);
         }
     }
 
@@ -247,11 +305,11 @@ public class MoveableBikeComponentsView extends View implements Runnable {
 
     public void setSeekbar_BackTyre(int percent) {
         mBikePartPositions.getBackWheel().setRadius(getScaledTyreSize(percent));
-        invalidate();
+        draw();
     }
     public void setSeekbar_FrontTyre(int percent) {
         mBikePartPositions.getFrontWheel().setRadius(getScaledTyreSize(percent));
-        invalidate();
+        draw();
     }
 
     private int getScaledTyreSize(int percent) {
@@ -281,19 +339,23 @@ public class MoveableBikeComponentsView extends View implements Runnable {
 
 
                     if(action == MotionEvent.ACTION_DOWN) {
-                        dx =  Math.signum(dx) * 25;
+                        dx = Math.signum(dx) * 25;
                         dy = Math.signum(dy) * 25;
                     }
 
                     if (action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_DOWN) {
-                        mNearestPressedPoint.getCenter().x = (int)Math.max(0, Math.min(getWidth(), dx));
-                        mNearestPressedPoint.getCenter().y = (int)Math.max(0, Math.min(getHeight(), dy));
+                        double scale = Math.min((double)getMeasuredHeight() / mSource.getHeight(), (double)getMeasuredWidth() / mSource.getWidth());
+                        double y = dy / scale;
+                        double tmp = getWidth() / 2;
+                        double x = tmp + ((dx - tmp) / scale);
+                        mNearestPressedPoint.getCenter().x = (int)Math.max(0, Math.min(mSource.getWidth(), x));
+                        mNearestPressedPoint.getCenter().y = (int)Math.max(0, Math.min(mSource.getHeight(), y));
                     }
                 }
                 break;
         }
 
-        invalidate();
+        draw();
         return true;
     }
 
@@ -307,10 +369,12 @@ public class MoveableBikeComponentsView extends View implements Runnable {
         //mBikePartPositions.getClosestComponent(new Point(touchX, touchY));
         if(mDrawableCircles != null) {
             for (DrawableCircle circle : mDrawableCircles) {
-                double diff = Math.sqrt(Math.pow(touchX - circle.getCenter().x, 2) + Math.pow(touchY - circle.getCenter().y, 2));
-                if (closestCircle == null || diff < closestDiff) {
-                    closestCircle = circle;
-                    closestDiff = diff;
+                if(circle != null && circle.getCenter() != null) {
+                    double diff = Math.sqrt(Math.pow(touchX - circle.getCenter().x, 2) + Math.pow(touchY - circle.getCenter().y, 2));
+                    if (closestCircle == null || diff < closestDiff) {
+                        closestCircle = circle;
+                        closestDiff = diff;
+                    }
                 }
             }
         }
@@ -320,15 +384,22 @@ public class MoveableBikeComponentsView extends View implements Runnable {
 
     @Override
     public void run() {
-        invalidate();
+        draw();
     }
 
     public void hideFrame(boolean b) {
         mHideFrame = b;
+        draw();
     }
 
     public void disableTyres(boolean b) {
         mTyresDisabled = b;
+        draw();
+    }
+
+    public void setSource(Bitmap source) {
+        this.mSource = source;
+        draw();
     }
 
 
