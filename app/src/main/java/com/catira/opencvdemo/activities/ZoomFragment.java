@@ -111,7 +111,7 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
         getView().setVisibility(View.VISIBLE);
     }
 
-    private void hide() {
+    public void hide() {
         getView().setVisibility(View.INVISIBLE);
     }
 
@@ -127,6 +127,27 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
         int x = Math.max(0, (int)((e.getX()*mZoomFactor)-(mSIZE*0.5)));
         int y = Math.max(0, (int)((e.getY()*mZoomFactor)-(mSIZE*0.5)));//-(v.getY()+mSIZE)*0.5)) + 60);
         if ((int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)) == 300) {
+            Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)), null, false);
+            mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, mSIZE, mSIZE, false));
+        }
+    }
+
+    public void updateImageSeekbar(View v, double xCycle, double yCycle) {
+        // mZoomFactor = 1f; // Default 2f?
+        // Move image to the right of the window if the cursor would collide with it
+        double size = mSIZE * 1.1;
+        if(xCycle < size && yCycle < (size * 1.1)) {
+            getView().setX(v.getWidth() - mSIZE);
+        } else {
+            getView().setX(0f);
+        }
+
+        show();
+
+
+        int x = Math.max(0, (int)((xCycle*mZoomFactor)-(mSIZE*0.5)));
+        int y = Math.max(0, (int)((yCycle*mZoomFactor)-(mSIZE*0.5)));//-(v.getY()+mSIZE)*0.5)) + 60);
+        if ((int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)) == mSIZE) {
             Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)), null, false);
             mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, mSIZE, mSIZE, false));
         }

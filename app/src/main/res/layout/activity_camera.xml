@@ -27,56 +27,63 @@
 
     </FrameLayout>
     <TextView
-        android:text="Please tip onto the center of the front tyre to start measurement."
+        android:text="@string/info_FrontTyreTip"
+        android:textSize="18sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#009587"
         android:id="@+id/textViewFrontTyreTip"
+        android:layout_gravity="center"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:gravity="center_vertical|center_horizontal" />
+         />
     <RelativeLayout
         android:id="@+id/seekBarWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/bikecycleImageView">
+
+        <TextView
+                android:text="@string/seek_fronttyre"
         android:layout_below="@+id/bicycleImageView">
             <TextView
                 android:text="BackTyre: "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#009587"
-                android:id="@+id/textView4"
-                android:layout_marginTop="15dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerInParent="true" />
-
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textView4"
-                android:id="@+id/seekBarBackTypre" />
-
-            <TextView
-                android:text="FrontTyre: "
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/seekBarBackTypre"
-                android:textColor="#009587"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="15dp"
+                android:layout_alignParentTop="true"
                 android:id="@+id/textView5" />
 
-            <SeekBar
+        <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textView5"
                 android:id="@+id/seekBarFrontTypre" />
 
+        <TextView
+            android:text="@string/seek_backtyre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/seekBarFrontTypre"
+            android:layout_centerInParent="true"
+            android:textColor="#009587"
+            android:id="@+id/textView4"
+            android:layout_marginTop="15dp"
+ />
+
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView4"
+            android:id="@+id/seekBarBackTypre" />
+
             <Button
-                android:text="Next Step: Set Points"
+                android:text="@string/camera_nextbutton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/seekBarFrontTypre"
+                android:layout_below="@+id/seekBarBackTypre"
                 android:id="@+id/buttonNextStepSetPoints"
                 android:layout_centerInParent="true"
                 android:background="@drawable/button_set_2"
@@ -87,7 +94,7 @@
     </RelativeLayout>
 
     <Button
-        android:text="Back: Set Tyres"
+        android:text="@string/back_TyreSet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/seekBarWrapper"

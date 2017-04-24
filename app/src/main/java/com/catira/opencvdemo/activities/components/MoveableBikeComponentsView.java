@@ -167,6 +167,17 @@ public class MoveableBikeComponentsView extends ImageView implements Runnable {
                 mPath.lineTo(getScaledValue(mBikePartPositions.getPaddles().x, scale, scaleTargetX), getScaledValue(mBikePartPositions.getPaddles().y, scale, scaleTargetY));
                 mPath.lineTo(getScaledValue(mBikePartPositions.getBackWheel().getCenter().x, scale, scaleTargetX), getScaledValue(mBikePartPositions.getBackWheel().getCenter().y, scale, scaleTargetY));
                 canvas.drawPath(mPath, mPaintRed);
+                //drawCanvas.drawPath(mPath, mPaintRed);
+
+                /* http://stackoverflow.com/questions/33790342/android-zoom-drag-draw-on-imageview
+                Instead of the this:
+                canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
+                canvas.drawPath(mPath, drawPaint);
+
+                Do something like this:
+                drawCanvas.drawPath(mPath, drawPaint);
+                canvas.drawBitmap(canvasBitmap, 0, 0, canvasPaint);
+                */
 
                 mPaddles.draw(canvas, mBikePartPositions.getPaddles(), mPointRadius);
                 mPaddleLength.draw(canvas, mBikePartPositions.getPaddlesLength(), mPointRadius);
@@ -313,7 +324,7 @@ public class MoveableBikeComponentsView extends ImageView implements Runnable {
     }
 
     private int getScaledTyreSize(int percent) {
-        return (int)(mDefaultTyreSize + (mDefaultTyreSize * ((percent - 50) * 0.01)));
+        return (int)(mDefaultTyreSize * (percent * 0.01 ));
     }
 
     public boolean onTouch(MotionEvent event) {
