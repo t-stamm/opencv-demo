@@ -214,6 +214,60 @@ public class BikeImageIdentifier implements LoaderCallbackInterface {
         return centerDiff * 2 + verticalDiff + radiusDiff;
     }*/
 
+    public BikePartPositions updateBikeDimensions(BikePartPositions positions, BikeSize bikeSize, int pointsToIgnore) {
+        pointsToIgnore = Math.max(0, Math.min(7, pointsToIgnore));
+
+        Circle frontWheel = positions.getFrontWheel();
+        Circle rearWheel = positions.getBackWheel();
+        int wheelSize = positions.getWheelSize();
+
+        int directionMultiplier = (frontWheel.getCenter().x > rearWheel.getCenter().x) ? 1 : -1;
+        // mContext.getResources().getDisplayMetrics().densityDpi * 25.4)
+        double imageScale = frontWheel.getRadius() * 2 / ((double) wheelSize / 10); // wheelsize is in mm. Bikecalculation returns values in cm;
+        BikeSizeCalculator calc = new BikeSizeCalculator();
+
+        // frame height from calc
+        // scaledSteering = frame height + cycling position
+        // scaledSteering and frame height 73°
+        // frame length horizontally between those to points
+
+        double pedalFactor = (frontWheel.getCenter().x > rearWheel.getCenter().x ? .33 : .66);
+        double leftWheelX = Math.min(frontWheel.getCenter().x, rearWheel.getCenter().x);
+        Point pedal = positions.getPaddles();
+        if (pointsToIgnore < 1) {
+            positions.getPaddles().x = (leftWheelX + (Math.abs(frontWheel.getCenter().x - rearWheel.getCenter().x) * pedalFactor));
+            positions.getPaddles().y = (frontWheel.getCenter().y + rearWheel.getCenter().y) * .5 + (7 * imageScale);
+        }
+
+        double scaledFrameHeight = bikeSize.getFrameHeight() * imageScale;
+        if (pointsToIgnore < 2) {
+            Point scaledFrameBack = rotatePoint(pedal, new Point(pedal.x, pedal.y - scaledFrameHeight), DEFAULT_DEGREES);
+            positions.getFrameBack().x = scaledFrameBack.x;
+            positions.getFrameBack().y = scaledFrameBack.y;
+        }
+        if (pointsToIgnore < 3) {
+            double scaledSaddleHeight = bikeSize.getSaddleHeight() * imageScale;
+            Point scaledSaddle = rotatePoint(pedal, new Point(pedal.x, pedal.y - scaledSaddleHeight), DEFAULT_DEGREES);
+            positions.getSaddle().x = scaledSaddle.x;
+            positions.getSaddle().y = scaledSaddle.y;
+        }
+
+        Point scaledFrameFront = rotatePoint(frontWheel.getCenter(), new Point(frontWheel.getCenter().x, frontWheel.getCenter().y - scaledFrameHeight), DEFAULT_DEGREES);
+        if(pointsToIgnore < 4) {
+            scaledFrameFront.y = positions.getFrameBack().y;
+            positions.getFrameFront().x = scaledFrameFront.x;
+            positions.getFrameFront().y = scaledFrameFront.y;
+        }
+
+        if(pointsToIgnore < 5) {
+            Point scaledSteering = rotatePoint(scaledFrameFront, new Point(scaledFrameFront.x, scaledFrameFront.y - 10 * imageScale), DEFAULT_DEGREES);
+            Point steeringLength = new Point(scaledSteering.x + (10 * imageScale) * directionMultiplier, scaledSteering.y - 3 * imageScale);
+            positions.getSteeringLength().x = steeringLength.x;
+            positions.getSteeringLength().y = steeringLength.y;
+        }
+        return positions;
+    }
+
     private BikePartPositions createBikeDimensions(Circle frontWheel, Circle rearWheel, BikeSize bikeSize, int wheelSize, CyclingPosition cyclingPosition, int width, int height) {
         int directionMultiplier = (frontWheel.getCenter().x > rearWheel.getCenter().x) ? 1 : -1;
         // mContext.getResources().getDisplayMetrics().densityDpi * 25.4)
