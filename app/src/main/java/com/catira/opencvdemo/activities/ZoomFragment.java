@@ -3,6 +3,7 @@ package com.catira.opencvdemo.activities;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -26,6 +27,8 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
     private int mTargetId = -1;
     private View mTargetView = null;
     private ImageView mZoomImage = null;
+    //private Matrix mMatrix = new Matrix();
+
 
     public static String TARGET_ID = "targetId";
 
@@ -104,10 +107,18 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
     }
 
     private void show() {
+        if(mBitmap != null) {
+            mBitmap.recycle();
+        }
+
         mBitmap = Bitmap.createBitmap(mTargetView.getWidth(), mTargetView.getHeight(), Bitmap.Config.ARGB_8888);
+
         mDrawableCanvas = new Canvas(mBitmap);
         mTargetView.draw(mDrawableCanvas);
-        mBitmap = Bitmap.createScaledBitmap(mBitmap, (int)(mBitmap.getWidth()*mZoomFactor), (int)(mBitmap.getHeight()*mZoomFactor), false);
+
+        // resize the bitmap with this matrix
+        //mMatrix.postScale(mSIZE * mZoomFactor, mSIZE * mZoomFactor);
+
         getView().setVisibility(View.VISIBLE);
     }
 
@@ -124,11 +135,13 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
             getView().setX(0f);
         }
 
-        int x = Math.max(0, (int)((e.getX()*mZoomFactor)-(mSIZE*0.5)));
-        int y = Math.max(0, (int)((e.getY()*mZoomFactor)-(mSIZE*0.5)));//-(v.getY()+mSIZE)*0.5)) + 60);
+        int x = Math.max(0, (int)((e.getX())-(mSIZE*0.5)));
+        int y = Math.max(0, (int)((e.getY())-(mSIZE*0.5)));//-(v.getY()+mSIZE)*0.5)) + 60);
         if ((int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)) == 300) {
             Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)), null, false);
-            mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, mSIZE, mSIZE, false));
+            mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, (int)(mSIZE * mZoomFactor), (int)(mSIZE * mZoomFactor), false));
+            unscaledBmp.recycle();
+            //mZoomImage.setImageBitmap(bmp);
         }
     }
 

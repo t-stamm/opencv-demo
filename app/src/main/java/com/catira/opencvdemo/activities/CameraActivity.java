@@ -2,6 +2,7 @@ package com.catira.opencvdemo.activities;
 
 import android.Manifest;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -47,11 +48,14 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 public class CameraActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
+    private static final String TAG = "CameraActivity";
     //Fünf Variable für Kamera
     ImageButton picture;
     ImageView bikecycleImageView, fa_button_camera, fa_button_check;
@@ -432,10 +436,26 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
 
-            try {
+            try {/*
                 BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                options.inJustDecodeBounds = true;
                 Bitmap bitmap = BitmapFactory.decodeFile(bildDatei.getAbsolutePath(), options);
+
+                // max 4096 px on the bigger side
+                int scale = Math.max(bitmap.getWidth(), bitmap.getHeight()) / 2096;
+                if(scale > 1) {
+                    scale--;
+                } else {
+                    scale = 1;
+                }
+
+                if(scale != 1) {
+                    options = new BitmapFactory.Options();
+                    options.inSampleSize = scale;
+                    bitmap = BitmapFactory.decodeFile(bildDatei.getAbsolutePath(), options);
+                }*/
+
+                Bitmap bitmap = getScaledBitmap(bildDatei);
 
                 Matrix mat = new Matrix();
 
@@ -488,6 +508,63 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         */
     }
+
+    private Bitmap getScaledBitmap(File path) {
+
+        InputStream in;
+        try {
+            final int IMAGE_MAX_SIZE = 1000000; // 1 MP
+            in = new FileInputStream(path);
+
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, o);
+            in.close();
+
+            int scale = 1;
+            while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
+                    IMAGE_MAX_SIZE) {
+                scale++;
+            }
+            Log.d(TAG, "scale = " + scale + ", original width: " + o.outWidth + ", original height: " + o.outHeight);
+
+            Bitmap b;
+            in = new FileInputStream(path);
+            if (scale > 1) {
+                scale--;
+                // scale to max possible inSampleSize that still yields an image
+                // larger than target
+                o = new BitmapFactory.Options();
+                o.inSampleSize = scale;
+                b = BitmapFactory.decodeStream(in, null, o);
+
+                // resize to desired dimensions
+                int height = b.getHeight();
+                int width = b.getWidth();
+                Log.d(TAG, "scale operation dimensions width: " + width + ", height: " + height);
+
+                double y = Math.sqrt(IMAGE_MAX_SIZE
+                        / (((double) width) / height));
+                double x = (y / height) * width;
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
+                        (int) y, true);
+                b.recycle();
+                b = scaledBitmap;
+            } else {
+                b = BitmapFactory.decodeStream(in);
+            }
+
+            Log.d(TAG, "bitmap size width: " + b.getWidth() + ", height: " +
+                    b.getHeight());
+            return b;
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+            return null;
+        }
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if(mBikeComponentsView != null && !mBikeComponentsView.isInitialized()) {
