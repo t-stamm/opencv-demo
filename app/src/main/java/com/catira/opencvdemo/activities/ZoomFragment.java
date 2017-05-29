@@ -135,11 +135,11 @@ public class ZoomFragment extends Fragment implements View.OnTouchListener {
             getView().setX(0f);
         }
 
-        int x = Math.max(0, (int)((e.getX())-(mSIZE*0.5)));
-        int y = Math.max(0, (int)((e.getY())-(mSIZE*0.5)));//-(v.getY()+mSIZE)*0.5)) + 60);
+        int x = Math.max(0, (int)(e.getX()-(mSIZE/(mZoomFactor*2))));
+        int y = Math.max(0, (int)(e.getY()-(mSIZE/(mZoomFactor*2))));//-(v.getY()+mSIZE)*0.5)) + 60);
         if ((int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)) == 300) {
-            Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE)), null, false);
-            mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, (int)(mSIZE * mZoomFactor), (int)(mSIZE * mZoomFactor), false));
+            Bitmap unscaledBmp = Bitmap.createBitmap(mBitmap, x, y, (int)Math.ceil(Math.min(mBitmap.getWidth()-x, mSIZE / mZoomFactor)), (int)Math.ceil(Math.min(mBitmap.getHeight()-y, mSIZE / mZoomFactor)), null, false);
+            mZoomImage.setImageBitmap(Bitmap.createScaledBitmap(unscaledBmp, (mSIZE), (mSIZE), false));
             unscaledBmp.recycle();
             //mZoomImage.setImageBitmap(bmp);
         }
